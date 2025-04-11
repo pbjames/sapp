@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { buttonVariants } from '@/components/ui/button';
 import { GitHubLogoIcon } from '@radix-ui/react-icons';
+import { Link } from '@tanstack/react-router';
 
 export const Hero = () => {
     return (
@@ -26,7 +27,11 @@ export const Hero = () => {
                 </p>
 
                 <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center lg:justify-start">
-                    <Button className="w-full sm:w-auto">Get Started</Button>
+                    <Button asChild>
+                        <Link to="/login" className="w-full sm:w-auto">
+                            Get Started{' '}
+                        </Link>
+                    </Button>
                     <a
                         rel="noreferrer noopener"
                         href=""

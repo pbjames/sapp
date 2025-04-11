@@ -7,39 +7,43 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import auth from '@/lib/api/auth';
 
-export const Route = createFileRoute('/login')({
+export const Route = createFileRoute('/register')({
     component: RouteComponent,
 });
 
-const loginSchema = z.object({
+const registerSchema = z.object({
     username: z.string().min(1, 'Username is required'),
+    wallet: z
+        .string()
+        .min(1, 'Wallet address is required')
+        .regex(/^0x[a-fA-F0-9]{40}$/, 'Invalid wallet address'),
     password: z
         .string()
         .min(1, 'Password is required')
         .min(8, 'Password must be at least 8 characters long'),
 });
 
-type LoginValues = z.infer<typeof loginSchema>;
+type RegisterValues = z.infer<typeof registerSchema>;
 
 function RouteComponent() {
     const nav = useNavigate();
     const {
         register,
         handleSubmit,
+        formState: { errors, isValid },
         setError,
         clearErrors,
-        formState: { errors, isValid },
-    } = useForm<LoginValues>({
-        resolver: zodResolver(loginSchema),
+    } = useForm<RegisterValues>({
+        resolver: zodResolver(registerSchema),
         mode: 'onChange',
     });
 
-    const onSubmit = async (data: LoginValues) => {
+    const onSubmit = async (data: RegisterValues) => {
         try {
-            await auth.login(data);
+            await auth.register(data);
             nav({ to: '/app' });
         } catch (error: Error | any) {
-            console.error('Login failed:', error);
+            console.error('Registration failed:', error);
             setError('root', {
                 type: 'manual',
                 message: error.message,
@@ -54,16 +58,14 @@ function RouteComponent() {
                 className="flex w-full max-w-sm flex-col"
                 onSubmit={handleSubmit(onSubmit)}
             >
-                <h1 className="mb-1 text-2xl font-semibold">Login</h1>
+                <h1 className="mb-1 text-2xl font-semibold">Sign Up</h1>
                 <p className="text-sm">
-                    Not signed up?{' '}
-                    <Link
-                        to="/register"
-                        className="text-blue-500 hover:underline"
-                    >
-                        Sign up
+                    Already signed up?{' '}
+                    <Link to="/login" className="text-blue-500 hover:underline">
+                        Sign in
                     </Link>
                 </p>
+
                 <Label htmlFor="username" className="mt-4 mb-2">
                     Username
                 </Label>
@@ -79,6 +81,24 @@ function RouteComponent() {
                 {errors.username && (
                     <span className="mt-1 text-sm text-red-500">
                         {errors.username.message}
+                    </span>
+                )}
+
+                <Label htmlFor="wallet" className="mt-4 mb-2">
+                    Wallet Address
+                </Label>
+                <Input
+                    id="wallet"
+                    placeholder="0x..."
+                    {...register('wallet')}
+                    onChange={(e) => {
+                        clearErrors('root');
+                        register('username').onChange(e);
+                    }}
+                />
+                {errors.wallet && (
+                    <span className="mt-1 text-sm text-red-500">
+                        {errors.wallet.message}
                     </span>
                 )}
 
@@ -103,7 +123,7 @@ function RouteComponent() {
                 )}
 
                 <Button className="mt-4" type="submit" disabled={!isValid}>
-                    Login
+                    Sign Up
                 </Button>
                 {errors.root && (
                     <span className="mt-1 text-sm text-red-500">

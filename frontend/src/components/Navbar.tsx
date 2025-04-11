@@ -13,9 +13,8 @@ import {
 } from '@/components/ui/sheet';
 import { GitHubLogoIcon } from '@radix-ui/react-icons';
 import { buttonVariants } from './ui/button';
-import { Menu } from 'lucide-react';
+import { Menu, Flame } from 'lucide-react';
 import { ModeToggle } from './mode-toggle';
-import { LogoIcon } from './Icons';
 
 interface RouteProps {
     href: string;
@@ -49,7 +48,7 @@ export const Navbar = () => {
                             href="/"
                             className="ml-2 flex text-xl font-bold"
                         >
-                            <LogoIcon />
+                            <Flame className="text-primary mr-2 h-6 w-6" />
                             ShadcnUI/React
                         </a>
                     </NavigationMenuItem>

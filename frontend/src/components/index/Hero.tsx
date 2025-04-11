@@ -1,6 +1,5 @@
-import { Button } from './ui/button';
-import { buttonVariants } from './ui/button';
-import { HeroCards } from './HeroCards';
+import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { GitHubLogoIcon } from '@radix-ui/react-icons';
 
 export const Hero = () => {
@@ -42,13 +41,6 @@ export const Hero = () => {
                     </a>
                 </div>
             </div>
-
-            {/* Hero Cards Section */}
-            <div className="z-10">
-                <HeroCards />
-            </div>
-
-            {/* Optional Shadow Element */}
             <div className="shadow"></div>
         </section>
     );

@@ -1,16 +1,13 @@
-import { About } from '@/components/About';
-import { Cta } from '@/components/Cta';
-import { FAQ } from '@/components/FAQ';
-import { Features } from '@/components/Features';
-import { Hero } from '@/components/Hero';
-import { HowItWorks } from '@/components/HowItWorks';
-import { Newsletter } from '@/components/Newsletter';
-import { Pricing } from '@/components/Pricing';
-import { ScrollToTop } from '@/components/ScrollToTop';
-import { Services } from '@/components/Services';
-import { Team } from '@/components/Team';
-import { Testimonials } from '@/components/Testimonials';
 import { createFileRoute } from '@tanstack/react-router';
+
+import { About } from '@/components/index/About';
+import { Cta } from '@/components/index/Cta';
+import { FAQ } from '@/components/index/FAQ';
+import { Features } from '@/components/index/Features';
+import { Hero } from '@/components/index/Hero';
+import { HowItWorks } from '@/components/index/HowItWorks';
+import { Pricing } from '@/components/index/Pricing';
+import { ScrollToTop } from '@/components/index/ScrollToTop';
 
 export const Route = createFileRoute('/')({
     component: Index,

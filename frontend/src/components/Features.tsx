@@ -53,41 +53,34 @@ export const Features = () => {
   return (
     <section
       id="features"
-      className="container py-24 sm:py-32 space-y-8"
+      className="container mx-auto px-4 py-24 sm:py-32 space-y-8"
     >
-      <h2 className="text-3xl lg:text-4xl font-bold md:text-center">
+      <h2 className="text-3xl lg:text-4xl font-bold text-center">
         Many{" "}
         <span className="bg-gradient-to-b from-primary/60 to-primary text-transparent bg-clip-text">
           Great Features
         </span>
       </h2>
 
-      <div className="flex flex-wrap md:justify-center gap-4">
+      <div className="flex flex-wrap justify-center gap-4">
         {featureList.map((feature: string) => (
-          <div key={feature}>
-            <Badge
-              variant="secondary"
-              className="text-sm"
-            >
-              {feature}
-            </Badge>
-          </div>
+          <Badge key={feature} variant="secondary" className="text-sm">
+            {feature}
+          </Badge>
         ))}
       </div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {features.map(({ title, description, image }: FeatureProps) => (
           <Card key={title}>
             <CardHeader>
-              <CardTitle>{title}</CardTitle>
+              <CardTitle className="text-center">{title}</CardTitle>
             </CardHeader>
-
-            <CardContent>{description}</CardContent>
-
+            <CardContent className="text-center">{description}</CardContent>
             <CardFooter>
               <img
                 src={image}
-                alt="About feature"
+                alt={`Feature ${title}`}
                 className="w-[200px] lg:w-[300px] mx-auto"
               />
             </CardFooter>

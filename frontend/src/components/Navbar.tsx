@@ -29,10 +29,6 @@ const routeList: RouteProps[] = [
     label: "Features",
   },
   {
-    href: "#testimonials",
-    label: "Testimonials",
-  },
-  {
     href: "#pricing",
     label: "Pricing",
   },
@@ -129,15 +125,14 @@ export const Navbar = () => {
           <div className="hidden md:flex gap-2">
             <a
               rel="noreferrer noopener"
-              href="https://github.com/leoMirandaa/shadcn-landing-page.git"
+              href=""
               target="_blank"
               className={`border ${buttonVariants({ variant: "secondary" })}`}
             >
-              <GitHubLogoIcon className="mr-2 w-5 h-5" />
-              Github
+
+              Login
             </a>
 
-            <ModeToggle />
           </div>
         </NavigationMenuList>
       </NavigationMenu>

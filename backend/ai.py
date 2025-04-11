@@ -1,3 +1,4 @@
+import logging
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage
 from langchain_core.runnables import RunnableConfig
@@ -18,7 +19,7 @@ config = RunnableConfig(
 
 
 @cli.command()
-def main(verbose: bool = False):
+def main():
     """
     Tool to run LLM
     """
@@ -34,15 +35,19 @@ def main(verbose: bool = False):
         print()
 
 
-@cli.command()
 def analyze_image(image_url: str) -> list[str]:
     message = HumanMessage(
         content=[
             {"type": "text", "text": IMAGE_PROMPT},
-            {"type": "input_image", "image_url": image_url},
+            {"type": "image_url", "image_url": {"url": image_url}},
         ]
     )
     return model.invoke([message]).text().split(" ")
+
+
+@cli.command()
+def analyze_image_test(image_url: str):
+    analyze_image(image_url)
 
 
 if __name__ == "__main__":

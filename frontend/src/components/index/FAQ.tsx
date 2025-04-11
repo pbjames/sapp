@@ -43,7 +43,10 @@ const FAQList: FAQProps[] = [
 
 export const FAQ = () => {
     return (
-        <section id="faq" className="container mx-auto px-4 py-24 sm:py-32">
+        <section
+            id="faq"
+            className="container mx-auto w-full max-w-5xl px-4 pb-24 sm:pb-32"
+        >
             <h2 className="mb-4 text-center text-3xl font-bold md:text-4xl">
                 Frequently Asked{' '}
                 <span className="from-primary/60 to-primary bg-gradient-to-b bg-clip-text text-transparent">
@@ -67,7 +70,7 @@ export const FAQ = () => {
             </Accordion>
 
             <div className="flex items-center justify-center">
-                <h3 className="mt-4 text-center font-medium">
+                <h3 className="mt-8 text-center font-medium">
                     Still have questions?{' '}
                     <a
                         rel="noreferrer noopener"

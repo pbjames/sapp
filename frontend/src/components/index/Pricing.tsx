@@ -74,7 +74,10 @@ const pricingList: PricingProps[] = [
 
 export const Pricing = () => {
     return (
-        <section id="pricing" className="container mx-auto px-4 py-24 sm:py-32">
+        <section
+            id="pricing"
+            className="container mx-auto w-full max-w-5xl px-4 py-24 sm:py-32"
+        >
             <h2 className="text-center text-3xl font-bold md:text-4xl">
                 Get
                 <span className="from-primary/60 to-primary bg-gradient-to-b bg-clip-text text-transparent">

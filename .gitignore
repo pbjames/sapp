@@ -25,11 +25,12 @@ frontend/*.sln
 frontend/*.sw?
 
 # Python-generated files
-backend/__pycache__/
-backend/*.py[oc]
+backend/**/__pycache__/
+backend/**/*.py[oc]
 backend/build/
 backend/dist/
 backend/wheels/
 backend/*.egg-info
 # Virtual environments
 backend/.venv
+backend/.env

@@ -1,35 +1,37 @@
 import { Button } from '@/components/ui/button';
 import { buttonVariants } from '@/components/ui/button';
 import { GitHubLogoIcon } from '@radix-ui/react-icons';
+import { Link } from '@tanstack/react-router';
 
 export const Hero = () => {
     return (
-        <section className="container mx-auto grid items-center gap-x-6 gap-y-8 px-4 py-10 sm:py-16 md:py-24 lg:grid-cols-2 lg:py-32">
+        <section className="mx-auto grid w-full max-w-5xl items-center gap-x-6 gap-y-8 px-4 py-10 sm:py-16 md:py-24 lg:grid-cols-2 lg:py-32">
             {/* Left Content */}
-            <div className="space-y-6 text-center lg:text-left">
-                <main className="text-3xl leading-tight font-bold sm:text-4xl md:text-5xl">
+            <div className="w-full space-y-6 text-center sm:min-w-lg lg:text-left">
+                <main className="w-full text-3xl leading-tight font-bold sm:text-4xl md:text-5xl">
                     <h1 className="inline">
                         <span className="inline bg-gradient-to-r from-[#F596D3] to-[#D247BF] bg-clip-text text-transparent">
-                            Shadcn
+                            Analyze
                         </span>{' '}
-                        landing page
+                        Zora Coins
                     </h1>{' '}
                     for{' '}
-                    <h2 className="inline">
-                        <span className="inline bg-gradient-to-r from-[#61DAFB] via-[#1fc0f1] to-[#03a3d7] bg-clip-text text-transparent">
-                            React
-                        </span>{' '}
-                        developers
-                    </h2>
+                    <span className="inline bg-gradient-to-r from-[#61DAFB] via-[#1fc0f1] to-[#03a3d7] bg-clip-text text-transparent">
+                        Earning as a Creator
+                    </span>
                 </main>
 
                 <p className="text-muted-foreground mx-auto text-base sm:text-lg md:w-10/12 md:text-xl lg:mx-0">
-                    Build your React landing page effortlessly with the required
-                    sections for your project.
+                    Level up your Zora experience with our powerful analytics
+                    tool.
                 </p>
 
                 <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center lg:justify-start">
-                    <Button className="w-full sm:w-auto">Get Started</Button>
+                    <Button asChild>
+                        <Link to="/login" className="w-full sm:w-auto">
+                            Get Started{' '}
+                        </Link>
+                    </Button>
                     <a
                         rel="noreferrer noopener"
                         href=""

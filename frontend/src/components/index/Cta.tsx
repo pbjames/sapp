@@ -2,8 +2,8 @@ import { Button } from '@/components/ui/button';
 
 export const Cta = () => {
     return (
-        <section id="cta" className="bg-muted/50 my-24 py-16 sm:my-32">
-            <div className="container mx-auto place-items-center gap-8 px-4 lg:grid lg:grid-cols-2">
+        <section id="cta" className="bg-muted/50 w-full py-16">
+            <div className="mx-auto w-full max-w-5xl place-items-center gap-8 px-4 lg:grid lg:grid-cols-2">
                 {/* Left text column (centered on mobile, left-aligned on larger screens) */}
                 <div className="space-y-4 text-center lg:col-start-1 lg:text-left">
                     <h2 className="text-3xl font-bold md:text-4xl">

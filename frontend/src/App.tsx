@@ -16,7 +16,6 @@ import { Team } from './components/Team';
 import { Testimonials } from './components/Testimonials';
 
 function App() {
-
     return (
         <>
             <Navbar />

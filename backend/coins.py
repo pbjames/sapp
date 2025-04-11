@@ -4,7 +4,7 @@ from typing import Final, Literal
 from pydantic import BaseModel
 import requests
 
-BASE_URL: Final[str] = "https://api-sdk.zora.engineering/"
+from const import BASE_URL
 
 
 class Amount(BaseModel):
@@ -209,9 +209,7 @@ def get_all_comments(address: str, count: int) -> list[ZoraCommentNode]:
         f"{BASE_URL}/coinComments", params={"address": address, "count": count}
     )
     comments = ZoraComments(**response.json()["zora20Token"]["zoraComments"])
-    if comments is not None:
-        return [e.node for e in comments.edges]
-    return []
+    return [e.node for e in comments.edges]
 
 
 def get_profile(address: str) -> BasicProfile:

@@ -5,7 +5,7 @@ import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { attemptLogin } from '@/lib/api';
+import auth from '@/lib/api/auth';
 
 export const Route = createFileRoute('/login')({
     component: RouteComponent,
@@ -36,7 +36,7 @@ function RouteComponent() {
 
     const onSubmit = async (data: LoginValues) => {
         try {
-            await attemptLogin(data);
+            await auth.login(data);
             nav({ to: '/app' });
         } catch (error: Error | any) {
             console.error('Login failed:', error);

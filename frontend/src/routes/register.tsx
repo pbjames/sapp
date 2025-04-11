@@ -5,7 +5,7 @@ import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { attemptRegister } from '@/lib/api';
+import auth from '@/lib/api/auth';
 
 export const Route = createFileRoute('/register')({
     component: RouteComponent,
@@ -40,7 +40,7 @@ function RouteComponent() {
 
     const onSubmit = async (data: RegisterValues) => {
         try {
-            await attemptRegister(data);
+            await auth.register(data);
             nav({ to: '/app' });
         } catch (error: Error | any) {
             console.error('Registration failed:', error);

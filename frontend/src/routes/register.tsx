@@ -2,81 +2,102 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 export const Route = createFileRoute('/register')({
     component: RouteComponent,
 });
 
+const registerSchema = z.object({
+    username: z.string().min(1, 'Username is required'),
+    wallet: z
+        .string()
+        .min(1, 'Wallet address is required')
+        .regex(/^0x[a-fA-F0-9]{40}$/, 'Invalid wallet address'),
+    password: z
+        .string()
+        .min(1, 'Password is required')
+        .min(8, 'Password must be at least 8 characters long'),
+});
+
+type RegisterValues = z.infer<typeof registerSchema>;
+
 function RouteComponent() {
-    const [details, setDetails] = useState({
-        username: '',
-        address: '',
-        password: '',
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isValid },
+    } = useForm<RegisterValues>({
+        resolver: zodResolver(registerSchema),
+        mode: 'onChange',
     });
 
-    const submit = (e: React.FormEvent) => {
-        e.preventDefault();
-        console.log(details);
+    const onSubmit = (data: RegisterValues) => {
+        console.log(data);
     };
 
     return (
         <div className="flex flex-grow items-center justify-center">
-            <form className="flex w-full max-w-sm flex-col" onSubmit={submit}>
+            <form
+                className="flex w-full max-w-sm flex-col"
+                onSubmit={handleSubmit(onSubmit)}
+            >
                 <h1 className="mb-1 text-2xl font-semibold">Sign Up</h1>
-                <p className="mb-4 text-sm">
+                <p className="text-sm">
                     Already signed up?{' '}
                     <Link to="/login" className="text-blue-500 hover:underline">
-                        Login
+                        Sign in
                     </Link>
                 </p>
-                <Label htmlFor="username" className="mb-2">
+
+                <Label htmlFor="username" className="mt-4 mb-2">
                     Username
                 </Label>
                 <Input
                     id="username"
                     placeholder="Username"
-                    className="mb-4"
-                    onChange={(e) =>
-                        setDetails({ ...details, username: e.target.value })
-                    }
+                    {...register('username')}
                 />
-                <Label htmlFor="username" className="mb-2">
+                {errors.username && (
+                    <span className="mt-1 text-sm text-red-500">
+                        {errors.username.message}
+                    </span>
+                )}
+
+                <Label htmlFor="wallet" className="mt-4 mb-2">
                     Wallet Address
                 </Label>
                 <Input
-                    id="address"
-                    placeholder="Address"
-                    className="mb-4"
-                    onChange={(e) =>
-                        setDetails({
-                            ...details,
-                            address: e.target.value,
-                        })
-                    }
+                    id="wallet"
+                    placeholder="0x..."
+                    {...register('wallet')}
                 />
-                <Label htmlFor="password" className="mb-2">
+                {errors.wallet && (
+                    <span className="mt-1 text-sm text-red-500">
+                        {errors.wallet.message}
+                    </span>
+                )}
+
+                <Label htmlFor="password" className="mt-4 mb-2">
                     Password
                 </Label>
                 <Input
                     id="password"
                     placeholder="Password"
                     type="password"
-                    className="mb-2"
-                    onChange={(e) =>
-                        setDetails({ ...details, password: e.target.value })
-                    }
+                    className="mb-1"
+                    {...register('password')}
                 />
-                <Button
-                    className="mt-4"
-                    type="submit"
-                    disabled={
-                        !details.username ||
-                        !details.address ||
-                        !details.password
-                    }
-                >
-                    Login
+                {errors.password && (
+                    <span className="mt-1 text-sm text-red-500">
+                        {errors.password.message}
+                    </span>
+                )}
+
+                <Button className="mt-4" type="submit" disabled={!isValid}>
+                    Sign Up
                 </Button>
             </form>
         </div>

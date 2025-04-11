@@ -15,6 +15,7 @@ import { Route as RegisterImport } from './routes/register';
 import { Route as LoginImport } from './routes/login';
 import { Route as AboutImport } from './routes/about';
 import { Route as IndexImport } from './routes/index';
+import { Route as AppIndexImport } from './routes/app/index';
 
 // Create/Update Routes
 
@@ -39,6 +40,12 @@ const AboutRoute = AboutImport.update({
 const IndexRoute = IndexImport.update({
     id: '/',
     path: '/',
+    getParentRoute: () => rootRoute,
+} as any);
+
+const AppIndexRoute = AppIndexImport.update({
+    id: '/app/',
+    path: '/app/',
     getParentRoute: () => rootRoute,
 } as any);
 
@@ -74,6 +81,13 @@ declare module '@tanstack/react-router' {
             preLoaderRoute: typeof RegisterImport;
             parentRoute: typeof rootRoute;
         };
+        '/app/': {
+            id: '/app/';
+            path: '/app';
+            fullPath: '/app';
+            preLoaderRoute: typeof AppIndexImport;
+            parentRoute: typeof rootRoute;
+        };
     }
 }
 
@@ -84,6 +98,7 @@ export interface FileRoutesByFullPath {
     '/about': typeof AboutRoute;
     '/login': typeof LoginRoute;
     '/register': typeof RegisterRoute;
+    '/app': typeof AppIndexRoute;
 }
 
 export interface FileRoutesByTo {
@@ -91,6 +106,7 @@ export interface FileRoutesByTo {
     '/about': typeof AboutRoute;
     '/login': typeof LoginRoute;
     '/register': typeof RegisterRoute;
+    '/app': typeof AppIndexRoute;
 }
 
 export interface FileRoutesById {
@@ -99,14 +115,15 @@ export interface FileRoutesById {
     '/about': typeof AboutRoute;
     '/login': typeof LoginRoute;
     '/register': typeof RegisterRoute;
+    '/app/': typeof AppIndexRoute;
 }
 
 export interface FileRouteTypes {
     fileRoutesByFullPath: FileRoutesByFullPath;
-    fullPaths: '/' | '/about' | '/login' | '/register';
+    fullPaths: '/' | '/about' | '/login' | '/register' | '/app';
     fileRoutesByTo: FileRoutesByTo;
-    to: '/' | '/about' | '/login' | '/register';
-    id: '__root__' | '/' | '/about' | '/login' | '/register';
+    to: '/' | '/about' | '/login' | '/register' | '/app';
+    id: '__root__' | '/' | '/about' | '/login' | '/register' | '/app/';
     fileRoutesById: FileRoutesById;
 }
 
@@ -115,6 +132,7 @@ export interface RootRouteChildren {
     AboutRoute: typeof AboutRoute;
     LoginRoute: typeof LoginRoute;
     RegisterRoute: typeof RegisterRoute;
+    AppIndexRoute: typeof AppIndexRoute;
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -122,6 +140,7 @@ const rootRouteChildren: RootRouteChildren = {
     AboutRoute: AboutRoute,
     LoginRoute: LoginRoute,
     RegisterRoute: RegisterRoute,
+    AppIndexRoute: AppIndexRoute,
 };
 
 export const routeTree = rootRoute
@@ -137,7 +156,8 @@ export const routeTree = rootRoute
         "/",
         "/about",
         "/login",
-        "/register"
+        "/register",
+        "/app/"
       ]
     },
     "/": {
@@ -151,6 +171,9 @@ export const routeTree = rootRoute
     },
     "/register": {
       "filePath": "register.tsx"
+    },
+    "/app/": {
+      "filePath": "app/index.tsx"
     }
   }
 }

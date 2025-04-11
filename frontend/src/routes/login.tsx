@@ -1,10 +1,11 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { attemptLogin } from '@/lib/api';
 
 export const Route = createFileRoute('/login')({
     component: RouteComponent,
@@ -21,17 +22,30 @@ const loginSchema = z.object({
 type LoginValues = z.infer<typeof loginSchema>;
 
 function RouteComponent() {
+    const nav = useNavigate();
     const {
         register,
         handleSubmit,
+        setError,
+        clearErrors,
         formState: { errors, isValid },
     } = useForm<LoginValues>({
         resolver: zodResolver(loginSchema),
         mode: 'onChange',
     });
 
-    const onSubmit = (data: LoginValues) => {
-        console.log(data);
+    const onSubmit = async (data: LoginValues) => {
+        try {
+            await attemptLogin(data);
+            nav({ to: '/app' });
+        } catch (error: Error | any) {
+            console.error('Login failed:', error);
+            setError('root', {
+                type: 'manual',
+                message: error.message,
+            });
+            return;
+        }
     };
 
     return (
@@ -57,6 +71,10 @@ function RouteComponent() {
                     id="username"
                     placeholder="Username"
                     {...register('username')}
+                    onChange={(e) => {
+                        clearErrors('root');
+                        register('username').onChange(e);
+                    }}
                 />
                 {errors.username && (
                     <span className="mt-1 text-sm text-red-500">
@@ -73,6 +91,10 @@ function RouteComponent() {
                     type="password"
                     className="mb-1"
                     {...register('password')}
+                    onChange={(e) => {
+                        clearErrors('root');
+                        register('username').onChange(e);
+                    }}
                 />
                 {errors.password && (
                     <span className="mt-1 text-sm text-red-500">
@@ -83,6 +105,11 @@ function RouteComponent() {
                 <Button className="mt-4" type="submit" disabled={!isValid}>
                     Login
                 </Button>
+                {errors.root && (
+                    <span className="mt-1 text-sm text-red-500">
+                        {errors.root.message}
+                    </span>
+                )}
             </form>
         </div>
     );

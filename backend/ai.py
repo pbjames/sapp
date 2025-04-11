@@ -6,7 +6,8 @@ from langgraph.checkpoint.memory import MemorySaver
 from langgraph.prebuilt import create_react_agent
 from typer import Typer
 
-from const import IMAGE_PROMPT, MODEL_NAME
+from coins import get_all_comments, get_coin
+from const import COIN_SUMMARY, IMAGE_PROMPT, MODEL_NAME
 
 cli = Typer()
 tools = []
@@ -43,6 +44,25 @@ def analyze_image(image_url: str) -> list[str]:
         ]
     )
     return model.invoke([message]).text().split(" ")
+
+
+def coin_summary(address: str) -> str:
+    coin_data = get_coin(address)
+    content = COIN_SUMMARY.format(
+        creatorEarnings=coin_data.creatorEarnings,
+        volume24h=coin_data.volume24h,
+        totalVolume=coin_data.totalVolume,
+        name=coin_data.name,
+        description=coin_data.description,
+        comments="\n".join([n.comment for n in get_all_comments(address, count=10)]),
+    )
+    message = HumanMessage(content=[{"type": "text", "text": content}])
+    return model.invoke([message]).text()
+
+
+@cli.command()
+def coin_summary_test(address: str) -> None:
+    coin_summary(address)
 
 
 @cli.command()

@@ -1,8 +1,33 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from typer import Typer
+import logging
+from sqlalchemy.orm import Session
+from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy import text
+from database import SessionLocal, engine, Base, get_db
+from models import User  # Import your models
+from routers.users import router as user_router
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 app = FastAPI()
 cli = Typer()
+
+app.include_router(user_router, prefix="/users", tags=["users"])
+
+@app.on_event("startup")
+async def startup_db_client():
+    try:
+        # Try to connect to the database
+        db = SessionLocal()
+        db.execute(text("SELECT 1"))
+        db.close()
+        logger.info("Successfully connected to the PostgreSQL database!")
+    except SQLAlchemyError as e:
+        logger.error(f"Error connecting to the PostgreSQL database: {e}")
+        raise
 
 
 @cli.command()
@@ -13,6 +38,7 @@ def say_hello():
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
+
 
 
 # @app.get("/items/{item_id}")

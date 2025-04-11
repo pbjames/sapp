@@ -111,9 +111,8 @@ class ExploreResponse(BaseModel):
 
 
 class Avatar(BaseModel):
-    small: str
-    medium: str
-    blurhash: str | None = None
+    small: PreviewImage | None = None
+    medium: PreviewImage | None = None
 
 
 class PublicWallet(BaseModel):
@@ -173,6 +172,11 @@ def explore(
         f"{BASE_URL}/explore", params={"listType": list_type, "count": count}
     )
     return ExploreResponse(**response.json())
+
+
+def get_coin(address: str) -> Zora20Token:
+    response = requests.get(f"{BASE_URL}/coin", params={"address": address})
+    return Zora20Token(**response.json()["zora20Token"])
 
 
 def get_profile(address: str) -> Profile:

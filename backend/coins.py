@@ -156,9 +156,21 @@ class Profile(BaseModel):
     linkedWallets: LinkedWallets
 
 
-def top_gainers(count: int = 10) -> ExploreResponse:
+ExploreListType = Literal[
+    "TOP_GAINERS",
+    "TOP_VOLUME_24H",
+    "MOST_VALUABLE",
+    "NEW",
+    "LAST_TRADED",
+    "LAST_TRADED_UNIQUE",
+]
+
+
+def explore(
+    count: int = 10, list_type: ExploreListType = "TOP_GAINERS"
+) -> ExploreResponse:
     response = requests.get(
-        f"{BASE_URL}/explore", params={"listType": "TOP_GAINERS", "count": count}
+        f"{BASE_URL}/explore", params={"listType": list_type, "count": count}
     )
     return ExploreResponse(**response.json())
 

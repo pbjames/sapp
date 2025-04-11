@@ -21,6 +21,5 @@ This coin has:
 - commentary:
 {comments}
 What makes it stand out and what inspiration can we draw from it?
-This is in the format of informal commentary, no specific examples needed and keep it
-short.
+Don't give too much of a boilerplate answer.
 """

@@ -15,6 +15,7 @@ import { GitHubLogoIcon } from '@radix-ui/react-icons';
 import { buttonVariants } from './ui/button';
 import { Menu, Flame } from 'lucide-react';
 import { ModeToggle } from './mode-toggle';
+import { Link } from '@tanstack/react-router';
 
 interface RouteProps {
     href: string;
@@ -43,14 +44,10 @@ export const Navbar = () => {
             <NavigationMenu className="mx-auto w-full max-w-5xl [&>div]:w-full">
                 <NavigationMenuList className="flex h-14 w-full justify-between px-4">
                     <NavigationMenuItem className="flex font-bold">
-                        <a
-                            rel="noreferrer noopener"
-                            href="/"
-                            className="ml-2 flex text-xl font-bold"
-                        >
+                        <Link to="/" className="ml-2 flex text-xl font-bold">
                             <Flame className="text-primary mr-2 h-6 w-6" />
                             SAPP
-                        </a>
+                        </Link>
                     </NavigationMenuItem>
 
                     {/* mobile */}
@@ -76,17 +73,16 @@ export const Navbar = () => {
                                 <nav className="mt-4 flex flex-col items-center justify-center gap-2">
                                     {routeList.map(
                                         ({ href, label }: RouteProps) => (
-                                            <a
-                                                rel="noreferrer noopener"
+                                            <Link
                                                 key={label}
-                                                href={href}
+                                                to={href}
                                                 onClick={() => setIsOpen(false)}
                                                 className={buttonVariants({
                                                     variant: 'ghost',
                                                 })}
                                             >
                                                 {label}
-                                            </a>
+                                            </Link>
                                         )
                                     )}
                                     <a
@@ -110,28 +106,25 @@ export const Navbar = () => {
                     {/* desktop */}
                     <nav className="hidden gap-2 md:flex">
                         {routeList.map((route: RouteProps, i) => (
-                            <a
-                                rel="noreferrer noopener"
-                                href={route.href}
+                            <Link
+                                to={route.href}
                                 key={i}
                                 className={`text-[17px] ${buttonVariants({
                                     variant: 'ghost',
                                 })}`}
                             >
                                 {route.label}
-                            </a>
+                            </Link>
                         ))}
                     </nav>
 
                     <div className="hidden gap-2 md:flex">
-                        <a
-                            rel="noreferrer noopener"
-                            href=""
-                            target="_blank"
+                        <Link
+                            to="/login"
                             className={`border ${buttonVariants({ variant: 'secondary' })}`}
                         >
                             Login
-                        </a>
+                        </Link>
                     </div>
                 </NavigationMenuList>
             </NavigationMenu>

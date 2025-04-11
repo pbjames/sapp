@@ -40,27 +40,27 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "#",
+      url: "/app/",
       icon: IconDashboard,
     },
     {
       title: "Previous Reports",
-      url: "#",
+      url: "/app/previous",
       icon: IconListDetails,
     },
     {
       title: "Analyse Coin",
-      url: "#",
+      url: "/app/analyse-coin",
       icon: IconChartBar,
     },
     {
       title: "Generate Ideas",
-      url: "#",
+      url: "/app/generate-coin",
       icon: IconFolder,
     },
     {
       title: "Analyse Profile",
-      url: "#",
+      url: "/app/analyse-profile",
       icon: IconUsers,
     },
   ],

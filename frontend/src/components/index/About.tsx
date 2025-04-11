@@ -18,18 +18,16 @@ export const About = () => {
                         <div className="pb-6">
                             <h2 className="text-3xl font-bold md:text-4xl">
                                 <span className="from-primary/60 to-primary bg-gradient-to-b bg-clip-text text-transparent">
-                                    About{' '}
+                                    About
                                 </span>
-                                Company
+                                SAPP
                             </h2>
                             <p className="text-muted-foreground mt-4 text-xl">
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit, sed do eiusmod tempor
-                                incididunt ut labore et dolore magna aliqua. Ut
-                                enim ad minim veniam, quis nostrud exercitation
-                                ullamco laboris nisi ut aliquip ex ea commodo
-                                consequat. Lorem ipsum dolor sit amet,
-                                consectetur adipiscing elit.
+                                SAPP is a powerful analytics tool designed to
+                                help creators plan and create content on the
+                                Zora platform. Effortlessly track your portfolio
+                                and use our custom AI to generate insights about
+                                your content.
                             </p>
                         </div>
 

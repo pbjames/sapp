@@ -21,8 +21,8 @@ export const Hero = () => {
                 </main>
 
                 <p className="text-muted-foreground mx-auto text-base sm:text-lg md:w-10/12 md:text-xl lg:mx-0">
-                    Build your React landing page effortlessly with the required
-                    sections for your project.
+                    Level up your Zora experience with our powerful analytics
+                    tool.
                 </p>
 
                 <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center lg:justify-start">

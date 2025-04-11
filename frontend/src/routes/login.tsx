@@ -51,7 +51,7 @@ function RouteComponent() {
     return (
         <div className="flex flex-grow items-center justify-center">
             <form
-                className="flex w-full max-w-sm flex-col"
+                className="flex w-full max-w-sm flex-col mt-8"
                 onSubmit={handleSubmit(onSubmit)}
             >
                 <h1 className="mb-1 text-2xl font-semibold">Login</h1>

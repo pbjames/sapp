@@ -53,7 +53,7 @@ export const Features = () => {
     return (
         <section
             id="features"
-            className="container mx-auto space-y-8 px-4 py-24 sm:py-32"
+            className="container mx-auto w-full max-w-5xl space-y-8 px-4 pb-24 sm:pb-32"
         >
             <h2 className="text-center text-3xl font-bold lg:text-4xl">
                 Many{' '}

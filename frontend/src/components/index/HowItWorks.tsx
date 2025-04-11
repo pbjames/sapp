@@ -38,7 +38,7 @@ export const HowItWorks = () => {
     return (
         <section
             id="howItWorks"
-            className="container mx-auto px-4 py-24 sm:py-32"
+            className="container mx-auto w-full max-w-5xl px-4 py-24 sm:py-32"
         >
             <h2 className="text-center text-3xl font-bold md:text-center md:text-4xl">
                 How It{' '}
@@ -52,11 +52,11 @@ export const HowItWorks = () => {
                 Veritatis dolor pariatur sit!
             </p>
 
-            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 {features.map(({ icon, title, description }: FeatureProps) => (
                     <Card key={title} className="bg-muted/50">
                         <CardHeader>
-                            <CardTitle className="grid place-items-center gap-4">
+                            <CardTitle className="grid place-items-center gap-2">
                                 {icon}
                                 {title}
                             </CardTitle>

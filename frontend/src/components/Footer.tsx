@@ -3,13 +3,13 @@ export const Footer = () => {
         <footer id="footer">
             <hr className="mx-auto w-11/12" />
 
-            {/* 
-        1) The container now uses mx-auto to center itself. 
+            {/*
+        1) The container now uses mx-auto to center itself.
         2) We added text-center directly on the section so all child elements
            inherit centered text alignment by default.
         3) justify-items-center ensures each grid cell is centered horizontally.
       */}
-            <section className="container mx-auto grid grid-cols-2 justify-items-center gap-x-12 gap-y-8 py-10 text-left md:grid-cols-4 xl:grid-cols-6">
+            <section className="mx-auto grid w-full max-w-5xl grid-cols-2 justify-items-center gap-x-12 gap-y-8 py-10 text-left md:grid-cols-4">
                 <div className="flex flex-col gap-2">
                     <h3 className="text-lg font-bold">Lorem Ipsum</h3>
                     <div>

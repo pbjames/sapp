@@ -40,8 +40,8 @@ export const Navbar = () => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
     return (
         <header className="dark:bg-background sticky top-0 z-40 w-full border-b-[1px] bg-white dark:border-b-slate-700">
-            <NavigationMenu className="mx-auto">
-                <NavigationMenuList className="container flex h-14 w-screen justify-between px-4">
+            <NavigationMenu className="mx-auto w-full max-w-5xl [&>div]:w-full">
+                <NavigationMenuList className="flex h-14 w-full justify-between px-4">
                     <NavigationMenuItem className="flex font-bold">
                         <a
                             rel="noreferrer noopener"
@@ -49,7 +49,7 @@ export const Navbar = () => {
                             className="ml-2 flex text-xl font-bold"
                         >
                             <Flame className="text-primary mr-2 h-6 w-6" />
-                            ShadcnUI/React
+                            SAPP
                         </a>
                     </NavigationMenuItem>
 
@@ -70,7 +70,7 @@ export const Navbar = () => {
                             <SheetContent side={'left'}>
                                 <SheetHeader>
                                     <SheetTitle className="text-xl font-bold">
-                                        Shadcn/React
+                                        SAPP
                                     </SheetTitle>
                                 </SheetHeader>
                                 <nav className="mt-4 flex flex-col items-center justify-center gap-2">

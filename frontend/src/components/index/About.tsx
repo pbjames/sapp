@@ -3,9 +3,9 @@ import pilot from '@/assets/pilot.png';
 
 export const About = () => {
     return (
-        <section id="about" className="container py-24 sm:py-32">
+        <section id="about" className="w-full">
             <div className="bg-muted/50 rounded-lg border py-12">
-                <div className="flex flex-col gap-8 px-6 md:flex-row md:gap-12">
+                <div className="mx-auto flex w-full max-w-5xl flex-col gap-8 px-6 md:flex-row md:gap-12">
                     {/* Image: centered on mobile */}
                     <img
                         src={pilot}

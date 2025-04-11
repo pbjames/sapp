@@ -43,9 +43,9 @@ export const Hero = () => {
                 bg-clip-text
               "
             >
-              Shadcn
+              Analyse
             </span>{" "}
-            landing page
+            Zora Coins
           </h1>{" "}
           for{" "}
           <h2 className="inline">
@@ -60,9 +60,8 @@ export const Hero = () => {
                 bg-clip-text
               "
             >
-              React
+              Earning as a creator
             </span>{" "}
-            developers
           </h2>
         </main>
 
@@ -97,8 +96,7 @@ export const Hero = () => {
               ${buttonVariants({ variant: "outline" })}
             `}
           >
-            Github Repository
-            <GitHubLogoIcon className="ml-2 w-5 h-5" />
+            Current Trending Coins
           </a>
         </div>
       </div>

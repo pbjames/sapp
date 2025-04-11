@@ -155,6 +155,30 @@ class Profile(BaseModel):
     linkedWallets: LinkedWallets
 
 
+class BasicProfile(BaseModel):
+    id: str
+    handle: str
+    avatar: Avatar | None = None
+    displayName: str | None = None
+    website: str | None = None
+    coinBalances: CoinBalances
+
+
+class CoinBalanceNode(BaseModel):
+    balance: str
+    id: str
+    coin: Zora20Token
+
+
+class CoinBalanceEdge(BaseModel):
+    node: CoinBalanceNode
+
+
+class CoinBalances(BaseModel):
+    count: int
+    edges: list[CoinBalanceEdge]
+
+
 ExploreListType = Literal[
     "TOP_GAINERS",
     "TOP_VOLUME_24H",
@@ -179,6 +203,18 @@ def get_coin(address: str) -> Zora20Token:
     return Zora20Token(**response.json()["zora20Token"])
 
 
-def get_profile(address: str) -> Profile:
-    response = requests.get(f"{BASE_URL}/profile", params={"identifier": address})
-    return Profile(**response.json())
+def get_all_comments(address: str, count: int) -> list[ZoraCommentNode]:
+    response = requests.get(
+        f"{BASE_URL}/coinComments", params={"address": address, "count": count}
+    )
+    comments = ZoraComments(**response.json()["zora20Token"]["zoraComments"])
+    if comments is not None:
+        return [e.node for e in comments.edges]
+    return []
+
+
+def get_profile(address: str) -> BasicProfile:
+    response = requests.get(
+        f"{BASE_URL}/profileBalances", params={"identifier": address}
+    )
+    return BasicProfile(**response.json()["profile"])

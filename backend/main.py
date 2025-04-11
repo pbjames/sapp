@@ -5,7 +5,8 @@ from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import text
 from database import SessionLocal, engine, Base, get_db
-from routers.users import router as users_router
+from models import User  # Import your models
+from routers.users import router as user_router
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -14,7 +15,7 @@ logger = logging.getLogger(__name__)
 app = FastAPI()
 cli = Typer()
 
-app.include_router(users_router, prefix="/users", tags=["users"])
+app.include_router(user_router, prefix="/users", tags=["users"])
 
 @app.on_event("startup")
 async def startup_db_client():

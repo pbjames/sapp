@@ -37,21 +37,21 @@ type RegisterResponse = {
 };
 
 const register = async (data: RegisterData): Promise<RegisterResponse> => {
-    try {
-        const response = await axios.post<RegisterResponse>(
-            `${import.meta.env.VITE_API_URL}/register`,
-            data,
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            }
-        );
-        return response.data;
-    } catch (error) {
-        throw new Error('Registration failed');
-    }
+    const response = await axios.post<RegisterResponse>(
+        `${import.meta.env.VITE_API_URL}/register`,
+        data,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }
+    );
+
+    return response.data;
 };
 
 export type { LoginData, LoginResponse, RegisterData, RegisterResponse };
-export default { login, register };
+export default {
+    login,
+    register,
+};

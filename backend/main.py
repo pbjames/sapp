@@ -59,13 +59,12 @@ def coin_time_series(address: str): ...
 
 
 class TokenInfo(BaseModel):
-    id: int
+    id: str
     name: str
     symbol: str
     preview: str | None
-    marketCap: int
-    marketCapDelta24h: int
-    price: float
+    marketCap: float
+    marketCapDelta24h: float
     timeseries: list[dict[str, int]]
 
 
@@ -75,13 +74,12 @@ def trending_coins(count: int = 5):
     coins = [e.node for e in coin.exploreList.edges]
     return [
         TokenInfo(
-            id=int(coin.id, base=16),
+            id=coin.address,
             name=coin.name,
             symbol=coin.symbol,
             preview=None,
-            marketCap=int(coin.marketCap),
-            marketCapDelta24h=int(coin.marketCapDelta24h),
-            price=69,
+            marketCap=float(coin.marketCap),
+            marketCapDelta24h=float(coin.marketCapDelta24h),
             timeseries=[],
         )
         for coin in coins

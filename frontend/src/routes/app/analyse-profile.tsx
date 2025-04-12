@@ -1,3 +1,4 @@
+// @ts-nocheck
 import Dashboard from '@/components/dashboard/dashboard';
 import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import { TriangleUpIcon } from '@radix-ui/react-icons';

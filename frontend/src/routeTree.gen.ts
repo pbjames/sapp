@@ -10,142 +10,174 @@
 
 // Import Routes
 
-import { Route as rootRoute } from './routes/__root';
-import { Route as RegisterImport } from './routes/register';
-import { Route as LoginImport } from './routes/login';
-import { Route as AboutImport } from './routes/about';
-import { Route as IndexImport } from './routes/index';
-import { Route as AppIndexImport } from './routes/app/index';
+import { Route as rootRoute } from './routes/__root'
+import { Route as RegisterImport } from './routes/register'
+import { Route as LoginImport } from './routes/login'
+import { Route as AboutImport } from './routes/about'
+import { Route as IndexImport } from './routes/index'
+import { Route as AppIndexImport } from './routes/app/index'
+import { Route as AppAnalyseProfileImport } from './routes/app/analyse-profile'
 
 // Create/Update Routes
 
 const RegisterRoute = RegisterImport.update({
-    id: '/register',
-    path: '/register',
-    getParentRoute: () => rootRoute,
-} as any);
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const LoginRoute = LoginImport.update({
-    id: '/login',
-    path: '/login',
-    getParentRoute: () => rootRoute,
-} as any);
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const AboutRoute = AboutImport.update({
-    id: '/about',
-    path: '/about',
-    getParentRoute: () => rootRoute,
-} as any);
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
-    id: '/',
-    path: '/',
-    getParentRoute: () => rootRoute,
-} as any);
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const AppIndexRoute = AppIndexImport.update({
-    id: '/app/',
-    path: '/app/',
-    getParentRoute: () => rootRoute,
-} as any);
+  id: '/app/',
+  path: '/app/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AppAnalyseProfileRoute = AppAnalyseProfileImport.update({
+  id: '/app/analyse-profile',
+  path: '/app/analyse-profile',
+  getParentRoute: () => rootRoute,
+} as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
-    interface FileRoutesByPath {
-        '/': {
-            id: '/';
-            path: '/';
-            fullPath: '/';
-            preLoaderRoute: typeof IndexImport;
-            parentRoute: typeof rootRoute;
-        };
-        '/about': {
-            id: '/about';
-            path: '/about';
-            fullPath: '/about';
-            preLoaderRoute: typeof AboutImport;
-            parentRoute: typeof rootRoute;
-        };
-        '/login': {
-            id: '/login';
-            path: '/login';
-            fullPath: '/login';
-            preLoaderRoute: typeof LoginImport;
-            parentRoute: typeof rootRoute;
-        };
-        '/register': {
-            id: '/register';
-            path: '/register';
-            fullPath: '/register';
-            preLoaderRoute: typeof RegisterImport;
-            parentRoute: typeof rootRoute;
-        };
-        '/app/': {
-            id: '/app/';
-            path: '/app';
-            fullPath: '/app';
-            preLoaderRoute: typeof AppIndexImport;
-            parentRoute: typeof rootRoute;
-        };
+  interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
     }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutImport
+      parentRoute: typeof rootRoute
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginImport
+      parentRoute: typeof rootRoute
+    }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterImport
+      parentRoute: typeof rootRoute
+    }
+    '/app/analyse-profile': {
+      id: '/app/analyse-profile'
+      path: '/app/analyse-profile'
+      fullPath: '/app/analyse-profile'
+      preLoaderRoute: typeof AppAnalyseProfileImport
+      parentRoute: typeof rootRoute
+    }
+    '/app/': {
+      id: '/app/'
+      path: '/app'
+      fullPath: '/app'
+      preLoaderRoute: typeof AppIndexImport
+      parentRoute: typeof rootRoute
+    }
+  }
 }
 
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-    '/': typeof IndexRoute;
-    '/about': typeof AboutRoute;
-    '/login': typeof LoginRoute;
-    '/register': typeof RegisterRoute;
-    '/app': typeof AppIndexRoute;
+  '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
+  '/app/analyse-profile': typeof AppAnalyseProfileRoute
+  '/app': typeof AppIndexRoute
 }
 
 export interface FileRoutesByTo {
-    '/': typeof IndexRoute;
-    '/about': typeof AboutRoute;
-    '/login': typeof LoginRoute;
-    '/register': typeof RegisterRoute;
-    '/app': typeof AppIndexRoute;
+  '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
+  '/app/analyse-profile': typeof AppAnalyseProfileRoute
+  '/app': typeof AppIndexRoute
 }
 
 export interface FileRoutesById {
-    __root__: typeof rootRoute;
-    '/': typeof IndexRoute;
-    '/about': typeof AboutRoute;
-    '/login': typeof LoginRoute;
-    '/register': typeof RegisterRoute;
-    '/app/': typeof AppIndexRoute;
+  __root__: typeof rootRoute
+  '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/login': typeof LoginRoute
+  '/register': typeof RegisterRoute
+  '/app/analyse-profile': typeof AppAnalyseProfileRoute
+  '/app/': typeof AppIndexRoute
 }
 
 export interface FileRouteTypes {
-    fileRoutesByFullPath: FileRoutesByFullPath;
-    fullPaths: '/' | '/about' | '/login' | '/register' | '/app';
-    fileRoutesByTo: FileRoutesByTo;
-    to: '/' | '/about' | '/login' | '/register' | '/app';
-    id: '__root__' | '/' | '/about' | '/login' | '/register' | '/app/';
-    fileRoutesById: FileRoutesById;
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/login'
+    | '/register'
+    | '/app/analyse-profile'
+    | '/app'
+  fileRoutesByTo: FileRoutesByTo
+  to: '/' | '/about' | '/login' | '/register' | '/app/analyse-profile' | '/app'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/login'
+    | '/register'
+    | '/app/analyse-profile'
+    | '/app/'
+  fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-    IndexRoute: typeof IndexRoute;
-    AboutRoute: typeof AboutRoute;
-    LoginRoute: typeof LoginRoute;
-    RegisterRoute: typeof RegisterRoute;
-    AppIndexRoute: typeof AppIndexRoute;
+  IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
+  LoginRoute: typeof LoginRoute
+  RegisterRoute: typeof RegisterRoute
+  AppAnalyseProfileRoute: typeof AppAnalyseProfileRoute
+  AppIndexRoute: typeof AppIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-    IndexRoute: IndexRoute,
-    AboutRoute: AboutRoute,
-    LoginRoute: LoginRoute,
-    RegisterRoute: RegisterRoute,
-    AppIndexRoute: AppIndexRoute,
-};
+  IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
+  LoginRoute: LoginRoute,
+  RegisterRoute: RegisterRoute,
+  AppAnalyseProfileRoute: AppAnalyseProfileRoute,
+  AppIndexRoute: AppIndexRoute,
+}
 
 export const routeTree = rootRoute
-    ._addFileChildren(rootRouteChildren)
-    ._addFileTypes<FileRouteTypes>();
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
 
 /* ROUTE_MANIFEST_START
 {
@@ -157,6 +189,7 @@ export const routeTree = rootRoute
         "/about",
         "/login",
         "/register",
+        "/app/analyse-profile",
         "/app/"
       ]
     },
@@ -171,6 +204,9 @@ export const routeTree = rootRoute
     },
     "/register": {
       "filePath": "register.tsx"
+    },
+    "/app/analyse-profile": {
+      "filePath": "app/analyse-profile.tsx"
     },
     "/app/": {
       "filePath": "app/index.tsx"

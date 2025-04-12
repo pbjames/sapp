@@ -20,6 +20,9 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 8000
+          env:
+            - name: DATABASE_URL
+              value: "postgresql://testing_owner:npg_hrSRKItY39Vd@ep-nameless-wind-a560j4gl-pooler.us-east-2.aws.neon.tech/testing?sslmode=require"
           resources:
             limits:
               memory: "512Mi"

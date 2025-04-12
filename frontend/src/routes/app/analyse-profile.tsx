@@ -1,7 +1,9 @@
 // @ts-nocheck
 import Dashboard from '@/components/dashboard/dashboard';
 import { Card, CardContent, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { TriangleUpIcon } from '@radix-ui/react-icons';
+import { Loader2 } from 'lucide-react';
 import { createFileRoute } from '@tanstack/react-router';
 import profile, { ProfileResponse, ReportsResponse } from '@/lib/api/profile';
 import { Dispatch, SetStateAction, useState } from 'react';
@@ -33,6 +35,11 @@ function ProfileAnalysis() {
                     targetProfile={targetProfile}
                     setTargetProfile={setTargetProfile}
                 />
+            ) : targetProfile == 'replaceMe' ? (
+                <ChooseTarget
+                    targetProfile={targetProfile}
+                    setTargetProfile={setTargetProfile}
+                />
             ) : (
                 <TargetAnalysis
                     targetProfile={targetProfile}
@@ -42,6 +49,30 @@ function ProfileAnalysis() {
         </Dashboard>
     );
 }
+
+function ChooseTarget(props: TargetState) {
+    function handleForm(formData: FormData) {
+        props.setTargetProfile(formData.get('wallet'));
+    }
+    return (
+        <section className="grid h-full w-full grid-cols-1 grid-rows-1 items-center justify-items-center">
+            <form
+                action={handleForm}
+                className="space-x-2 rounded-lg p-4 outline"
+            >
+                <label htmlFor="wallet">Wallet: </label>
+                <input
+                    name="wallet"
+                    type="text"
+                    placeholder="0x123456789a..ff"
+                    className="rounded outline"
+                />
+                <Button type="submit">Submit</Button>
+            </form>
+        </section>
+    );
+}
+
 function TargetSelection(props: TargetState) {
     return (
         <section className="h-full items-center">
@@ -59,7 +90,7 @@ function TargetSelection(props: TargetState) {
                 </button>
                 <button
                     className="grid cursor-pointer grid-flow-col grid-cols-1 items-center justify-items-center transition-colors hover:bg-gray-300"
-                    onClick={() => props.setTargetProfile('')}
+                    onClick={() => props.setTargetProfile('replaceMe')}
                 >
                     <p className="text-2xl font-semibold">Another profile</p>
                 </button>
@@ -71,19 +102,28 @@ function TargetAnalysis(props: TargetState) {
     const profileQ = useQuery<ProfileResponse>({
         queryKey: ['profile', 'analysis'],
         queryFn: async () => {
-            const p = await profile.getProfile(
-                localStorage.getItem('jwt') || ''
+            const p = await profile.getProfileByWallet(
+                localStorage.getItem('jwt') || '',
+                props.targetProfile
             );
             return p;
         },
     });
+    console.log(props.targetProfile);
+    if (profileQ.status == 'pending') {
+        return (
+            <div className="flex h-[calc(122px-2rem)] w-full items-center justify-center">
+                <Loader2 className="h-6 w-6 animate-spin text-gray-500" />
+            </div>
+        );
+    }
     return (
         <section className="flex flex-col items-center justify-items-center space-y-2 px-[15%]">
             <section className="flex pt-10">
-                <div className="flex justify-items-start p-4">
+                <div className="flex h-auto max-w-[25%] justify-items-start p-4">
                     <img
-                        src={profileQ.data?.avatar || ''}
-                        className="h-auto w-50 object-contain"
+                        src={profileQ.data?.avatar || null}
+                        className="rounded-full object-contain"
                     />
                 </div>
                 <div className="flex flex-col justify-items-start space-y-1">

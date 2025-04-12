@@ -65,7 +65,6 @@ class TokenInfo(BaseModel):
     preview: str | None
     marketCap: float
     marketCapDelta24h: float
-    price: float
     timeseries: list[dict[str, int]]
 
 
@@ -81,7 +80,6 @@ def trending_coins(count: int = 5):
             preview=None,
             marketCap=float(coin.marketCap),
             marketCapDelta24h=float(coin.marketCapDelta24h),
-            price=69,
             timeseries=[],
         )
         for coin in coins

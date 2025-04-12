@@ -1,24 +1,24 @@
 {
-    "resource": "/create-coin",
-    "path": "/create-coin",
+  "resource": "/create-coin",
+  "path": "/create-coin",
+  "httpMethod": "POST",
+  "headers": {
+    "Content-Type": "application/json"
+  },
+  "queryStringParameters": null,
+  "pathParameters": null,
+  "stageVariables": null,
+  "requestContext": {
+    "resourcePath": "/create-coin",
     "httpMethod": "POST",
-    "headers": {
-      "Content-Type": "application/json"
-    },
-    "queryStringParameters": null,
-    "pathParameters": null,
-    "stageVariables": null,
-    "requestContext": {
-      "resourcePath": "/create-coin",
-      "httpMethod": "POST",
-      "requestId": "unique-request-id",
-      "accountId": "123456789012",
-      "stage": "test",
-      "identity": {
-        "sourceIp": "127.0.0.1",
-        "userAgent": "Custom User Agent"
-      }
-    },
-    "body": "{\"name\": \"My Awesome Coin\", \"symbol\": \"MAC\", \"uri\": \"ipfs://bafybeibexampleuri\", \"payoutRecipient\": \"0x1234567890abcdef1234567890abcdef12345678\"}",
-    "isBase64Encoded": false
-  }
+    "requestId": "unique-request-id",
+    "accountId": "123456789012",
+    "stage": "test",
+    "identity": {
+      "sourceIp": "127.0.0.1",
+      "userAgent": "Custom User Agent"
+    }
+  },
+  "body": "{\"name\": \"My Awesome Coin\", \"symbol\": \"MAC\", \"description\": \"This is my awesome coin's description.\"}",
+  "isBase64Encoded": false
+}

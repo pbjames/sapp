@@ -6,65 +6,79 @@ import { base } from 'viem/chains';
 import axios from 'axios';
 import FormData from 'form-data';
 
-// =========== Infura Credentials ==========
-const projectId = "f66c36dd3ec047f0bac42842aa9a1344";
-const projectSecret = "GJXTUZnJGNXUqg0HSYNuKnBw84XLG/txieF/QCpy+mibw32su/O0pA";
-const authHeader = 'Basic ' + Buffer.from(`${projectId}:${projectSecret}`).toString('base64');
-
-/**
- * Pin an existing CID to Infura IPFS using Axios.
- * Mirrors the original https.request code, but with Axios.
- */
-async function pinCID(cid: string): Promise<string> {
-  // Equivalent to:
-  //  POST /api/v0/pin/add?arg=<CID>
-  // with Basic Auth <projectId>:<projectSecret>
-
-  const url = `https://ipfs.infura.io:5001/api/v0/pin/add?arg=${cid}`;
-  
-
-  // Use “auth” option or the Authorization header. Here we’ll do an explicit header:
-  const response = await axios.post(url, null, {
-    headers: {
-      Authorization: authHeader,
-    },
-    // or you could do:
-    // auth: { username: projectId, password: projectSecret }
-  });
-
-  if (response.status !== 200) {
-    throw new Error(`Failed to pin CID. Status: ${response.status} - ${response.statusText}`);
+type CreateCoinArgs = {
+    name: string;             // The name of the coin (e.g., "My Awesome Coin")
+    symbol: string;           // The trading symbol for the coin (e.g., "MAC")
+    uri: string;              // Metadata URI (an IPFS URI is recommended)
+    owners?: Address[];       // Optional array of owner addresses, defaults to [payoutRecipient]
+    tickLower?: number;       // Optional tick lower for Uniswap V3 pool, defaults to -199200
+    payoutRecipient: Address; // Address that receives creator earnings
+    platformReferrer?: Address; // Optional platform referrer address, earns referral fees
+    initialPurchaseWei?: bigint; // Optional initial purchase amount in wei
   }
 
-  // Infura usually returns JSON with "Pins" or a pinned object. Just return raw text or JSON
-  return JSON.stringify(response.data);
-}
+const walletAddress = "0xfF025f47461755AADED95Ce9dF5A196945180Bfc";
+
+// =========== Pinata Credentials ==========
+const pinataApiKey = "117b984c2537d405227d";
+const pinataSecretApiKey = "a509e44c29ea215af443e56e8ca10e90f4ead9ca6435f97b916fef63cd9b4ac5";
+
+// =========== Helper Functions ==========
 
 /**
- * Upload a file (Buffer) to IPFS via Infura using /api/v0/add?pin=true
+ * Upload JSON metadata to Pinata using the pinJSONToIPFS endpoint.
  * Returns the IPFS hash (CID).
  */
-async function uploadToIPFS(fileBuffer: Buffer): Promise<string> {
-  const formData = new FormData();
-  formData.append('file', fileBuffer, { filename: 'file' });
+async function uploadJSONToPinata(jsonContent: object): Promise<string> {
+  const url = "https://api.pinata.cloud/pinning/pinJSONToIPFS";
 
   const response = await axios.post(
-    'https://ipfs.infura.io:5001/api/v0/add?pin=true',
-    formData,
+    url,
+    {
+      pinataMetadata: {
+        name: (jsonContent as any).name || "Metadata",
+      },
+      pinataContent: jsonContent,
+    },
     {
       headers: {
-        Authorization: authHeader,
-        ...formData.getHeaders(),
+        "Content-Type": "application/json",
+        pinata_api_key: pinataApiKey,
+        pinata_secret_api_key: pinataSecretApiKey,
       },
     }
   );
 
   if (response.status !== 200) {
-    throw new Error(`Failed to upload to IPFS. Status: ${response.status}`);
+    throw new Error(`Failed to upload JSON to Pinata. Status: ${response.status}`);
   }
+  // The response data contains an "IpfsHash" property.
+  return response.data.IpfsHash;
+}
 
-  // The response data includes { Name, Hash, Size }
-  return response.data.Hash; // or response.data.Path
+/**
+ * Upload a file (Buffer) to Pinata using the pinFileToIPFS endpoint.
+ * Returns the IPFS hash (CID).
+ */
+async function uploadFileToPinata(fileBuffer: Buffer, filename: string = "file"): Promise<string> {
+  const url = "https://api.pinata.cloud/pinning/pinFileToIPFS";
+  const formData = new FormData();
+  formData.append("file", fileBuffer, { filename });
+
+  const response = await axios.post(url, formData, {
+    headers: {
+      // Merge formData headers (which include the proper Content-Type boundary)
+      ...formData.getHeaders(),
+      pinata_api_key: pinataApiKey,
+      pinata_secret_api_key: pinataSecretApiKey,
+    },
+  });
+
+  if (response.status !== 200) {
+    throw new Error(`Failed to upload file to Pinata. Status: ${response.status}`);
+  }
+  // The response data includes "IpfsHash" property.
+  return response.data.IpfsHash;
 }
 
 // =========== viem Setup ==========
@@ -74,41 +88,14 @@ const publicClient = createPublicClient({
 });
 
 const walletClient = createWalletClient({
-  account: '0xd067782dbaefe271fc16fc8c84531445320c6a79' as Hex,
+  account: walletAddress as Hex,
   chain: base,
   transport: http('https://base-sepolia.drpc.org'),
 });
 
 /**
- * Create the coin by calling @zoralabs/coins-sdk
+ * Create the coin by calling @zoralabs/coins-sdk.
  */
-async function createMyCoin(
-  name: string,
-  symbol: string,
-  uri: string,
-  payoutRecipient: string
-) {
-  try {
-    const coinParams = {
-      name,
-      symbol,
-      uri,
-      payoutRecipient: payoutRecipient as Address,
-    };
-
-    const result = await createCoin(coinParams, walletClient, publicClient);
-
-    console.log('Transaction hash:', result.hash);
-    console.log('Coin address:', result.address);
-    console.log('Deployment details:', result.deployment);
-
-    return result;
-  } catch (error) {
-    console.error('Error creating coin:', error);
-    throw error;
-  }
-}
-
 /**
  * Lambda Handler
  */
@@ -116,10 +103,10 @@ export const lambdaHandler = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
   try {
-    // 1) Log the incoming event
+    // 1) Log the incoming event.
     console.log('Received event:', JSON.stringify(event));
 
-    // 2) Parse request body
+    // 2) Parse the request body.
     let requestData: any = {};
     if (event.body) {
       try {
@@ -136,54 +123,46 @@ export const lambdaHandler = async (
       }
     }
 
-    // 3) Build some JSON metadata
+    // 3) Build JSON metadata.
     const metadata = {
       name: requestData.name,
       description: requestData.description,
-      image: "", // Will fill in after uploading an image
+      image: "", // Will be filled after image upload.
       properties: {
         category: "social",
       },
     };
 
-    // 4) Upload the metadata (without image) to IPFS
-    const metadataBuffer = Buffer.from(JSON.stringify(metadata));
-    const metadataHash = await uploadToIPFS(metadataBuffer);
-    console.log("Initial JSON CID:", metadataHash);
-    const jsonUri = `ipfs://${metadataHash}`;
+    // 4) Upload the metadata (without image) to Pinata.
+    const initialMetadataHash = await uploadJSONToPinata(metadata);
+    console.log("Initial JSON CID:", initialMetadataHash);
+    const jsonUri = `ipfs://${initialMetadataHash}`;
 
-    // 5) Simulate an image upload (replace with real data)
+    // 5) Simulate an image upload (replace with real image data).
     const imageBuffer = Buffer.from("...binary image data...", "binary");
-    const imageHash = await uploadToIPFS(imageBuffer);
+    const imageHash = await uploadFileToPinata(imageBuffer, "image.png");
     console.log("Image CID:", imageHash);
     const imageUri = `ipfs://${imageHash}`;
 
-    // 6) Update metadata with image URI, re-upload
+    // 6) Update metadata with the image URI and re-upload.
     metadata.image = imageUri;
-    const updatedMetadataBuffer = Buffer.from(JSON.stringify(metadata));
-    const updatedMetadataHash = await uploadToIPFS(updatedMetadataBuffer);
+    const updatedMetadataHash = await uploadJSONToPinata(metadata);
     console.log("Updated JSON CID:", updatedMetadataHash);
     const updatedJsonUri = `ipfs://${updatedMetadataHash}`;
 
-    // (Optional) Pin the final metadata CID if you want
-    // You can call pinCID() to explicitly pin the final IPFS hash
-    // await pinCID(updatedMetadataHash);
-
-    // 7) Create a coin using the final metadata URI
-    const coinParams = {
+    // 7) Create a coin using the final metadata URI.
+    const coinParams: CreateCoinArgs = {
       name: requestData.name,
       symbol: requestData.symbol,
       uri: updatedJsonUri,
-      payoutRecipient: "0xd067782dbaefe271fc16fc8c84531445320c6a79" as Address,
+      payoutRecipient: walletAddress as Address,
+      platformReferrer: walletAddress as Address,
+      initialPurchaseWei: 0n,
     };
-    const res = await createMyCoin(
-      coinParams.name,
-      coinParams.symbol,
-      coinParams.uri,
-      coinParams.payoutRecipient
-    );
 
-    // 8) Log and return a success response
+    const res = await createCoin(coinParams, walletClient, publicClient);
+
+    // 8) Log and return a success response.
     console.log("Transaction hash:", res.hash);
     console.log("Coin address:", res.address);
     console.log("Deployment details:", res.deployment);

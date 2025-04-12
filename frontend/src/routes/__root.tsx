@@ -3,7 +3,6 @@ import {
     Outlet,
     useRouterState,
 } from '@tanstack/react-router';
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import { Footer } from '@/components/Footer';
 import { Navbar } from '@/components/Navbar';
 import { ProtectedRouteProvider } from '@/context/ProtectedRouteContext';

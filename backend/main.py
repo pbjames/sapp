@@ -166,10 +166,12 @@ def profile_details(profile_id):
     return _profile_details(profile_id)
 
 
-# @app.get("/profile")
-# def profile_details(user = Depends(get_current_user)):
-#     return _profile_details(user.)
+@app.get("/profile")
+def profile_details_me(user: User = Depends(get_current_user)):
+    return _profile_details(user.wallet_address)
 
+
+# def get_reports_by_wallet(current_user: User = Depends(get_current_user)):
 
 # @app.get("/items/{item_id}")
 # def read_item(item_id: int, q: Union[str, None] = None):

@@ -6,7 +6,7 @@ import logging
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import text
-from coins import explore, get_profile
+from coins import MediaContent, Zora20Token, explore, get_profile
 from database import SessionLocal, engine, Base, get_db
 from models import User  # Import your models
 from routers.users import router as user_router
@@ -66,10 +66,17 @@ class TokenInfo(BaseModel):
     marketCap: float
     marketCapDelta24h: float
     timeseries: list[dict[str, int]]
+    image: str
 
 
 @app.get("/trending_tokens")
 def trending_coins(count: int = 5):
+    def extract_image(coin: Zora20Token) -> str:
+        if (content := coin.mediaContent) is not None:
+            if (preview := content.previewImage) is not None:
+                return preview.medium
+        return ""
+
     coin = explore(count=count)
     coins = [e.node for e in coin.exploreList.edges]
     return [
@@ -81,6 +88,7 @@ def trending_coins(count: int = 5):
             marketCap=float(coin.marketCap),
             marketCapDelta24h=float(coin.marketCapDelta24h),
             timeseries=[],
+            image=extract_image(coin),
         )
         for coin in coins
     ]

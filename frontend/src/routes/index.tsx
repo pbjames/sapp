@@ -20,12 +20,8 @@ function Index() {
             <About />
             <HowItWorks />
             <Features />
-            {
-                // <Cta />
-            }
-            {
-                // <Pricing />
-            }
+            {/* <Cta />*/}
+            {/*<Pricing />*/}
             <FAQ />
             <ScrollToTop />
         </>

@@ -59,7 +59,7 @@ def coin_time_series(address: str): ...
 
 
 class TokenInfo(BaseModel):
-    id: int
+    id: str
     name: str
     symbol: str
     preview: str | None
@@ -75,7 +75,7 @@ def trending_coins(count: int = 5):
     coins = [e.node for e in coin.exploreList.edges]
     return [
         TokenInfo(
-            id=int(coin.id, base=16),
+            id=coin.id,
             name=coin.name,
             symbol=coin.symbol,
             preview=None,

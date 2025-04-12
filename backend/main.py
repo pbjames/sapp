@@ -98,10 +98,6 @@ def trending_coins(count: int = 5):
         for coin in coins
     ]
 
-@app.get("/hello")
-async def hello_world():
-    return {"message": "Hello World!!!"}
-
 class ProfileHolding(BaseModel):
     id: str
     symbol: str

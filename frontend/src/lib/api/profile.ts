@@ -5,7 +5,7 @@ type ProfileResponse = {
     wallet: string;
     zora: {
         displayName: string;
-        handle: string;
+        handle: string | null;
         bio: string;
         avatar: string | null;
         following: number;

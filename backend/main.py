@@ -17,6 +17,7 @@ from coins import (
 from database import SessionLocal, engine, Base, get_db
 from models import User  # Import your models
 from routers.users import router as user_router
+from routers.users import get_current_user
 from routers.reports import router as report_router
 from routers.analyze import router as analyze_router
 
@@ -119,9 +120,7 @@ class ProfileResponse(BaseModel):
     holdings: list[ProfileHolding]
 
 
-@app.get("/profile/{profile_id}")
-def profile_details(profile_id: str) -> ProfileResponse:
-
+def _profile_details(profile_id: str) -> ProfileResponse:
     def extract_image_token(coin: Zora20Token) -> str:
         if (content := coin.mediaContent) is not None:
             if (preview := content.previewImage) is not None:
@@ -160,6 +159,16 @@ def profile_details(profile_id: str) -> ProfileResponse:
         avatar=extract_image_profile(profile),
         holdings=holdings,
     )
+
+
+@app.get("/profile/{profile_id}")
+def profile_details(profile_id):
+    return _profile_details(profile_id)
+
+
+# @app.get("/profile")
+# def profile_details(user = Depends(get_current_user)):
+#     return _profile_details(user.)
 
 
 # @app.get("/items/{item_id}")

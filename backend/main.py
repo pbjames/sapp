@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends
+from fastapi.middleware.cors import CORSMiddleware
 from typer import Typer
 import logging
 from sqlalchemy.orm import Session
@@ -16,6 +17,16 @@ app = FastAPI()
 cli = Typer()
 
 app.include_router(user_router, prefix="/users", tags=["users"])
+
+# Allow all origins (for development)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # or ["http://localhost:3000"] for specific frontend
+    allow_credentials=True,
+    allow_methods=["*"],  # GET, POST, PUT, DELETE, etc.
+    allow_headers=["*"],  # Authorization, Content-Type, etc.
+)
+
 
 @app.on_event("startup")
 async def startup_db_client():
@@ -38,7 +49,6 @@ def say_hello():
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
-
 
 
 # @app.get("/items/{item_id}")

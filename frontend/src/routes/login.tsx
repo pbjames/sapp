@@ -6,7 +6,8 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import auth from '@/lib/api/auth';
-
+import { useProtectedRoute } from '@/context/ProtectedRouteContext';
+import { useEffect } from 'react';
 export const Route = createFileRoute('/login')({
     component: RouteComponent,
 });
@@ -34,16 +35,25 @@ function RouteComponent() {
         mode: 'onChange',
     });
 
+    const { isAuthenticated, loading } = useProtectedRoute();
+
+    useEffect(() => {
+        if (!loading && isAuthenticated) {
+            nav({ to: '/app' });
+        }
+    }, [isAuthenticated, loading, nav]);
+
     const onSubmit = async (data: LoginValues) => {
         try {
             await auth.login(data);
-            nav({ to: '/app' });
+            window.location.reload();
         } catch (error: Error | any) {
             console.error('Login failed:', error);
             setError('root', {
                 type: 'manual',
                 message: error.message,
             });
+           
             return;
         }
     };

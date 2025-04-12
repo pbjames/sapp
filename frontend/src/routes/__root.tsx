@@ -6,6 +6,8 @@ import {
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import { Footer } from '@/components/Footer';
 import { Navbar } from '@/components/Navbar';
+import { ProtectedRouteProvider } from '@/context/ProtectedRouteContext';
+
 
 function RootLayout() {
     const location = useRouterState({ select: (state) => state.location });
@@ -15,6 +17,7 @@ function RootLayout() {
     console.log(location.pathname);
 
     return (
+      <ProtectedRouteProvider>
         <div className="flex h-dvh flex-col">
             {!hideLayout && <Navbar />}
 
@@ -24,6 +27,7 @@ function RootLayout() {
 
             {!hideLayout && <Footer />}
         </div>
+      </ProtectedRouteProvider>
     );
 }
 

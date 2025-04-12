@@ -64,9 +64,9 @@ type ReportsResponse = {
     createdAt: number;
 }[];
 
-const getReports = async (jwt: string): Promise<ReportsResponse[]> => {
-    const response = await axios.get<ReportsResponse[]>(
-        `${import.meta.env.VITE_API_URL}/users/reports`,
+const getReports = async (jwt: string): Promise<ReportsResponse> => {
+    const response = await axios.get<ReportsResponse>(
+        `${import.meta.env.VITE_API_URL}/`,
         {
             headers: {
                 'Content-Type': 'application/json',
@@ -88,7 +88,7 @@ type ReportResponse = {
 
 const getReport = async (id: string, jwt: string): Promise<ReportResponse> => {
     const response = await axios.get<ReportResponse>(
-        `${import.meta.env.VITE_API_URL}/users/reports/${id}`,
+        `${import.meta.env.VITE_API_URL}/reports/${id}`,
         {
             headers: {
                 'Content-Type': 'application/json',

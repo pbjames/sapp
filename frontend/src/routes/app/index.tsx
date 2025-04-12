@@ -12,8 +12,8 @@ import {
     DialogTitle,
 } from '@/components/ui/dialog';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { TrendingResponse } from '@/lib/api/analysis';
-import { ProfileResponse, ReportsResponse } from '@/lib/api/profile';
+import analysis, { TrendingResponse } from '@/lib/api/analysis';
+import profile, { ProfileResponse, ReportsResponse } from '@/lib/api/profile';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { ChartLine, ChartNoAxesCombined, Coins } from 'lucide-react';
@@ -87,118 +87,17 @@ function RouteComponent() {
 
     const reportsQ = useQuery<ReportsResponse>({
         queryKey: ['reports'],
-        queryFn: () => {
-            return [
-                {
-                    id: '1',
-                    type: 'coin-analysis',
-                    title: 'Poop coin',
-                    description: 'We analyzed poop coin',
-                    createdAt: new Date().getTime(),
-                },
-            ];
+        queryFn: async () => {
+            //return await profile.getReports(localStorage.getItem('jwt') || '');
+            return [];
         },
     });
 
     const trendingQ = useQuery<TrendingResponse>({
         queryKey: ['trending'],
-        queryFn: () => [
-            {
-                id: '1',
-                name: 'SICK COIN',
-                symbol: 'SICK',
-                preview: null,
-                marketCap: 100000,
-                marketCapDelta24h: 1000,
-                price: 1,
-                timeseries: [
-                    {
-                        stamp: 1672531199,
-                        price: 2000,
-                    },
-                    {
-                        stamp: 1672617599,
-                        price: 2100,
-                    },
-                ],
-            },
-            {
-                id: '2',
-                name: 'EPIC COIN',
-                symbol: 'EPIC',
-                preview: null,
-                marketCap: 100000,
-                marketCapDelta24h: 1000,
-                price: 1,
-                timeseries: [
-                    {
-                        stamp: 1672531199,
-                        price: 2000,
-                    },
-                    {
-                        stamp: 1672617599,
-                        price: 2100,
-                    },
-                ],
-            },
-            {
-                id: '3',
-                name: 'LIT COIN',
-                symbol: 'LIT',
-                preview: null,
-                marketCap: 100000,
-                marketCapDelta24h: 1000,
-                price: 1,
-                timeseries: [
-                    {
-                        stamp: 1672531199,
-                        price: 2000,
-                    },
-                    {
-                        stamp: 1672617599,
-                        price: 2100,
-                    },
-                ],
-            },
-            {
-                id: '4',
-                name: 'BRO COIN',
-                symbol: 'BRO',
-                preview: null,
-                marketCap: 100000,
-                marketCapDelta24h: 1000,
-                price: 1,
-                timeseries: [
-                    {
-                        stamp: 1672531199,
-                        price: 2000,
-                    },
-                    {
-                        stamp: 1672617599,
-                        price: 2100,
-                    },
-                ],
-            },
-            {
-                id: '5',
-                name: 'WOKE COIN',
-                symbol: 'WOKE',
-                preview: null,
-                marketCap: 100000,
-                marketCapDelta24h: 1000,
-                price: 1,
-                timeseries: [
-                    {
-                        stamp: 1672531199,
-                        price: 2000,
-                    },
-                    {
-                        stamp: 1672617599,
-                        price: 2100,
-                    },
-                ],
-            },
-        ],
+        queryFn: async () => {
+            return await analysis.getTrending('');
+        },
     });
 
     if (
@@ -343,31 +242,32 @@ function RouteComponent() {
                                     className="flex flex-row items-center gap-2"
                                 >
                                     <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-300">
-                                        {coin.preview ? (
-                                            <img
-                                                src={coin.preview}
-                                                alt={coin.name}
-                                                className="h-12 w-12 rounded-full"
-                                            />
-                                        ) : (
-                                            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-300">
-                                                {coin.symbol}
-                                            </div>
-                                        )}
+                                        <img
+                                            src={coin.image}
+                                            alt={coin.name}
+                                            className="h-12 w-12 rounded-full"
+                                        />
                                     </div>
                                     <div className="flex flex-col">
                                         <h3 className="text-lg font-semibold">
                                             {coin.name}
                                         </h3>
-                                        <p className="text-sm text-gray-500">
-                                            {coin.symbol} - {coin.price} USD
-                                        </p>
-                                        <p className="text-sm text-gray-500">
+                                        <p className={'text-sm text-gray-500'}>
                                             Market Cap: {coin.marketCap} USD (
-                                            {coin.marketCapDelta24h > 0
-                                                ? '+'
-                                                : ''}
-                                            {coin.marketCapDelta24h} USD)
+                                            <span
+                                                className={
+                                                    'text-sm ' +
+                                                    (coin.marketCapDelta24h > 0
+                                                        ? 'text-green-500'
+                                                        : 'text-red-500')
+                                                }
+                                            >
+                                                {coin.marketCapDelta24h > 0
+                                                    ? '+'
+                                                    : ''}
+                                                {coin.marketCapDelta24h} USD
+                                            </span>
+                                            )
                                         </p>
                                     </div>
                                     <button

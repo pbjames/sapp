@@ -4,10 +4,9 @@ type TrendingResponse = {
     id: string;
     name: string;
     symbol: string;
-    preview: string | null;
+    image: string;
     marketCap: number;
     marketCapDelta24h: number;
-    price: number;
     timeseries: {
         stamp: number;
         price: number;
@@ -16,7 +15,7 @@ type TrendingResponse = {
 
 const getTrending = async (jwt: string): Promise<TrendingResponse> => {
     const response = await axios.get<TrendingResponse>(
-        `${import.meta.env.VITE_API_URL}/trending`,
+        `${import.meta.env.VITE_API_URL}/trending_tokens`,
         {
             headers: {
                 'Content-Type': 'application/json',

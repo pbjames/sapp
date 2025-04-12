@@ -18,35 +18,33 @@ interface FeatureProps {
 
 const features: FeatureProps[] = [
     {
-        title: 'Responsive Design',
+        title: 'Intelligence',
         description:
-            'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi nesciunt est nostrum omnis ab sapiente.',
+            'We use advanced financial prediction models and sentiment analysis to bring you the freshest insights.',
         image: image4,
     },
     {
         title: 'Intuitive user interface',
         description:
-            'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi nesciunt est nostrum omnis ab sapiente.',
+            'Built with love, from scratch - our team cares about the user experience at every step.',
         image: image3,
     },
     {
-        title: 'AI-Powered insights',
+        title: 'Our Team',
         description:
-            'Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi nesciunt est nostrum omnis ab sapiente.',
+            'We are ready to help you with anything that stands in your path to creative expression!',
         image: image,
     },
 ];
 
 const featureList: string[] = [
-    'Dark/Light theme',
-    'Reviews',
-    'Features',
-    'Pricing',
-    'Contact form',
     'Our team',
     'Responsive design',
-    'Newsletter',
-    'Minimalist',
+    'Intelligence',
+    'Pricing',
+    'Features',
+    'Convienience',
+    'Reviews',
 ];
 
 export const Features = () => {

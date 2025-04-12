@@ -13,31 +13,24 @@ interface FAQProps {
 
 const FAQList: FAQProps[] = [
     {
-        question: 'Is this template free?',
-        answer: 'Yes. It is a free ChadcnUI template.',
+        question: 'Will this post coins on my behalf?',
+        answer: 'No. We will never take charge of your account from you, our goal is only to provide key insights into trending ideas and movements on Zora!',
         value: 'item-1',
     },
     {
-        question: 'Lorem ipsum dolor sit amet consectetur adipisicing elit?',
-        answer: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sint labore quidem quam? Consectetur sapiente iste rerum reiciendis animi nihil nostrum sit quo, modi quod.',
+        question: 'How does the coin analysis work?',
+        answer: 'We use time-series data to build a historical record of the coins performance, and correlate data with image contents using AI vision.',
         value: 'item-2',
     },
     {
-        question:
-            'Lorem ipsum dolor sit amet  Consectetur natus dolores minus quibusdam?',
-        answer: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Labore qui nostrum reiciendis veritatis necessitatibus maxime quis ipsa vitae cumque quo?',
+        question: 'How do I contact the team?',
+        answer: "You can reach us on GitHub by our link and submit an issue, or find us in whatever building we're in!",
         value: 'item-3',
     },
     {
-        question: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit?',
-        answer: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit.',
+        question: "What if I don't like the profile analysis?",
+        answer: 'Our process is customisable, and you can personally tell the AI agent how it could improve, but remember - feedback is always important!',
         value: 'item-4',
-    },
-    {
-        question:
-            'Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur natus?',
-        answer: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sint labore quidem quam? Consectetur sapiente iste rerum reiciendis animi nihil nostrum sit quo, modi quod.',
-        value: 'item-5',
     },
 ];
 
@@ -75,7 +68,7 @@ export const FAQ = () => {
                     <a
                         rel="noreferrer noopener"
                         href="#"
-                        className="text-primary border-primary transition-all hover:border-b-2"
+                        className="border-primary text-blue-500 transition-all hover:border-b-2"
                     >
                         Contact us
                     </a>

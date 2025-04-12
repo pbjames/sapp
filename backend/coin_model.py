@@ -2,11 +2,17 @@ import coins
 import pandas as pd
 import time
 import requests
+import joblib
+import os
 from transformers import pipeline
 from datetime import datetime, timezone
-from xgboost import XGBRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import root_mean_squared_error, r2_score
+from sklearn.svm import SVR
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import make_pipeline
+from sklearn.model_selection import GridSearchCV
+from sklearn.impute import SimpleImputer
 
 def get_current_price(token_address: str) -> float | None:
     url = f"https://api.geckoterminal.com/api/v2/networks/base/tokens/{token_address}"
@@ -209,21 +215,89 @@ def data_preprocessing(df):
 
     return X, y
 
-def train_model(X, y):
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+def grid_search(X, y):
+    imputer = SimpleImputer(strategy="mean")
+    X_imputed = imputer.fit_transform(X)
+    X_train, X_test, y_train, y_test = train_test_split(X_imputed, y, test_size=0.2, random_state=42)
 
-    model = XGBRegressor(n_estimators=100, max_depth=5, learning_rate=0.1)
+    pipeline = make_pipeline(StandardScaler(), SVR())
+    param_grid = {
+        "svr__C": [0.1, 1, 10, 100],
+        "svr__epsilon": [0.01, 0.1, 0.2],
+        "svr__kernel": ["linear", "rbf"]
+    }
+
+    grid = GridSearchCV(pipeline, param_grid, scoring="r2", cv=5, verbose=1, n_jobs=-1)
+    grid.fit(X_train, y_train)
+
+    print("Best Parameters:", grid.best_params_)
+    print("Best CV R² Score:", grid.best_score_)
+
+    best_model = grid.best_estimator_
+    y_pred = best_model.predict(X_test)
+
+    print("Test R² Score:", r2_score(y_test, y_pred))
+    print("Test RMSE:", root_mean_squared_error(y_test, y_pred))
+
+def train_model(X, y): 
+    imputer = SimpleImputer(strategy="mean")
+    X_imputed = imputer.fit_transform(X)
+
+    X_train, X_test, y_train, y_test = train_test_split(X_imputed, y, test_size=0.2, random_state=42)
+    model = make_pipeline(StandardScaler(), SVR(kernel='rbf', C=1, epsilon=0.01))
     model.fit(X_train, y_train)
 
-    y_pred = model.predict(X_test)
-    print("R² score:", r2_score(y_test, y_pred))
-    print("RMSE:", root_mean_squared_error(y_test, y_pred))
+    joblib.dump(model, "svr_best_model.pkl")
 
-df = pd.read_csv('complete_dataset.csv')
+def get_input(address):
+    token = coins.get_coin(address)
 
-X, y = data_preprocessing(df)
+    if token.zoraComments and token.zoraComments.edges:
+        comments = [ZoraCommentEdge.node.comment for ZoraCommentEdge in token.zoraComments.edges]
+    else:
+        comments = []
 
-train_model(X, y)
+    comments_sentimental_score = sentimental_analysis(comments)
+
+    earnings = token.creatorEarnings[0].amount.amountDecimal if token.creatorEarnings else 0.0
+    days_since_created = get_days_since_created(token.createdAt)
+
+    record = {
+                "address": address,
+                "total_supply": token.totalSupply,
+                "volume_24h": token.volume24h,
+                "total_volume": token.totalVolume,
+                "market_cap": token.marketCap,
+                "market_cap_change_24h": token.marketCapDelta24h,
+                "creator_earnings": earnings,
+                "days_since_created": days_since_created,
+                "unique_holders": token.uniqueHolders,
+                "transfers": token.transfers.count,
+                "comments_sentimental_score": comments_sentimental_score,
+            }
+    
+    df = pd.DataFrame([record])
+
+    return df
+
+def predict(data: pd.DataFrame):
+    X = data.drop(columns=["address"], errors="ignore")
+
+    if not os.path.exists('svr_best_model.pkl'):
+        print("Model not found. Training new model...")
+        df = pd.read_csv("dataset/complete_dataset.csv")
+        X_train, y_train = data_preprocessing(df)
+        trained_model = train_model(X_train, y_train)
+        joblib.dump(trained_model, "svr_best_model.pkl")
+
+    pipeline = joblib.load("svr_best_model.pkl")
+    
+    predictions = pipeline.predict(X)
+    return predictions
+
+input = get_input('0xf91d9a85e30e6ceb17ef3622aef69baa0393df04')
+print(input)
+print("Predicted ROI:", predict(input))
 
 
 

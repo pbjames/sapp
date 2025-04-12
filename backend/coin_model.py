@@ -295,7 +295,7 @@ def predict(data: pd.DataFrame):
     predictions = pipeline.predict(X)
     return predictions
 
-# input = get_input('')
+# input = get_input('0xf91d9a85e30e6ceb17ef3622aef69baa0393df04')
 # print(input)
 # print("Predicted ROI:", predict(input))
 

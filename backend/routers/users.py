@@ -6,8 +6,7 @@ from passlib.context import CryptContext
 from database import get_db
 from models import User
 from pydantic import BaseModel
-import jwt
-from jose import JWTError
+from jose import JWTError, jwt
 from datetime import datetime, timedelta
 import os
 

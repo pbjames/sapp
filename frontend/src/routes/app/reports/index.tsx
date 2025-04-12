@@ -2,7 +2,7 @@ import Dashboard from '@/components/dashboard/dashboard';
 import { Reports } from '@/components/reports';
 import { Card } from '@/components/ui/card';
 import { ProtectedRoute } from '@/context/ProtectedRouteContext';
-import { ReportsResponse } from '@/lib/api/profile';
+import profile, { ReportsResponse } from '@/lib/api/profile';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 
@@ -14,15 +14,7 @@ function RouteComponent() {
     const reportsQ = useQuery<ReportsResponse>({
         queryKey: ['reports'],
         queryFn: () => {
-            return [
-                {
-                    id: '1',
-                    type: 'coin-analysis',
-                    title: 'Poop coin',
-                    description: 'We analyzed poop coin',
-                    createdAt: new Date().getTime(),
-                },
-            ];
+            return profile.getReports(localStorage.getItem('jwt') || '');
         },
     });
 

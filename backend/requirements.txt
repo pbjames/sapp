@@ -1,6 +1,6 @@
-adblock @ file:///build/python-adblock/src/python-adblock-0.6.0/target/wheels/adblock-0.0.0-cp37-abi3-manylinux_2_34_x86_64.whl#sha256=6392b1028ef17173abcea90c70e5509d90472ca47f7205a5ee7fd3d81c49451b
-airdrop-ng==1.1
-airgraph-ng==1.1
+# adblock @ file:///build/python-adblock/src/python-adblock-0.6.0/target/wheels/adblock-0.0.0-cp37-abi3-manylinux_2_34_x86_64.whl#sha256=6392b1028ef17173abcea90c70e5509d90472ca47f7205a5ee7fd3d81c49451b
+# airdrop-ng==1.1
+# airgraph-ng==1.1
 anki==25.2
 anyio==4.8.0
 appdirs==1.4.4
@@ -10,12 +10,12 @@ argon2-cffi==23.1.0
 argon2-cffi-bindings==21.2.0
 asttokens==3.0.0
 async-lru==2.0.5
-attrs==23.2.1.dev0
+# attrs==23.2.1.dev0
 autocommand==2.2.2
 Babel==2.15.0
 beautifulsoup4==4.12.3
 bleach==6.2.0
-blinker==1.8.2
+# blinker==1.8.2
 bowler==0.9.0
 breezy==3.3.9
 btrfsutil==6.14
@@ -34,8 +34,8 @@ comm==0.2.2
 configobj==5.0.9
 crashtest==0.4.1
 cryptography==44.0.2
-dbus-python==1.4.0
-dbus_next==0.2.3
+# dbus-python==1.4.0
+# dbus_next==0.2.3
 decorator==5.1.1
 defusedxml==0.7.1
 distlib==0.3.9
@@ -49,9 +49,9 @@ fastjsonschema==2.21.1
 filelock==3.18.0
 findpython==0.6.3
 fissix==24.4.24
-Flask==3.1.0
+# Flask==3.1.0
 flask-cors==5.0.1
-gpg==1.24.2
+# gpg==1.24.2
 greenlet==3.1.1
 h11==0.14.0
 hatch==1.14.0
@@ -68,8 +68,8 @@ installer==0.7.0
 ipykernel==6.29.5
 ipython==9.1.0
 ipython_pygments_lexers==1.1.1
-itsdangerous==2.1.2
-iwlib==1.7.0
+# itsdangerous==2.1.2
+# iwlib==1.7.0
 jaraco.classes==3.4.0
 jaraco.collections==5.1.0
 jaraco.context==6.0.1
@@ -91,9 +91,9 @@ jupyterlab_server==2.27.3
 keyring==25.6.0
 keyutils==0.6
 lark==1.2.2
-lensfun==0.3.4
+# lensfun==0.3.4
 libcst==1.5.1
-libfdt==1.7.2
+# libfdt==1.7.2
 libtorrent==2.0.11
 lockfile==0.12.2
 Markdown==3.7
@@ -145,7 +145,7 @@ pure_eval==0.2.3
 pycairo==1.27.0
 pycparser==2.22
 Pygments==2.19.1
-PyGObject==3.52.3
+# PyGObject==3.52.3
 pynvim==0.5.2
 pyproject_hooks==1.2.0
 PyQt5==5.15.11
@@ -159,17 +159,17 @@ pytest==8.3.5
 python-dateutil==2.9.0
 python-json-logger==3.3.0
 pytz==2025.1
-pywayland==0.4.18
-pywlroots==0.17.0
+# pywayland==0.4.18
+# pywlroots==0.17.0
 pyxdg==0.28
 PyYAML==6.0.2
-pyzmq==26.2.0
-qtile==0.31.1.dev0+g8666bfc8.d20250312
+# pyzmq==26.2.0
+# qtile==0.31.1.dev0+g8666bfc8.d20250312
 qutebrowser==3.4.0
 RapidFuzz==3.12.2
 redis==5.2.1
 referencing==0.35.1
-Reflector==2023.6.28.0.36.1
+# Reflector==2023.6.28.0.36.1
 regex==2024.11.6
 requests==2.32.3
 requests-file==2.1.0
@@ -187,17 +187,17 @@ six==1.17.0
 sniffio==1.3.1
 soupsieve==2.6
 stack_data==0.6.3
-TBB==0.2
+# TBB==0.2
 tinycss2==1.4.0
 tldextract==5.2.0
 tomli==2.0.1
 tomli_w==1.2.0
 tomlkit==0.13.2
-torbrowser-launcher==0.3.7
+# torbrowser-launcher==0.3.7
 tornado==6.4.2
 tqdm==4.67.1
 traitlets==5.14.3
-trove-classifiers==2025.3.19.19
+# trove-classifiers==2025.3.19.19
 typeguard==4.4.2
 typing_extensions==4.12.2
 typing_inspect==0.9.0
@@ -207,8 +207,8 @@ unoconv==0.9.0
 urllib3==2.3.0
 urwid==2.6.15
 userpath==1.9.2
-uv==0.6.14
-validate==5.0.9
+# uv==0.6.14
+# validate==5.0.9
 virtualenv==20.28.0
 volatile==2.1.0
 waitress==3.0.2
@@ -219,6 +219,6 @@ Werkzeug==3.1.3
 wheel==0.45.1
 xcffib==1.5.0
 xkbcommon==1.5.1
-yt-dlp==2025.3.31
+# yt-dlp==2025.3.31
 zipp==3.21.0
 zstandard==0.23.0

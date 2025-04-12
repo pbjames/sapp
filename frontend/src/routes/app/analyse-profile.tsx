@@ -71,13 +71,13 @@ function TargetSelection(props: TargetState) {
             </div>
             <section className="grid min-h-screen grid-cols-2">
                 <button
-                    className="grid grid-cols-1 items-center justify-items-center transition-colors hover:bg-gray-300"
+                    className="grid cursor-pointer grid-cols-1 items-center justify-items-center transition-colors hover:bg-gray-300"
                     onClick={() => props.setTargetProfile('0xme')}
                 >
                     <p className="text-2xl font-semibold">My profile</p>
                 </button>
                 <button
-                    className="grid grid-flow-col grid-cols-1 items-center justify-items-center transition-colors hover:bg-gray-300"
+                    className="grid cursor-pointer grid-flow-col grid-cols-1 items-center justify-items-center transition-colors hover:bg-gray-300"
                     onClick={() => props.setTargetProfile('0xother')}
                 >
                     <p className="text-2xl font-semibold">Another profile</p>

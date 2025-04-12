@@ -33,8 +33,8 @@ import {
 
 const data = {
     user: {
-        name: 'shadcn',
-        email: 'm@example.com',
+        name: 'fred',
+        email: 'fred@gmail.com',
         avatar: '/avatars/shadcn.jpg',
     },
     navMain: [
@@ -115,7 +115,7 @@ const data = {
     navSecondary: [
         {
             title: 'Settings',
-            url: '#',
+            url: '/app/settings',
             icon: IconSettings,
         },
     ],

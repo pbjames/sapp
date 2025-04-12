@@ -12,7 +12,7 @@ type LoginResponse = {
 const login = async (data: LoginData): Promise<LoginResponse> => {
   try {
     const response = await axios.post<LoginResponse>(
-      `${import.meta.env.VITE_API_URL}/login`,
+      `${import.meta.env.VITE_API_URL}/users/login`,
       data,
       {
         headers: {
@@ -38,7 +38,7 @@ type RegisterResponse = {
 
 const register = async (data: RegisterData): Promise<RegisterResponse> => {
   const response = await axios.post<RegisterResponse>(
-    `${import.meta.env.VITE_API_URL}/register`,
+    `${import.meta.env.VITE_API_URL}/users/register`,
     data,
     {
       headers: {

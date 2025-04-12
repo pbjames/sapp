@@ -68,6 +68,7 @@ function RouteComponent() {
                 holdings,
             };
         },
+        refetchInterval: 15000,
     });
 
     const reportsQ = useQuery<ReportsResponse>({
@@ -100,6 +101,7 @@ function RouteComponent() {
                 };
             });
         },
+        refetchInterval: 15000,
     });
 
     if (profileQ.status === 'error') {

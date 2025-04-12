@@ -3,26 +3,24 @@ import axios from 'axios';
 type ProfileResponse = {
     username: string;
     wallet: string;
-    zora: {
-        displayName: string;
-        handle: string | null;
-        bio: string;
-        avatar: string | null;
-        following: number;
-        followers: number;
-        holdings: {
-            id: string;
-            symbol: string;
-            name: string;
-            preview: string | null;
-            amount: number;
-            value: number;
-            timeseries: {
-                stamp: number;
-                price: number;
-            }[];
+    displayName: string;
+    handle: string | null;
+    bio: string;
+    avatar: string | null;
+    following: number;
+    followers: number;
+    holdings: {
+        id: string;
+        symbol: string;
+        name: string;
+        preview: string | null;
+        amount: number;
+        value: number;
+        timeseries: {
+            stamp: number;
+            price: number;
         }[];
-    };
+    }[];
 };
 
 type UpdateProfileData = {
@@ -56,17 +54,19 @@ const updateProfile = async (
     });
 };
 
-type ReportsResponse = {
+type Report = {
     id: string;
-    type: string;
-    title: string;
-    description: string;
-    createdAt: number;
-}[];
+    report_type: string;
+    content: string;
+    created_at: number;
+    image_data: string;
+};
+
+type ReportsResponse = Report[];
 
 const getReports = async (jwt: string): Promise<ReportsResponse> => {
     const response = await axios.get<ReportsResponse>(
-        `${import.meta.env.VITE_API_URL}/`,
+        `${import.meta.env.VITE_API_URL}/reports`,
         {
             headers: {
                 'Content-Type': 'application/json',
@@ -78,13 +78,7 @@ const getReports = async (jwt: string): Promise<ReportsResponse> => {
     return response.data;
 };
 
-type ReportResponse = {
-    id: string;
-    title: string;
-    chat: string;
-    images: string[];
-    createdAt: number;
-};
+type ReportResponse = Report;
 
 const getReport = async (id: string, jwt: string): Promise<ReportResponse> => {
     const response = await axios.get<ReportResponse>(

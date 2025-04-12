@@ -40,47 +40,32 @@ function RouteComponent() {
 
     const profileQ = useQuery<ProfileResponse>({
         queryKey: ['profile'],
-        queryFn: () => {
+        queryFn: async () => {
+            const p = await profile.getProfile(
+                localStorage.getItem('jwt') || ''
+            );
+
+            const holdings = p.holdings.map((holding) => {
+                const timeseries = [];
+                const now = Date.now();
+                let current = holding.value;
+                for (let i = 0; i < 100; i++) {
+                    timeseries.push({
+                        stamp: now - i * 1000 * 60 * 60,
+                        price: current,
+                    });
+                    current =
+                        current - (Math.random() * 0.15 - 0.075) * current;
+                }
+                return {
+                    ...holding,
+                    timeseries: timeseries.reverse(),
+                };
+            });
+
             return {
-                username: 'fred',
-                wallet: '0x742d35Cc6634C0532925a3b844Bc454e4438f44e',
-                zora: {
-                    displayName: 'Freddy Snow',
-                    handle: 'fred',
-                    bio: 'I am Fred Bloggs',
-                    avatar: null,
-                    following: 100,
-                    followers: 200,
-                    holdings: [
-                        {
-                            id: '1',
-                            symbol: 'ETH',
-                            name: 'Ethereum',
-                            preview: null,
-                            amount: 1,
-                            value: 2000,
-                            timeseries: [],
-                        },
-                        {
-                            id: '2',
-                            symbol: 'BTC',
-                            name: 'Bitcoin',
-                            preview: null,
-                            amount: 0.5,
-                            value: 25000,
-                            timeseries: [
-                                {
-                                    stamp: 1672531199,
-                                    price: 2000,
-                                },
-                                {
-                                    stamp: 1672617599,
-                                    price: 2100,
-                                },
-                            ],
-                        },
-                    ],
-                },
+                ...p,
+                holdings,
             };
         },
     });
@@ -88,15 +73,30 @@ function RouteComponent() {
     const reportsQ = useQuery<ReportsResponse>({
         queryKey: ['reports'],
         queryFn: async () => {
-            //return await profile.getReports(localStorage.getItem('jwt') || '');
-            return [];
+            return await profile.getReports(localStorage.getItem('jwt') || '');
+            //return [];
         },
     });
 
     const trendingQ = useQuery<TrendingResponse>({
         queryKey: ['trending'],
         queryFn: async () => {
-            return await analysis.getTrending('');
+            return (await analysis.getTrending('')).map((coin) => {
+                const timeseries = [];
+                const now = Date.now();
+                let current = coin.marketCap;
+                for (let i = 0; i < 100; i++) {
+                    timeseries.push({
+                        stamp: now - i * 1000 * 60 * 60,
+                        price: current,
+                    });
+                    current = current - (Math.random() * 0.15 - 0.05) * current;
+                }
+                return {
+                    ...coin,
+                    timeseries: timeseries.reverse(),
+                };
+            });
         },
     });
 
@@ -129,24 +129,24 @@ function RouteComponent() {
                     </h1>
                     <div className="mt-2 flex flex-row flex-wrap items-center gap-6">
                         <div className="flex flex-row items-center gap-2">
-                            {profileQ.data.zora.avatar ? (
+                            {profileQ.data.avatar ? (
                                 <img
-                                    src={profileQ.data.zora.avatar}
+                                    src={profileQ.data.avatar}
                                     alt="Avatar"
                                     className="h-12 w-12 rounded-full"
                                 />
                             ) : (
                                 <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-300">
-                                    {profileQ.data.zora.displayName[0]}
+                                    {profileQ.data.displayName[0]}
                                 </div>
                             )}
                             <div className="flex flex-col">
                                 <h2 className="text-lg leading-5 font-semibold">
-                                    {profileQ.data.zora.displayName}
+                                    {profileQ.data.displayName}
                                 </h2>
                                 <p className="text-sm text-gray-500">
-                                    {profileQ.data.zora.handle &&
-                                        `@${profileQ.data.zora.handle}`}{' '}
+                                    {profileQ.data.handle &&
+                                        `@${profileQ.data.handle}`}{' '}
                                     ({profileQ.data.wallet})
                                 </p>
                             </div>
@@ -154,13 +154,13 @@ function RouteComponent() {
                         <div className="flex flex-col">
                             <span className="text-sm">
                                 <span className="font-semibold text-gray-600">
-                                    {profileQ.data.zora.following}
+                                    {profileQ.data.following}
                                 </span>{' '}
                                 <span className="text-gray-500">following</span>
                             </span>
                             <span className="text-sm">
                                 <span className="font-semibold text-gray-600">
-                                    {profileQ.data.zora.followers}
+                                    {profileQ.data.followers}
                                 </span>{' '}
                                 <span className="text-gray-500">followers</span>
                             </span>
@@ -176,34 +176,36 @@ function RouteComponent() {
                                     Your Holdings
                                 </h2>
                                 <p className="text-sm text-gray-500">
-                                    {profileQ.data.zora.holdings.length} assets
+                                    {profileQ.data.holdings.length} assets
                                 </p>
                             </div>
                         </div>
                         <div className="flex flex-col gap-2">
-                            {profileQ.data.zora.holdings.map((holding) => (
+                            {profileQ.data.holdings.map((holding) => (
                                 <div
                                     key={holding.id}
                                     className="flex flex-row items-center gap-2"
                                 >
-                                    {holding.preview ? (
-                                        <img
-                                            src={holding.preview}
-                                            alt={holding.name}
-                                            className="h-12 w-12 rounded-full"
-                                        />
-                                    ) : (
-                                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-300">
-                                            {holding.symbol}
-                                        </div>
-                                    )}
+                                    <img
+                                        src={holding.preview!}
+                                        alt={holding.name}
+                                        className="h-12 w-12 rounded-full"
+                                    />
                                     <div className="flex flex-col">
                                         <h3 className="text-lg font-semibold">
                                             {holding.name}
                                         </h3>
                                         <p className="text-sm text-gray-500">
-                                            {holding.symbol} - {holding.amount}{' '}
-                                            ({holding.value} USD)
+                                            Holdings{' '}
+                                            {holding.value < 0.01
+                                                ? '<$0.01'
+                                                : new Intl.NumberFormat(
+                                                      'en-US',
+                                                      {
+                                                          style: 'currency',
+                                                          currency: 'USD',
+                                                      }
+                                                  ).format(holding.value)}
                                         </p>
                                     </div>
                                     <button
@@ -253,7 +255,12 @@ function RouteComponent() {
                                             {coin.name}
                                         </h3>
                                         <p className={'text-sm text-gray-500'}>
-                                            Market Cap: {coin.marketCap} USD (
+                                            Market Cap:{' '}
+                                            {new Intl.NumberFormat('en-US', {
+                                                style: 'currency',
+                                                currency: 'USD',
+                                            }).format(coin.marketCap)}{' '}
+                                            (
                                             <span
                                                 className={
                                                     'text-sm ' +
@@ -265,7 +272,17 @@ function RouteComponent() {
                                                 {coin.marketCapDelta24h > 0
                                                     ? '+'
                                                     : ''}
-                                                {coin.marketCapDelta24h} USD
+                                                {new Intl.NumberFormat(
+                                                    'en-US',
+                                                    {
+                                                        style: 'currency',
+                                                        currency: 'USD',
+                                                    }
+                                                ).format(
+                                                    Math.abs(
+                                                        coin.marketCapDelta24h
+                                                    )
+                                                )}
                                             </span>
                                             )
                                         </p>
@@ -306,9 +323,7 @@ function RouteComponent() {
                 >
                     <DialogContent className="sm:max-w-2xl">
                         <DialogHeader>
-                            <DialogTitle>
-                                {focusedCoin?.name} ({focusedCoin?.symbol})
-                            </DialogTitle>
+                            <DialogTitle>{focusedCoin?.name}</DialogTitle>
                         </DialogHeader>
                         <div className="flex flex-col gap-2">
                             <ChartContainer

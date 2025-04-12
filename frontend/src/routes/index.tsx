@@ -14,6 +14,7 @@ export const Route = createFileRoute('/')({
 });
 
 function Index() {
+    // TODO: Replace corny ass images
     return (
         <>
             <Hero />

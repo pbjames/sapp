@@ -1,11 +1,12 @@
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 from typer import Typer
 import logging
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import text
-from coins import get_profile
+from coins import MediaContent, Zora20Token, explore, get_profile
 from database import SessionLocal, engine, Base, get_db
 from models import User  # Import your models
 from routers.users import router as user_router
@@ -54,6 +55,45 @@ def say_hello():
 @app.get("/profile/{profile_id}")
 def profile_details(profile_id: str):
     return get_profile(profile_id)
+
+
+def coin_time_series(address: str): ...
+
+
+class TokenInfo(BaseModel):
+    id: str
+    name: str
+    symbol: str
+    preview: str | None
+    marketCap: float
+    marketCapDelta24h: float
+    timeseries: list[dict[str, int]]
+    image: str
+
+
+@app.get("/trending_tokens")
+def trending_coins(count: int = 5):
+    def extract_image(coin: Zora20Token) -> str:
+        if (content := coin.mediaContent) is not None:
+            if (preview := content.previewImage) is not None:
+                return preview.medium
+        return ""
+
+    coin = explore(count=count)
+    coins = [e.node for e in coin.exploreList.edges]
+    return [
+        TokenInfo(
+            id=coin.address,
+            name=coin.name,
+            symbol=coin.symbol,
+            preview=None,
+            marketCap=float(coin.marketCap),
+            marketCapDelta24h=float(coin.marketCapDelta24h),
+            timeseries=[],
+            image=extract_image(coin),
+        )
+        for coin in coins
+    ]
 
 
 # @app.get("/items/{item_id}")

@@ -4,9 +4,10 @@ from langchain_core.messages import HumanMessage
 from langchain_core.runnables import RunnableConfig
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.prebuilt import create_react_agent
+from pydantic import BaseModel
 from typer import Typer
 
-from coins import get_all_comments, get_coin
+from coins import explore, get_all_comments, get_coin
 from const import COIN_SUMMARY, IMAGE_PROMPT, MODEL_NAME
 
 cli = Typer()

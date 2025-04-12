@@ -191,12 +191,23 @@ ExploreListType = Literal[
 
 
 def explore(
-    count: int = 10, list_type: ExploreListType = "TOP_GAINERS"
+    count: int = 10,
+    list_type: ExploreListType = "TOP_GAINERS",
+    cursor: str | None = None
 ) -> ExploreResponse:
-    response = requests.get(
-        f"{BASE_URL}/explore", params={"listType": list_type, "count": count}
-    )
+    params = {
+        "listType": list_type,
+        "count": count
+    }
+
+    if cursor is not None:
+        params["cursor"] = cursor
+
+    response = requests.get(f"{BASE_URL}/explore", params=params)
+    response.raise_for_status()
+
     return ExploreResponse(**response.json())
+
 
 
 def get_coin(address: str) -> Zora20Token:

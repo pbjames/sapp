@@ -29,7 +29,8 @@ const features: FeatureProps[] = [
     {
         icon: <GiftIcon />,
         title: 'Gamification',
-        description: 'Earn crypto from your Zora coins',
+        description:
+            'Earn crypto from your Zora coins and push your creations to perfection.',
     },
 ];
 

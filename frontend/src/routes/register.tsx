@@ -13,7 +13,7 @@ export const Route = createFileRoute('/register')({
 
 const registerSchema = z.object({
     username: z.string().min(1, 'Username is required'),
-    wallet: z
+    wallet_address: z
         .string()
         .min(1, 'Wallet address is required')
         .regex(/^0x[a-fA-F0-9]{40}$/, 'Invalid wallet address'),
@@ -84,21 +84,21 @@ function RouteComponent() {
                     </span>
                 )}
 
-                <Label htmlFor="wallet" className="mt-4 mb-2">
+                <Label htmlFor="wallet_address" className="mt-4 mb-2">
                     Wallet Address
                 </Label>
                 <Input
-                    id="wallet"
+                    id="wallet_address"
                     placeholder="0x..."
-                    {...register('wallet')}
+                    {...register('wallet_address')}
                     onChange={(e) => {
                         clearErrors('root');
                         register('username').onChange(e);
                     }}
                 />
-                {errors.wallet && (
+                {errors.wallet_address && (
                     <span className="mt-1 text-sm text-red-500">
-                        {errors.wallet.message}
+                        {errors.wallet_address.message}
                     </span>
                 )}
 

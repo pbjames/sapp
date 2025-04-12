@@ -7,7 +7,6 @@ from sqlalchemy import text
 from database import SessionLocal, engine, Base, get_db
 from models import User  # Import your models
 from routers.users import router as user_router
-from fastapi.middleware.cors import CORSMiddleware
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -15,14 +14,6 @@ logger = logging.getLogger(__name__)
 
 app = FastAPI()
 cli = Typer()
-
-app.add_middleware(
-         CORSMiddleware,
-         allow_origins=["*"],  
-         allow_credentials=True,
-         allow_methods=["*"],
-         allow_headers=["*"],
-     )
 
 app.include_router(user_router, prefix="/users", tags=["users"])
 

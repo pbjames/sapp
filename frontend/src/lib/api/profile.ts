@@ -56,6 +56,49 @@ const updateProfile = async (
     });
 };
 
+type ReportsResponse = {
+    id: string;
+    title: string;
+    description: string;
+    createdAt: number;
+};
+
+const getReports = async (jwt: string): Promise<ReportsResponse[]> => {
+    const response = await axios.get<ReportsResponse[]>(
+        `${import.meta.env.VITE_API_URL}/users/reports`,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${jwt}`,
+            },
+        }
+    );
+
+    return response.data;
+};
+
+type ReportResponse = {
+    id: string;
+    title: string;
+    chat: string;
+    images: string[];
+    createdAt: number;
+};
+
+const getReport = async (id: string, jwt: string): Promise<ReportResponse> => {
+    const response = await axios.get<ReportResponse>(
+        `${import.meta.env.VITE_API_URL}/users/reports/${id}`,
+        {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${jwt}`,
+            },
+        }
+    );
+
+    return response.data;
+};
+
 export type { ProfileResponse, UpdateProfileData };
 export default {
     getProfile,

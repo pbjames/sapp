@@ -23,4 +23,5 @@ dependencies = [
     "transformers>=4.51.2",
     "scikit-learn>=1.6.1",
     "bcrypt>=4.3.0",
+    "python-jose>=3.4.0",
 ]

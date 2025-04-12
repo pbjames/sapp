@@ -35,15 +35,13 @@ export const Hero = () => {
                             Get Started{' '}
                         </Link>
                     </Button>
-                    <a
-                        rel="noreferrer noopener"
-                        href=""
-                        target="_blank"
+                    <Link
+                        to="/app"
                         className={`flex w-full items-center justify-center sm:w-auto sm:justify-start ${buttonVariants({ variant: 'outline' })} `}
                     >
                         Github Repository
                         <GitHubLogoIcon className="ml-2 h-5 w-5" />
-                    </a>
+                    </Link>
                 </div>
             </div>
             <div className="shadow"></div>

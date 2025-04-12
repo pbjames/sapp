@@ -112,8 +112,14 @@ class ExploreResponse(BaseModel):
 
 
 class Avatar(BaseModel):
+
     small: PreviewImage | None = None
     medium: PreviewImage | None = None
+
+
+class ProfileAvatar(BaseModel):
+    small: str | None = None
+    medium: str | None = None
 
 
 class PublicWallet(BaseModel):
@@ -146,7 +152,7 @@ class LinkedWallets(BaseModel):
 class Profile(BaseModel):
     id: str
     handle: str
-    avatar: Avatar | None = None
+    avatar: ProfileAvatar | None = None
     username: str
     displayName: str | None = None
     bio: str
@@ -159,7 +165,6 @@ class Profile(BaseModel):
 class BasicProfile(BaseModel):
     id: str
     handle: str
-    avatar: Avatar | None = None
     displayName: str | None = None
     website: str | None = None
     coinBalances: CoinBalances
@@ -191,11 +196,18 @@ ExploreListType = Literal[
 
 
 def explore(
-    count: int = 10, list_type: ExploreListType = "TOP_GAINERS"
+    count: int = 10,
+    list_type: ExploreListType = "TOP_GAINERS",
+    cursor: str | None = None,
 ) -> ExploreResponse:
-    response = requests.get(
-        f"{BASE_URL}/explore", params={"listType": list_type, "count": count}
-    )
+    params = {"listType": list_type, "count": count}
+
+    if cursor is not None:
+        params["cursor"] = cursor
+
+    response = requests.get(f"{BASE_URL}/explore", params=params)
+    response.raise_for_status()
+
     return ExploreResponse(**response.json())
 
 
@@ -212,8 +224,13 @@ def get_all_comments(address: str, count: int) -> list[ZoraCommentNode]:
     return [e.node for e in comments.edges]
 
 
-def get_profile(address: str) -> BasicProfile:
+def get_profile_balances(address: str) -> BasicProfile:
     response = requests.get(
         f"{BASE_URL}/profileBalances", params={"identifier": address}
     )
     return BasicProfile(**response.json()["profile"])
+
+
+def get_profile(address: str) -> Profile:
+    response = requests.get(f"{BASE_URL}/profile", params={"identifier": address})
+    return Profile(**response.json()["profile"])

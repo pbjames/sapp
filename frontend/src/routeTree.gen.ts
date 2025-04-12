@@ -16,7 +16,11 @@ import { Route as LoginImport } from './routes/login'
 import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
 import { Route as AppIndexImport } from './routes/app/index'
+import { Route as AppGenerateIdeasImport } from './routes/app/generate-ideas'
 import { Route as AppAnalyseProfileImport } from './routes/app/analyse-profile'
+import { Route as AppAnalyseCoinImport } from './routes/app/analyse-coin'
+import { Route as AppReportsIndexImport } from './routes/app/reports/index'
+import { Route as AppReportsReportIdImport } from './routes/app/reports/$reportId'
 
 // Create/Update Routes
 
@@ -50,9 +54,33 @@ const AppIndexRoute = AppIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const AppGenerateIdeasRoute = AppGenerateIdeasImport.update({
+  id: '/app/generate-ideas',
+  path: '/app/generate-ideas',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const AppAnalyseProfileRoute = AppAnalyseProfileImport.update({
   id: '/app/analyse-profile',
   path: '/app/analyse-profile',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AppAnalyseCoinRoute = AppAnalyseCoinImport.update({
+  id: '/app/analyse-coin',
+  path: '/app/analyse-coin',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AppReportsIndexRoute = AppReportsIndexImport.update({
+  id: '/app/reports/',
+  path: '/app/reports/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AppReportsReportIdRoute = AppReportsReportIdImport.update({
+  id: '/app/reports/$reportId',
+  path: '/app/reports/$reportId',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -88,6 +116,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RegisterImport
       parentRoute: typeof rootRoute
     }
+    '/app/analyse-coin': {
+      id: '/app/analyse-coin'
+      path: '/app/analyse-coin'
+      fullPath: '/app/analyse-coin'
+      preLoaderRoute: typeof AppAnalyseCoinImport
+      parentRoute: typeof rootRoute
+    }
     '/app/analyse-profile': {
       id: '/app/analyse-profile'
       path: '/app/analyse-profile'
@@ -95,11 +130,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAnalyseProfileImport
       parentRoute: typeof rootRoute
     }
+    '/app/generate-ideas': {
+      id: '/app/generate-ideas'
+      path: '/app/generate-ideas'
+      fullPath: '/app/generate-ideas'
+      preLoaderRoute: typeof AppGenerateIdeasImport
+      parentRoute: typeof rootRoute
+    }
     '/app/': {
       id: '/app/'
       path: '/app'
       fullPath: '/app'
       preLoaderRoute: typeof AppIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/app/reports/$reportId': {
+      id: '/app/reports/$reportId'
+      path: '/app/reports/$reportId'
+      fullPath: '/app/reports/$reportId'
+      preLoaderRoute: typeof AppReportsReportIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/app/reports/': {
+      id: '/app/reports/'
+      path: '/app/reports'
+      fullPath: '/app/reports'
+      preLoaderRoute: typeof AppReportsIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -112,8 +168,12 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/app/analyse-coin': typeof AppAnalyseCoinRoute
   '/app/analyse-profile': typeof AppAnalyseProfileRoute
+  '/app/generate-ideas': typeof AppGenerateIdeasRoute
   '/app': typeof AppIndexRoute
+  '/app/reports/$reportId': typeof AppReportsReportIdRoute
+  '/app/reports': typeof AppReportsIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -121,8 +181,12 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/app/analyse-coin': typeof AppAnalyseCoinRoute
   '/app/analyse-profile': typeof AppAnalyseProfileRoute
+  '/app/generate-ideas': typeof AppGenerateIdeasRoute
   '/app': typeof AppIndexRoute
+  '/app/reports/$reportId': typeof AppReportsReportIdRoute
+  '/app/reports': typeof AppReportsIndexRoute
 }
 
 export interface FileRoutesById {
@@ -131,8 +195,12 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
+  '/app/analyse-coin': typeof AppAnalyseCoinRoute
   '/app/analyse-profile': typeof AppAnalyseProfileRoute
+  '/app/generate-ideas': typeof AppGenerateIdeasRoute
   '/app/': typeof AppIndexRoute
+  '/app/reports/$reportId': typeof AppReportsReportIdRoute
+  '/app/reports/': typeof AppReportsIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -142,18 +210,36 @@ export interface FileRouteTypes {
     | '/about'
     | '/login'
     | '/register'
+    | '/app/analyse-coin'
     | '/app/analyse-profile'
+    | '/app/generate-ideas'
     | '/app'
+    | '/app/reports/$reportId'
+    | '/app/reports'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/login' | '/register' | '/app/analyse-profile' | '/app'
+  to:
+    | '/'
+    | '/about'
+    | '/login'
+    | '/register'
+    | '/app/analyse-coin'
+    | '/app/analyse-profile'
+    | '/app/generate-ideas'
+    | '/app'
+    | '/app/reports/$reportId'
+    | '/app/reports'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/login'
     | '/register'
+    | '/app/analyse-coin'
     | '/app/analyse-profile'
+    | '/app/generate-ideas'
     | '/app/'
+    | '/app/reports/$reportId'
+    | '/app/reports/'
   fileRoutesById: FileRoutesById
 }
 
@@ -162,8 +248,12 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
+  AppAnalyseCoinRoute: typeof AppAnalyseCoinRoute
   AppAnalyseProfileRoute: typeof AppAnalyseProfileRoute
+  AppGenerateIdeasRoute: typeof AppGenerateIdeasRoute
   AppIndexRoute: typeof AppIndexRoute
+  AppReportsReportIdRoute: typeof AppReportsReportIdRoute
+  AppReportsIndexRoute: typeof AppReportsIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -171,8 +261,12 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
+  AppAnalyseCoinRoute: AppAnalyseCoinRoute,
   AppAnalyseProfileRoute: AppAnalyseProfileRoute,
+  AppGenerateIdeasRoute: AppGenerateIdeasRoute,
   AppIndexRoute: AppIndexRoute,
+  AppReportsReportIdRoute: AppReportsReportIdRoute,
+  AppReportsIndexRoute: AppReportsIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -189,8 +283,12 @@ export const routeTree = rootRoute
         "/about",
         "/login",
         "/register",
+        "/app/analyse-coin",
         "/app/analyse-profile",
-        "/app/"
+        "/app/generate-ideas",
+        "/app/",
+        "/app/reports/$reportId",
+        "/app/reports/"
       ]
     },
     "/": {
@@ -205,11 +303,23 @@ export const routeTree = rootRoute
     "/register": {
       "filePath": "register.tsx"
     },
+    "/app/analyse-coin": {
+      "filePath": "app/analyse-coin.tsx"
+    },
     "/app/analyse-profile": {
       "filePath": "app/analyse-profile.tsx"
     },
+    "/app/generate-ideas": {
+      "filePath": "app/generate-ideas.tsx"
+    },
     "/app/": {
       "filePath": "app/index.tsx"
+    },
+    "/app/reports/$reportId": {
+      "filePath": "app/reports/$reportId.tsx"
+    },
+    "/app/reports/": {
+      "filePath": "app/reports/index.tsx"
     }
   }
 }

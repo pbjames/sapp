@@ -6,8 +6,7 @@ from passlib.context import CryptContext
 from database import get_db
 from models import User
 from pydantic import BaseModel
-import jwt
-from jwt import PyJWTError
+from jose import JWTError, jwt
 from datetime import datetime, timedelta
 import os
 
@@ -51,7 +50,7 @@ def verify_jwt_token(token: str = Depends(oauth2_scheme)):
         return payload
     except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=401, detail="Token has expired")
-    except PyJWTError:
+    except JWTError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",
@@ -97,3 +96,27 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
     db.refresh(new_user)
     
     return {"username": new_user.username, "wallet_address": new_user.wallet_address}
+
+async def get_current_user(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)):
+    """
+    Extract and verify the current user from the JWT token.
+    """
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username: str = payload.get("username")
+        if username is None:
+            raise credentials_exception
+    except JWTError:
+        raise credentials_exception
+        
+    user = db.query(User).filter(User.username == username).first()
+    if user is None:
+        raise credentials_exception
+        
+    return user

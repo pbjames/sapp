@@ -16,6 +16,7 @@ import { buttonVariants } from './ui/button';
 import { Menu, Flame } from 'lucide-react';
 import { ModeToggle } from './mode-toggle';
 import { Link } from '@tanstack/react-router';
+import { useProtectedRoute } from '@/context/ProtectedRouteContext';
 
 interface RouteProps {
     href: string;
@@ -38,6 +39,7 @@ const routeList: RouteProps[] = [
 ];
 
 export const Navbar = () => {
+    const { isAuthenticated } = useProtectedRoute();
     const [isOpen, setIsOpen] = useState<boolean>(false);
     return (
         <header className="dark:bg-background sticky top-0 z-40 w-full border-b-[1px] bg-white dark:border-b-slate-700">
@@ -119,12 +121,21 @@ export const Navbar = () => {
                     </nav>
 
                     <div className="hidden gap-2 md:flex">
-                        <Link
-                            to="/login"
-                            className={`border ${buttonVariants({ variant: 'secondary' })}`}
-                        >
-                            Login
-                        </Link>
+                        {isAuthenticated ? (
+                            <Link
+                                to="/app"
+                                className={`border ${buttonVariants({ variant: 'secondary' })}`}
+                            >
+                                App
+                            </Link>
+                        ) : (
+                            <Link
+                                to="/login"
+                                className={`border ${buttonVariants({ variant: 'secondary' })}`}
+                            >
+                                Login
+                            </Link>
+                        )}
                     </div>
                 </NavigationMenuList>
             </NavigationMenu>

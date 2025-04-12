@@ -6,6 +6,8 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import auth from '@/lib/api/auth';
+import { useProtectedRoute } from '@/context/ProtectedRouteContext';
+import { useEffect } from 'react';
 
 export const Route = createFileRoute('/register')({
     component: RouteComponent,
@@ -27,6 +29,7 @@ type RegisterValues = z.infer<typeof registerSchema>;
 
 function RouteComponent() {
     const nav = useNavigate();
+    const { isAuthenticated, loading } = useProtectedRoute();
     const {
         register,
         handleSubmit,
@@ -37,6 +40,21 @@ function RouteComponent() {
         resolver: zodResolver(registerSchema),
         mode: 'onChange',
     });
+
+    // Redirect if already authenticated
+    useEffect(() => {
+        if (!loading && isAuthenticated) {
+            nav({ to: '/app' });
+        }
+    }, [isAuthenticated, loading, nav]);
+    
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+    
+    if (isAuthenticated) {
+        return null;
+    }
 
     const onSubmit = async (data: RegisterValues) => {
         try {

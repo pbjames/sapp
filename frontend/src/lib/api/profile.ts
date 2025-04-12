@@ -17,6 +17,10 @@ type ProfileResponse = {
             preview: string | null;
             amount: number;
             value: number;
+            timeseries: {
+                stamp: number;
+                price: number;
+            }[];
         }[];
     };
 };

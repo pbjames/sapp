@@ -3,6 +3,8 @@ from typing import Final
 
 MODEL_NAME: Final[str] = "gpt-4o"
 BASE_URL: Final[str] = "https://api-sdk.zora.engineering/"
+GT_BASE_URL: Final[str] = "https://api.geckoterminal.com/api/v2"
+BASE_NET_NAME: Final[str] = "Base"
 IMAGE_PROMPT: Final[
     str
 ] = """

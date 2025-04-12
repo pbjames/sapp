@@ -211,8 +211,12 @@ function RouteComponent() {
                                                 </p>
                                             </div>
                                             <button
-                                                className="mr-2 ml-auto"
-                                                onClick={() => {
+                                                className="mr-2 ml-auto cursor-pointer"
+                                                onClick={(
+                                                    e: React.MouseEvent
+                                                ) => {
+                                                    e.stopPropagation();
+                                                    e.preventDefault();
                                                     setFocusedCoin({
                                                         id: holding.id,
                                                         name: holding.name,
@@ -314,8 +318,12 @@ function RouteComponent() {
                                                 </p>
                                             </div>
                                             <button
-                                                className="mr-2 ml-auto"
-                                                onClick={() => {
+                                                className="mr-2 ml-auto cursor-pointer"
+                                                onClick={(
+                                                    e: React.MouseEvent
+                                                ) => {
+                                                    e.stopPropagation();
+                                                    e.preventDefault();
                                                     setFocusedCoin({
                                                         id: coin.id,
                                                         name: coin.name,

@@ -7,7 +7,7 @@ from database import get_db
 from models import User
 from pydantic import BaseModel
 import jwt
-from jwt import PyJWTError
+from jose import JWTError
 from datetime import datetime, timedelta
 import os
 
@@ -51,7 +51,7 @@ def verify_jwt_token(token: str = Depends(oauth2_scheme)):
         return payload
     except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=401, detail="Token has expired")
-    except PyJWTError:
+    except JWTError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Could not validate credentials",

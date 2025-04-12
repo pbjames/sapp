@@ -6,7 +6,14 @@ import logging
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import text
-from coins import MediaContent, Zora20Token, explore, get_profile
+from coins import (
+    MediaContent,
+    Profile,
+    Zora20Token,
+    explore,
+    get_profile,
+    get_profile_balances,
+)
 from database import SessionLocal, engine, Base, get_db
 from models import User  # Import your models
 from routers.users import router as user_router
@@ -52,11 +59,6 @@ def say_hello():
     print("hello from backend")
 
 
-@app.get("/profile/{profile_id}")
-def profile_details(profile_id: str):
-    return get_profile(profile_id)
-
-
 def coin_time_series(address: str): ...
 
 
@@ -94,6 +96,70 @@ def trending_coins(count: int = 5):
         )
         for coin in coins
     ]
+
+
+class ProfileHolding(BaseModel):
+    id: str
+    symbol: str
+    name: str
+    preview: str | None
+    amount: float
+    value: float
+    timeseries: list[dict[str, int]]
+
+
+class ProfileResponse(BaseModel):
+    username: str
+    wallet: str
+
+    displayName: str
+    handle: str | None
+    bio: str
+    avatar: str | None
+    holdings: list[ProfileHolding]
+
+
+@app.get("/profile/{profile_id}")
+def profile_details(profile_id: str) -> ProfileResponse:
+
+    def extract_image_token(coin: Zora20Token) -> str:
+        if (content := coin.mediaContent) is not None:
+            if (preview := content.previewImage) is not None:
+                return preview.medium
+        return ""
+
+    def extract_image_profile(profile) -> str:
+        if (avatar := profile.avatar) is not None:
+            return avatar.medium
+        return ""
+
+    def value_from_coin(amount: float, coin: Zora20Token) -> float:
+        return (amount / float(coin.totalSupply)) * float(coin.marketCap)
+
+    profile = get_profile(profile_id)
+    profile_balances = get_profile_balances(profile_id)
+    balances = [e.node for e in profile_balances.coinBalances.edges]
+    holdings = [
+        ProfileHolding(
+            id=balance.coin.id,
+            symbol=balance.coin.symbol,
+            name=balance.coin.name,
+            preview=extract_image_token(balance.coin),
+            amount=float(balance.balance) / (10**18),
+            value=value_from_coin(float(balance.balance) / (10**18), balance.coin),
+            timeseries=[],
+        )
+        for balance in balances
+    ]
+    return ProfileResponse(
+        username=profile.username,
+        wallet=profile.publicWallet.walletAddress,
+        displayName=profile.displayName or "",
+        handle=profile.handle,
+        bio=profile.bio,
+        avatar=extract_image_profile(profile),
+        holdings=holdings,
+    )
 
 
 # @app.get("/items/{item_id}")

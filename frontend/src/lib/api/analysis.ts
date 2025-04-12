@@ -8,6 +8,10 @@ type TrendingResponse = {
     marketCap: number;
     marketCapDelta24h: number;
     price: number;
+    timeseries: {
+        stamp: number;
+        price: number;
+    }[];
 }[];
 
 const getTrending = async (jwt: string): Promise<TrendingResponse> => {

@@ -9,9 +9,9 @@ export const Footer = () => {
            inherit centered text alignment by default.
         3) justify-items-center ensures each grid cell is centered horizontally.
       */}
-            <section className="mx-auto grid w-full max-w-5xl grid-cols-2 justify-items-center gap-x-12 gap-y-8 py-10 text-left md:grid-cols-4">
+            {/*<section className="mx-auto grid w-full max-w-5xl grid-cols-2 justify-items-center gap-x-12 gap-y-8 py-10 text-left md:grid-cols-4">
                 <div className="flex flex-col gap-2">
-                    <h3 className="text-lg font-bold">Lorem Ipsum</h3>
+                    <h3 className="text-lg font-bold">sigma</h3>
                     <div>
                         <a
                             rel="noreferrer noopener"
@@ -134,18 +134,17 @@ export const Footer = () => {
                     </div>
                 </div>
             </section>
-
-            <section className="container mx-auto pb-14 text-center">
+*/}
+            <section className="container mx-auto py-5 text-center">
                 <h3>
-                    &copy; 2024 Lorem ipsum dolor sit amet, consectetur
-                    adipiscing elit.{' '}
+                    &copy; 2025 MIT{' '}
                     <a
                         rel="noreferrer noopener"
                         target="_blank"
                         href="https://www.example.com"
                         className="text-primary border-primary transition-all hover:border-b-2"
                     >
-                        Lorem Ipsum
+                        Sapp team @ Encode Hackathon
                     </a>
                 </h3>
             </section>

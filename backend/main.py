@@ -1,9 +1,11 @@
 from fastapi import FastAPI, Depends
+from fastapi.middleware.cors import CORSMiddleware
 from typer import Typer
 import logging
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import text
+from coins import get_profile
 from database import SessionLocal, engine, Base, get_db
 from models import User  # Import your models
 from routers.users import router as user_router
@@ -16,6 +18,16 @@ app = FastAPI()
 cli = Typer()
 
 app.include_router(user_router, prefix="/users", tags=["users"])
+
+# Allow all origins (for development)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # or ["http://localhost:3000"] for specific frontend
+    allow_credentials=True,
+    allow_methods=["*"],  # GET, POST, PUT, DELETE, etc.
+    allow_headers=["*"],  # Authorization, Content-Type, etc.
+)
+
 
 @app.on_event("startup")
 async def startup_db_client():
@@ -35,10 +47,9 @@ def say_hello():
     print("hello from backend")
 
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
-
+@app.get("/profile/{profile_id}")
+def profile_details(profile_id: str):
+    return get_profile(profile_id)
 
 
 # @app.get("/items/{item_id}")

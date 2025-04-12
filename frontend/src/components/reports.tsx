@@ -16,8 +16,7 @@ export function Reports({ reports }: { reports: ReportsResponse }) {
             <TableHeader>
                 <TableRow>
                     <TableHead className="w-[200px]">Type</TableHead>
-                    <TableHead className="w-[200px]">Title</TableHead>
-                    <TableHead>Description</TableHead>
+                    <TableHead>Content</TableHead>
                     <TableHead className="w-[160px]">Created</TableHead>
                     <TableHead className="w-[140px] text-right">
                         Action
@@ -27,17 +26,14 @@ export function Reports({ reports }: { reports: ReportsResponse }) {
             <TableBody>
                 {reports.map((report) => (
                     <TableRow key={report.id}>
-                        <TableCell className="font-medium">
-                            {report.type}
+                        <TableCell>{report.report_type}</TableCell>
+                        <TableCell>
+                            {report.content.length > 40
+                                ? `${report.content.slice(0, 40)}...`
+                                : report.content}
                         </TableCell>
-                        <TableCell className="font-medium">
-                            {report.title}
-                        </TableCell>
-                        <TableCell className="text-gray-500">
-                            {report.description}
-                        </TableCell>
-                        <TableCell className="text-gray-500">
-                            {new Date(report.createdAt).toLocaleDateString(
+                        <TableCell>
+                            {new Date(report.created_at).toLocaleDateString(
                                 'en-US',
                                 {
                                     month: 'short',
@@ -47,7 +43,10 @@ export function Reports({ reports }: { reports: ReportsResponse }) {
                             )}
                         </TableCell>
                         <TableCell className="text-right">
-                            <Link to={`/app/reports/${report.id}`}>
+                            <Link
+                                to={`/app/reports/$reportId`}
+                                params={{ reportId: report.id }}
+                            >
                                 <Button>Go to report</Button>
                             </Link>
                         </TableCell>

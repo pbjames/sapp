@@ -16,7 +16,7 @@ import analysis, { TrendingResponse } from '@/lib/api/analysis';
 import profile, { ProfileResponse, ReportsResponse } from '@/lib/api/profile';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { ChartLine, ChartNoAxesCombined, Coins } from 'lucide-react';
+import { ChartLine, ChartNoAxesCombined, Coins, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 import { ProtectedRoute } from '@/context/ProtectedRouteContext';
@@ -42,7 +42,7 @@ function RouteComponent() {
         queryKey: ['profile'],
         queryFn: async () => {
             const p = await profile.getProfile(
-                localStorage.getItem('jwt') || ''
+                localStorage.getItem('auth_token') || ''
             );
 
             const holdings = p.holdings.map((holding) => {
@@ -73,7 +73,9 @@ function RouteComponent() {
     const reportsQ = useQuery<ReportsResponse>({
         queryKey: ['reports'],
         queryFn: async () => {
-            return await profile.getReports(localStorage.getItem('jwt') || '');
+            return await profile.getReports(
+                localStorage.getItem('auth_token') || ''
+            );
             //return [];
         },
     });
@@ -100,14 +102,6 @@ function RouteComponent() {
         },
     });
 
-    if (
-        profileQ.status === 'pending' ||
-        trendingQ.status === 'pending' ||
-        reportsQ.status === 'pending'
-    ) {
-        return <div>Loading...</div>;
-    }
-
     if (profileQ.status === 'error') {
         return <div>Profile Error: {JSON.stringify(profileQ.error)}</div>;
     }
@@ -124,198 +118,235 @@ function RouteComponent() {
         <ProtectedRoute>
             <Dashboard>
                 <Card className="w-full gap-1 p-4">
-                    <h1 className="text-xl font-bold">
-                        Welcome back, {profileQ.data.username}
-                    </h1>
-                    <div className="mt-2 flex flex-row flex-wrap items-center gap-6">
-                        <div className="flex flex-row items-center gap-2">
-                            {profileQ.data.avatar ? (
-                                <img
-                                    src={profileQ.data.avatar}
-                                    alt="Avatar"
-                                    className="h-12 w-12 rounded-full"
-                                />
-                            ) : (
-                                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-300">
-                                    {profileQ.data.displayName[0]}
+                    {profileQ.status == 'pending' ? (
+                        <div className="flex h-[calc(122px-2rem)] w-full items-center justify-center">
+                            <Loader2 className="h-6 w-6 animate-spin text-gray-500" />
+                        </div>
+                    ) : (
+                        <>
+                            <h1 className="text-xl font-bold">
+                                Welcome back, {profileQ.data.username}
+                            </h1>
+                            <div className="mt-2 flex flex-row flex-wrap items-center gap-6">
+                                <div className="flex flex-row items-center gap-2">
+                                    {profileQ.data.avatar ? (
+                                        <img
+                                            src={profileQ.data.avatar}
+                                            alt="Avatar"
+                                            className="h-12 w-12 rounded-full"
+                                        />
+                                    ) : (
+                                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-300">
+                                            {profileQ.data.displayName[0]}
+                                        </div>
+                                    )}
+                                    <div className="flex flex-col">
+                                        <h2 className="text-lg leading-5 font-semibold">
+                                            {profileQ.data.displayName}
+                                        </h2>
+                                        <p className="text-sm text-gray-500">
+                                            {profileQ.data.handle &&
+                                                `@${profileQ.data.handle}`}{' '}
+                                            ({profileQ.data.wallet})
+                                        </p>
+                                    </div>
                                 </div>
-                            )}
-                            <div className="flex flex-col">
-                                <h2 className="text-lg leading-5 font-semibold">
-                                    {profileQ.data.displayName}
-                                </h2>
-                                <p className="text-sm text-gray-500">
-                                    {profileQ.data.handle &&
-                                        `@${profileQ.data.handle}`}{' '}
-                                    ({profileQ.data.wallet})
-                                </p>
                             </div>
-                        </div>
-                        <div className="flex flex-col">
-                            <span className="text-sm">
-                                <span className="font-semibold text-gray-600">
-                                    {profileQ.data.following}
-                                </span>{' '}
-                                <span className="text-gray-500">following</span>
-                            </span>
-                            <span className="text-sm">
-                                <span className="font-semibold text-gray-600">
-                                    {profileQ.data.followers}
-                                </span>{' '}
-                                <span className="text-gray-500">followers</span>
-                            </span>
-                        </div>
-                    </div>
+                        </>
+                    )}
                 </Card>
                 <div className="mt-4 flex flex-row flex-wrap gap-4">
                     <Card className="flex flex-grow basis-0 flex-col p-4">
-                        <div className="flex flex-row items-center gap-3">
-                            <Coins className="h-6 w-6 text-gray-500" />
-                            <div className="flex flex-col">
-                                <h2 className="text-lg leading-5 font-semibold">
-                                    Your Holdings
-                                </h2>
-                                <p className="text-sm text-gray-500">
-                                    {profileQ.data.holdings.length} assets
-                                </p>
+                        {profileQ.status === 'pending' ? (
+                            <div className="flex h-[calc(470px-2rem)] w-full items-center justify-center">
+                                <Loader2 className="h-6 w-6 animate-spin text-gray-500" />
                             </div>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            {profileQ.data.holdings.map((holding) => (
-                                <div
-                                    key={holding.id}
-                                    className="flex flex-row items-center gap-2"
-                                >
-                                    <img
-                                        src={holding.preview!}
-                                        alt={holding.name}
-                                        className="h-12 w-12 rounded-full"
-                                    />
+                        ) : (
+                            <>
+                                <div className="flex flex-row items-center gap-3">
+                                    <Coins className="h-6 w-6 text-gray-500" />
                                     <div className="flex flex-col">
-                                        <h3 className="text-lg font-semibold">
-                                            {holding.name}
-                                        </h3>
+                                        <h2 className="text-lg leading-5 font-semibold">
+                                            Your Holdings
+                                        </h2>
                                         <p className="text-sm text-gray-500">
-                                            Holdings{' '}
-                                            {holding.value < 0.01
-                                                ? '<$0.01'
-                                                : new Intl.NumberFormat(
-                                                      'en-US',
-                                                      {
-                                                          style: 'currency',
-                                                          currency: 'USD',
-                                                      }
-                                                  ).format(holding.value)}
+                                            {profileQ.data.holdings.length}{' '}
+                                            assets
                                         </p>
                                     </div>
-                                    <button
-                                        className="ml-auto"
-                                        onClick={() => {
-                                            setFocusedCoin({
-                                                id: holding.id,
-                                                name: holding.name,
-                                                symbol: holding.symbol,
-                                                timeseries: holding.timeseries,
-                                            });
-                                        }}
-                                    >
-                                        <ChartLine className="h-5 w-5 text-gray-500" />
-                                    </button>
                                 </div>
-                            ))}
-                        </div>
+                                <div className="flex max-h-[calc(400px-2rem)] flex-col gap-2 overflow-y-auto">
+                                    {profileQ.data.holdings.map((holding) => (
+                                        <div
+                                            key={holding.id}
+                                            className="flex flex-row items-center gap-2"
+                                        >
+                                            <img
+                                                src={holding.preview!}
+                                                alt={holding.name}
+                                                className="h-12 w-12 rounded-full"
+                                            />
+                                            <div className="flex flex-col">
+                                                <h3 className="text-lg font-semibold">
+                                                    {holding.name}
+                                                </h3>
+                                                <p className="text-sm text-gray-500">
+                                                    Holdings{' '}
+                                                    {holding.value < 0.01
+                                                        ? '<$0.01'
+                                                        : new Intl.NumberFormat(
+                                                              'en-US',
+                                                              {
+                                                                  style: 'currency',
+                                                                  currency:
+                                                                      'USD',
+                                                              }
+                                                          ).format(
+                                                              holding.value
+                                                          )}
+                                                </p>
+                                            </div>
+                                            <button
+                                                className="mr-2 ml-auto"
+                                                onClick={() => {
+                                                    setFocusedCoin({
+                                                        id: holding.id,
+                                                        name: holding.name,
+                                                        symbol: holding.symbol,
+                                                        timeseries:
+                                                            holding.timeseries,
+                                                    });
+                                                }}
+                                            >
+                                                <ChartLine className="h-5 w-5 text-gray-500" />
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </>
+                        )}
                     </Card>
                     <Card className="flex flex-grow basis-0 flex-col p-4">
-                        <div className="flex flex-row items-center gap-3">
-                            <ChartNoAxesCombined className="h-6 w-6 text-gray-500" />
-                            <div className="flex flex-col">
-                                <h2 className="text-lg leading-5 font-semibold">
-                                    Trending Coins
-                                </h2>
-                                <p className="text-sm text-gray-500">
-                                    {trendingQ.data.length} assets
-                                </p>
+                        {trendingQ.status === 'pending' ? (
+                            <div className="flex h-[calc(470px-2rem)] w-full items-center justify-center">
+                                <Loader2 className="h-6 w-6 animate-spin text-gray-500" />
                             </div>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            {trendingQ.data.map((coin) => (
-                                <div
-                                    key={coin.id}
-                                    className="flex flex-row items-center gap-2"
-                                >
-                                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-300">
-                                        <img
-                                            src={coin.image}
-                                            alt={coin.name}
-                                            className="h-12 w-12 rounded-full"
-                                        />
-                                    </div>
+                        ) : (
+                            <>
+                                <div className="flex flex-row items-center gap-3">
+                                    <ChartNoAxesCombined className="h-6 w-6 text-gray-500" />
                                     <div className="flex flex-col">
-                                        <h3 className="text-lg font-semibold">
-                                            {coin.name}
-                                        </h3>
-                                        <p className={'text-sm text-gray-500'}>
-                                            Market Cap:{' '}
-                                            {new Intl.NumberFormat('en-US', {
-                                                style: 'currency',
-                                                currency: 'USD',
-                                            }).format(coin.marketCap)}{' '}
-                                            (
-                                            <span
-                                                className={
-                                                    'text-sm ' +
-                                                    (coin.marketCapDelta24h > 0
-                                                        ? 'text-green-500'
-                                                        : 'text-red-500')
-                                                }
-                                            >
-                                                {coin.marketCapDelta24h > 0
-                                                    ? '+'
-                                                    : ''}
-                                                {new Intl.NumberFormat(
-                                                    'en-US',
-                                                    {
-                                                        style: 'currency',
-                                                        currency: 'USD',
-                                                    }
-                                                ).format(
-                                                    Math.abs(
-                                                        coin.marketCapDelta24h
-                                                    )
-                                                )}
-                                            </span>
-                                            )
+                                        <h2 className="text-lg leading-5 font-semibold">
+                                            Trending Coins
+                                        </h2>
+                                        <p className="text-sm text-gray-500">
+                                            {trendingQ.data.length} assets
                                         </p>
                                     </div>
-                                    <button
-                                        className="ml-auto"
-                                        onClick={() => {
-                                            setFocusedCoin({
-                                                id: coin.id,
-                                                name: coin.name,
-                                                symbol: coin.symbol,
-                                                timeseries: coin.timeseries,
-                                            });
-                                        }}
-                                    >
-                                        <ChartLine className="h-5 w-5 text-gray-500" />
-                                    </button>
                                 </div>
-                            ))}
-                        </div>
+                                <div className="flex flex-col gap-2">
+                                    {trendingQ.data.map((coin) => (
+                                        <div
+                                            key={coin.id}
+                                            className="flex flex-row items-center gap-2"
+                                        >
+                                            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gray-300">
+                                                <img
+                                                    src={coin.image}
+                                                    alt={coin.name}
+                                                    className="h-12 w-12 rounded-full"
+                                                />
+                                            </div>
+                                            <div className="flex flex-col">
+                                                <h3 className="text-lg font-semibold">
+                                                    {coin.name}
+                                                </h3>
+                                                <p
+                                                    className={
+                                                        'text-sm text-gray-500'
+                                                    }
+                                                >
+                                                    Market Cap:{' '}
+                                                    {new Intl.NumberFormat(
+                                                        'en-US',
+                                                        {
+                                                            style: 'currency',
+                                                            currency: 'USD',
+                                                        }
+                                                    ).format(
+                                                        coin.marketCap
+                                                    )}{' '}
+                                                    (
+                                                    <span
+                                                        className={
+                                                            'text-sm ' +
+                                                            (coin.marketCapDelta24h >
+                                                            0
+                                                                ? 'text-green-500'
+                                                                : 'text-red-500')
+                                                        }
+                                                    >
+                                                        {coin.marketCapDelta24h >
+                                                        0
+                                                            ? '+'
+                                                            : ''}
+                                                        {new Intl.NumberFormat(
+                                                            'en-US',
+                                                            {
+                                                                style: 'currency',
+                                                                currency: 'USD',
+                                                            }
+                                                        ).format(
+                                                            Math.abs(
+                                                                coin.marketCapDelta24h
+                                                            )
+                                                        )}
+                                                    </span>
+                                                    )
+                                                </p>
+                                            </div>
+                                            <button
+                                                className="mr-2 ml-auto"
+                                                onClick={() => {
+                                                    setFocusedCoin({
+                                                        id: coin.id,
+                                                        name: coin.name,
+                                                        symbol: coin.symbol,
+                                                        timeseries:
+                                                            coin.timeseries,
+                                                    });
+                                                }}
+                                            >
+                                                <ChartLine className="h-5 w-5 text-gray-500" />
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            </>
+                        )}
                     </Card>
                 </div>
                 <Card className="mt-4 flex flex-grow basis-0 flex-col p-4">
-                    <h1 className="mb-4 text-xl font-bold">Recent Reports..</h1>
-                    <Reports reports={reportsQ.data.slice(0, 3)} />
-                    <div className="flex items-center justify-center">
-                        <Link
-                            to="/app/reports"
-                            className="mt-2 w-fit text-sm text-gray-500 hover:text-gray-700 hover:underline"
-                        >
-                            See all reports
-                        </Link>
-                    </div>
+                    {reportsQ.status === 'pending' ? (
+                        <div className="flex h-[calc(670px-2rem)] w-full items-center justify-center">
+                            <Loader2 className="h-6 w-6 animate-spin text-gray-500" />
+                        </div>
+                    ) : (
+                        <>
+                            <h1 className="mb-4 text-xl font-bold">
+                                Recent Reports..
+                            </h1>
+                            <Reports reports={reportsQ.data.slice(0, 3)} />
+                            <div className="flex items-center justify-center">
+                                <Link
+                                    to="/app/reports"
+                                    className="mt-2 w-fit text-sm text-gray-500 hover:text-gray-700 hover:underline"
+                                >
+                                    See all reports
+                                </Link>
+                            </div>
+                        </>
+                    )}
                 </Card>
                 <Dialog
                     open={!!focusedCoin}

@@ -6,6 +6,8 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import auth from '@/lib/api/auth';
+import { useProtectedRoute } from '@/context/ProtectedRouteContext';
+import { useEffect } from 'react';
 
 export const Route = createFileRoute('/register')({
     component: RouteComponent,
@@ -13,7 +15,7 @@ export const Route = createFileRoute('/register')({
 
 const registerSchema = z.object({
     username: z.string().min(1, 'Username is required'),
-    wallet: z
+    wallet_address: z
         .string()
         .min(1, 'Wallet address is required')
         .regex(/^0x[a-fA-F0-9]{40}$/, 'Invalid wallet address'),
@@ -27,6 +29,7 @@ type RegisterValues = z.infer<typeof registerSchema>;
 
 function RouteComponent() {
     const nav = useNavigate();
+    const { isAuthenticated, loading } = useProtectedRoute();
     const {
         register,
         handleSubmit,
@@ -37,6 +40,21 @@ function RouteComponent() {
         resolver: zodResolver(registerSchema),
         mode: 'onChange',
     });
+
+    // Redirect if already authenticated
+    useEffect(() => {
+        if (!loading && isAuthenticated) {
+            nav({ to: '/app' });
+        }
+    }, [isAuthenticated, loading, nav]);
+    
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+    
+    if (isAuthenticated) {
+        return null;
+    }
 
     const onSubmit = async (data: RegisterValues) => {
         try {
@@ -84,21 +102,21 @@ function RouteComponent() {
                     </span>
                 )}
 
-                <Label htmlFor="wallet" className="mt-4 mb-2">
+                <Label htmlFor="wallet_address" className="mt-4 mb-2">
                     Wallet Address
                 </Label>
                 <Input
-                    id="wallet"
+                    id="wallet_address"
                     placeholder="0x..."
-                    {...register('wallet')}
+                    {...register('wallet_address')}
                     onChange={(e) => {
                         clearErrors('root');
                         register('username').onChange(e);
                     }}
                 />
-                {errors.wallet && (
+                {errors.wallet_address && (
                     <span className="mt-1 text-sm text-red-500">
-                        {errors.wallet.message}
+                        {errors.wallet_address.message}
                     </span>
                 )}
 

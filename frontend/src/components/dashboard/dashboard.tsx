@@ -8,7 +8,7 @@ export default function Dashboard({ children }: { children: React.ReactNode }) {
             <AppSidebar variant="inset" />
             <SidebarInset>
                 <SiteHeader />
-                <div className="flex flex-1 flex-col">{children}</div>
+                <div className="flex flex-1 flex-col p-2">{children}</div>
             </SidebarInset>
         </SidebarProvider>
     );

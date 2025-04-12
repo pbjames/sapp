@@ -1,11 +1,12 @@
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 from typer import Typer
 import logging
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import text
-from coins import get_profile
+from coins import explore, get_profile
 from database import SessionLocal, engine, Base, get_db
 from models import User  # Import your models
 from routers.users import router as user_router
@@ -52,6 +53,39 @@ def say_hello():
 @app.get("/profile/{profile_id}")
 def profile_details(profile_id: str):
     return get_profile(profile_id)
+
+
+def coin_time_series(address: str): ...
+
+
+class TokenInfo(BaseModel):
+    id: int
+    name: str
+    symbol: str
+    preview: str | None
+    marketCap: int
+    marketCapDelta24h: int
+    price: float
+    timeseries: list[dict[str, int]]
+
+
+@app.get("/trending_tokens")
+def trending_coins(count: int = 5):
+    coin = explore(count=count)
+    coins = [e.node for e in coin.exploreList.edges]
+    return [
+        TokenInfo(
+            id=int(coin.id, base=16),
+            name=coin.name,
+            symbol=coin.symbol,
+            preview=None,
+            marketCap=int(coin.marketCap),
+            marketCapDelta24h=int(coin.marketCapDelta24h),
+            price=69,
+            timeseries=[],
+        )
+        for coin in coins
+    ]
 
 
 # @app.get("/items/{item_id}")

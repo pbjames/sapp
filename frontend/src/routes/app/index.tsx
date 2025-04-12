@@ -1,16 +1,48 @@
 import Dashboard from '@/components/dashboard/dashboard';
+import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import {
+    ChartContainer,
+    ChartTooltip,
+    ChartTooltipContent,
+} from '@/components/ui/chart';
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { TrendingResponse } from '@/lib/api/analysis';
 import { ProfileResponse } from '@/lib/api/profile';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
-import { ChartNoAxesCombined, Coins } from 'lucide-react';
+import { ChartLine, ChartNoAxesCombined, Coins, Copy } from 'lucide-react';
+import { useState } from 'react';
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 
 export const Route = createFileRoute('/app/')({
     component: RouteComponent,
 });
 
 function RouteComponent() {
+    const isMobile = useIsMobile();
+    const [focusedCoin, setFocusedCoin] = useState<{
+        id: string;
+        name: string;
+        symbol: string;
+        timeseries: {
+            stamp: number;
+            price: number;
+        }[];
+    } | null>(null);
+
     const profileQ = useQuery<ProfileResponse>({
         queryKey: ['profile'],
         queryFn: () => {
@@ -32,6 +64,7 @@ function RouteComponent() {
                             preview: null,
                             amount: 1,
                             value: 2000,
+                            timeseries: [],
                         },
                         {
                             id: '2',
@@ -40,6 +73,16 @@ function RouteComponent() {
                             preview: null,
                             amount: 0.5,
                             value: 25000,
+                            timeseries: [
+                                {
+                                    stamp: 1672531199,
+                                    price: 2000,
+                                },
+                                {
+                                    stamp: 1672617599,
+                                    price: 2100,
+                                },
+                            ],
                         },
                     ],
                 },
@@ -58,6 +101,16 @@ function RouteComponent() {
                 marketCap: 100000,
                 marketCapDelta24h: 1000,
                 price: 1,
+                timeseries: [
+                    {
+                        stamp: 1672531199,
+                        price: 2000,
+                    },
+                    {
+                        stamp: 1672617599,
+                        price: 2100,
+                    },
+                ],
             },
             {
                 id: '2',
@@ -67,6 +120,16 @@ function RouteComponent() {
                 marketCap: 100000,
                 marketCapDelta24h: 1000,
                 price: 1,
+                timeseries: [
+                    {
+                        stamp: 1672531199,
+                        price: 2000,
+                    },
+                    {
+                        stamp: 1672617599,
+                        price: 2100,
+                    },
+                ],
             },
             {
                 id: '3',
@@ -76,6 +139,16 @@ function RouteComponent() {
                 marketCap: 100000,
                 marketCapDelta24h: 1000,
                 price: 1,
+                timeseries: [
+                    {
+                        stamp: 1672531199,
+                        price: 2000,
+                    },
+                    {
+                        stamp: 1672617599,
+                        price: 2100,
+                    },
+                ],
             },
             {
                 id: '4',
@@ -85,6 +158,16 @@ function RouteComponent() {
                 marketCap: 100000,
                 marketCapDelta24h: 1000,
                 price: 1,
+                timeseries: [
+                    {
+                        stamp: 1672531199,
+                        price: 2000,
+                    },
+                    {
+                        stamp: 1672617599,
+                        price: 2100,
+                    },
+                ],
             },
             {
                 id: '5',
@@ -94,6 +177,16 @@ function RouteComponent() {
                 marketCap: 100000,
                 marketCapDelta24h: 1000,
                 price: 1,
+                timeseries: [
+                    {
+                        stamp: 1672531199,
+                        price: 2000,
+                    },
+                    {
+                        stamp: 1672617599,
+                        price: 2100,
+                    },
+                ],
             },
         ],
     });
@@ -195,6 +288,19 @@ function RouteComponent() {
                                         {holding.value} USD)
                                     </p>
                                 </div>
+                                <button
+                                    className="ml-auto"
+                                    onClick={() => {
+                                        setFocusedCoin({
+                                            id: holding.id,
+                                            name: holding.name,
+                                            symbol: holding.symbol,
+                                            timeseries: holding.timeseries,
+                                        });
+                                    }}
+                                >
+                                    <ChartLine className="h-5 w-5 text-gray-500" />
+                                </button>
                             </div>
                         ))}
                     </div>
@@ -243,11 +349,155 @@ function RouteComponent() {
                                         {coin.marketCapDelta24h} USD)
                                     </p>
                                 </div>
+                                <button
+                                    className="ml-auto"
+                                    onClick={() => {
+                                        setFocusedCoin({
+                                            id: coin.id,
+                                            name: coin.name,
+                                            symbol: coin.symbol,
+                                            timeseries: coin.timeseries,
+                                        });
+                                    }}
+                                >
+                                    <ChartLine className="h-5 w-5 text-gray-500" />
+                                </button>
                             </div>
                         ))}
                     </div>
                 </Card>
             </div>
+            <Dialog
+                open={!!focusedCoin}
+                onOpenChange={() => setFocusedCoin(null)}
+            >
+                <DialogContent className="sm:max-w-2xl">
+                    <DialogHeader>
+                        <DialogTitle>
+                            {focusedCoin?.name} ({focusedCoin?.symbol})
+                        </DialogTitle>
+                    </DialogHeader>
+                    <div className="flex flex-col gap-2">
+                        <ChartContainer
+                            config={{
+                                price: {
+                                    label: 'Desktop',
+                                    color: 'var(--primary)',
+                                },
+                            }}
+                            className="aspect-auto h-[250px] w-full"
+                        >
+                            <AreaChart
+                                data={focusedCoin?.timeseries.map((d) => ({
+                                    date: new Date(d.stamp).toISOString(),
+                                    price: d.price,
+                                }))}
+                            >
+                                <defs>
+                                    <linearGradient
+                                        id="fillDesktop"
+                                        x1="0"
+                                        y1="0"
+                                        x2="0"
+                                        y2="1"
+                                    >
+                                        <stop
+                                            offset="5%"
+                                            stopColor="var(--color-desktop)"
+                                            stopOpacity={1.0}
+                                        />
+
+                                        <stop
+                                            offset="95%"
+                                            stopColor="var(--color-desktop)"
+                                            stopOpacity={0.1}
+                                        />
+                                    </linearGradient>
+
+                                    <linearGradient
+                                        id="fillMobile"
+                                        x1="0"
+                                        y1="0"
+                                        x2="0"
+                                        y2="1"
+                                    >
+                                        <stop
+                                            offset="5%"
+                                            stopColor="var(--color-mobile)"
+                                            stopOpacity={0.8}
+                                        />
+
+                                        <stop
+                                            offset="95%"
+                                            stopColor="var(--color-mobile)"
+                                            stopOpacity={0.1}
+                                        />
+                                    </linearGradient>
+                                </defs>
+
+                                <CartesianGrid vertical={false} />
+                                <YAxis
+                                    tickLine={false}
+                                    axisLine={false}
+                                    tickMargin={8}
+                                    width={40}
+                                    tickFormatter={(value) =>
+                                        value >= 1000
+                                            ? `$${(value / 1000).toFixed(1)}k`
+                                            : `$${value}`
+                                    }
+                                />
+
+                                <XAxis
+                                    dataKey="date"
+                                    tickLine={false}
+                                    axisLine={false}
+                                    tickMargin={8}
+                                    minTickGap={32}
+                                    tickFormatter={(value) => {
+                                        const date = new Date(value);
+
+                                        return date.toLocaleDateString(
+                                            'en-US',
+                                            {
+                                                month: 'short',
+
+                                                day: 'numeric',
+                                            }
+                                        );
+                                    }}
+                                />
+
+                                <ChartTooltip
+                                    cursor={false}
+                                    defaultIndex={isMobile ? -1 : 10}
+                                    content={
+                                        <ChartTooltipContent
+                                            labelFormatter={(value) => {
+                                                return new Date(
+                                                    value
+                                                ).toLocaleDateString('en-US', {
+                                                    month: 'short',
+                                                    day: 'numeric',
+                                                });
+                                            }}
+                                            indicator="dot"
+                                        />
+                                    }
+                                />
+
+                                <Area
+                                    dataKey="price"
+                                    type="natural"
+                                    fill="url(#fillMobile)"
+                                    stroke="var(--color-mobile)"
+                                    stackId="a"
+                                />
+                            </AreaChart>
+                        </ChartContainer>
+                    </div>
+                </DialogContent>
+            </Dialog>
         </Dashboard>
     );
 }

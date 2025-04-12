@@ -9,10 +9,7 @@ import { Navbar } from '@/components/Navbar';
 
 function RootLayout() {
     const location = useRouterState({ select: (state) => state.location });
-
-    // Check if the current pathname is exactly "/app"
-    const hideLayout = location.pathname === '/app/';
-    console.log(location.pathname);
+    const hideLayout = location.pathname.includes('/app');
 
     return (
         <div className="flex h-dvh flex-col">

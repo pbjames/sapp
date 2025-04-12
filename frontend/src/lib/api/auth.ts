@@ -22,8 +22,8 @@ const login = async (data: LoginData): Promise<LoginResponse> => {
         },
       }
     );
-    localStorage.setItem('auth_token', response.data.token);
 
+    localStorage.setItem('auth_token', response.data.token);
     return response.data;
   } catch (error) {
     throw new Error('Username or password is incorrect');
@@ -50,6 +50,7 @@ const register = async (data: RegisterData): Promise<RegisterResponse> => {
       },
     }
   );
+
   return response.data;
 };
 
@@ -72,5 +73,5 @@ export default {
   register,
   isAuthenticated,
   getToken,
-  logout
+  logout,
 };

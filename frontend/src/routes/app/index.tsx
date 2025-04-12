@@ -30,7 +30,7 @@ import { ProtectedRoute } from '@/context/ProtectedRouteContext';
 
 // We can define beforeMatch if we need more complex route protection logic
 export const Route = createFileRoute('/app/')({
-    component: ProtectedAppRoute,
+    component: ProtectedRoute,
 });
 
 function ProtectedAppRoute() {

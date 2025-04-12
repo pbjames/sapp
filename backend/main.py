@@ -9,6 +9,7 @@ from coins import get_profile
 from database import SessionLocal, engine, Base, get_db
 from models import User  # Import your models
 from routers.users import router as user_router
+from routers.reports import router as report_router
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -18,6 +19,7 @@ app = FastAPI()
 cli = Typer()
 
 app.include_router(user_router, prefix="/users", tags=["users"])
+app.include_router(report_router, prefix="/reports", tags=["reports"])
 
 # Allow all origins (for development)
 app.add_middleware(

@@ -8,6 +8,7 @@ import {
     TableHeader,
     TableRow,
 } from './ui/table';
+import { Link } from '@tanstack/react-router';
 
 export function Reports({ reports }: { reports: ReportsResponse }) {
     return (
@@ -46,7 +47,9 @@ export function Reports({ reports }: { reports: ReportsResponse }) {
                             )}
                         </TableCell>
                         <TableCell className="text-right">
-                            <Button>Go to report</Button>
+                            <Link to={`/app/reports/${report.id}`}>
+                                <Button>Go to report</Button>
+                            </Link>
                         </TableCell>
                     </TableRow>
                 ))}

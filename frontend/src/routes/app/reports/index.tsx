@@ -6,7 +6,7 @@ import { ReportsResponse } from '@/lib/api/profile';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/app/reports')({
+export const Route = createFileRoute('/app/reports/')({
     component: RouteComponent,
 });
 

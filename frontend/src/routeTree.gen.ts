@@ -16,10 +16,11 @@ import { Route as LoginImport } from './routes/login'
 import { Route as AboutImport } from './routes/about'
 import { Route as IndexImport } from './routes/index'
 import { Route as AppIndexImport } from './routes/app/index'
-import { Route as AppReportsImport } from './routes/app/reports'
 import { Route as AppGenerateIdeasImport } from './routes/app/generate-ideas'
 import { Route as AppAnalyseProfileImport } from './routes/app/analyse-profile'
 import { Route as AppAnalyseCoinImport } from './routes/app/analyse-coin'
+import { Route as AppReportsIndexImport } from './routes/app/reports/index'
+import { Route as AppReportsReportIdImport } from './routes/app/reports/$reportId'
 
 // Create/Update Routes
 
@@ -53,12 +54,6 @@ const AppIndexRoute = AppIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const AppReportsRoute = AppReportsImport.update({
-  id: '/app/reports',
-  path: '/app/reports',
-  getParentRoute: () => rootRoute,
-} as any)
-
 const AppGenerateIdeasRoute = AppGenerateIdeasImport.update({
   id: '/app/generate-ideas',
   path: '/app/generate-ideas',
@@ -74,6 +69,18 @@ const AppAnalyseProfileRoute = AppAnalyseProfileImport.update({
 const AppAnalyseCoinRoute = AppAnalyseCoinImport.update({
   id: '/app/analyse-coin',
   path: '/app/analyse-coin',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AppReportsIndexRoute = AppReportsIndexImport.update({
+  id: '/app/reports/',
+  path: '/app/reports/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const AppReportsReportIdRoute = AppReportsReportIdImport.update({
+  id: '/app/reports/$reportId',
+  path: '/app/reports/$reportId',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -130,18 +137,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppGenerateIdeasImport
       parentRoute: typeof rootRoute
     }
-    '/app/reports': {
-      id: '/app/reports'
-      path: '/app/reports'
-      fullPath: '/app/reports'
-      preLoaderRoute: typeof AppReportsImport
-      parentRoute: typeof rootRoute
-    }
     '/app/': {
       id: '/app/'
       path: '/app'
       fullPath: '/app'
       preLoaderRoute: typeof AppIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/app/reports/$reportId': {
+      id: '/app/reports/$reportId'
+      path: '/app/reports/$reportId'
+      fullPath: '/app/reports/$reportId'
+      preLoaderRoute: typeof AppReportsReportIdImport
+      parentRoute: typeof rootRoute
+    }
+    '/app/reports/': {
+      id: '/app/reports/'
+      path: '/app/reports'
+      fullPath: '/app/reports'
+      preLoaderRoute: typeof AppReportsIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -157,8 +171,9 @@ export interface FileRoutesByFullPath {
   '/app/analyse-coin': typeof AppAnalyseCoinRoute
   '/app/analyse-profile': typeof AppAnalyseProfileRoute
   '/app/generate-ideas': typeof AppGenerateIdeasRoute
-  '/app/reports': typeof AppReportsRoute
   '/app': typeof AppIndexRoute
+  '/app/reports/$reportId': typeof AppReportsReportIdRoute
+  '/app/reports': typeof AppReportsIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -169,8 +184,9 @@ export interface FileRoutesByTo {
   '/app/analyse-coin': typeof AppAnalyseCoinRoute
   '/app/analyse-profile': typeof AppAnalyseProfileRoute
   '/app/generate-ideas': typeof AppGenerateIdeasRoute
-  '/app/reports': typeof AppReportsRoute
   '/app': typeof AppIndexRoute
+  '/app/reports/$reportId': typeof AppReportsReportIdRoute
+  '/app/reports': typeof AppReportsIndexRoute
 }
 
 export interface FileRoutesById {
@@ -182,8 +198,9 @@ export interface FileRoutesById {
   '/app/analyse-coin': typeof AppAnalyseCoinRoute
   '/app/analyse-profile': typeof AppAnalyseProfileRoute
   '/app/generate-ideas': typeof AppGenerateIdeasRoute
-  '/app/reports': typeof AppReportsRoute
   '/app/': typeof AppIndexRoute
+  '/app/reports/$reportId': typeof AppReportsReportIdRoute
+  '/app/reports/': typeof AppReportsIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -196,8 +213,9 @@ export interface FileRouteTypes {
     | '/app/analyse-coin'
     | '/app/analyse-profile'
     | '/app/generate-ideas'
-    | '/app/reports'
     | '/app'
+    | '/app/reports/$reportId'
+    | '/app/reports'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -207,8 +225,9 @@ export interface FileRouteTypes {
     | '/app/analyse-coin'
     | '/app/analyse-profile'
     | '/app/generate-ideas'
-    | '/app/reports'
     | '/app'
+    | '/app/reports/$reportId'
+    | '/app/reports'
   id:
     | '__root__'
     | '/'
@@ -218,8 +237,9 @@ export interface FileRouteTypes {
     | '/app/analyse-coin'
     | '/app/analyse-profile'
     | '/app/generate-ideas'
-    | '/app/reports'
     | '/app/'
+    | '/app/reports/$reportId'
+    | '/app/reports/'
   fileRoutesById: FileRoutesById
 }
 
@@ -231,8 +251,9 @@ export interface RootRouteChildren {
   AppAnalyseCoinRoute: typeof AppAnalyseCoinRoute
   AppAnalyseProfileRoute: typeof AppAnalyseProfileRoute
   AppGenerateIdeasRoute: typeof AppGenerateIdeasRoute
-  AppReportsRoute: typeof AppReportsRoute
   AppIndexRoute: typeof AppIndexRoute
+  AppReportsReportIdRoute: typeof AppReportsReportIdRoute
+  AppReportsIndexRoute: typeof AppReportsIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -243,8 +264,9 @@ const rootRouteChildren: RootRouteChildren = {
   AppAnalyseCoinRoute: AppAnalyseCoinRoute,
   AppAnalyseProfileRoute: AppAnalyseProfileRoute,
   AppGenerateIdeasRoute: AppGenerateIdeasRoute,
-  AppReportsRoute: AppReportsRoute,
   AppIndexRoute: AppIndexRoute,
+  AppReportsReportIdRoute: AppReportsReportIdRoute,
+  AppReportsIndexRoute: AppReportsIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -264,8 +286,9 @@ export const routeTree = rootRoute
         "/app/analyse-coin",
         "/app/analyse-profile",
         "/app/generate-ideas",
-        "/app/reports",
-        "/app/"
+        "/app/",
+        "/app/reports/$reportId",
+        "/app/reports/"
       ]
     },
     "/": {
@@ -289,11 +312,14 @@ export const routeTree = rootRoute
     "/app/generate-ideas": {
       "filePath": "app/generate-ideas.tsx"
     },
-    "/app/reports": {
-      "filePath": "app/reports.tsx"
-    },
     "/app/": {
       "filePath": "app/index.tsx"
+    },
+    "/app/reports/$reportId": {
+      "filePath": "app/reports/$reportId.tsx"
+    },
+    "/app/reports/": {
+      "filePath": "app/reports/index.tsx"
     }
   }
 }

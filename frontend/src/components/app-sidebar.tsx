@@ -19,17 +19,14 @@ import {
     LayoutDashboard,
     Lightbulb,
     List,
+    LogOut,
     Orbit,
     Users,
 } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
+import { Button } from './ui/button';
 
 const data = {
-    user: {
-        name: 'fred',
-        email: 'fred@gmail.com',
-        avatar: '/avatars/shadcn.jpg',
-    },
     navMain: [
         {
             title: 'Dashboard',
@@ -105,13 +102,6 @@ const data = {
             ],
         },
     ],
-    navSecondary: [
-        {
-            title: 'Settings',
-            url: '/app/settings',
-            icon: <LayoutDashboard className="size-5" />,
-        },
-    ],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
@@ -130,10 +120,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             </SidebarHeader>
             <SidebarContent>
                 <NavMain items={data.navMain} />
-                <NavSecondary items={data.navSecondary} className="mt-auto" />
             </SidebarContent>
             <SidebarFooter>
-                <NavUser user={data.user} />
+                <Button
+                    variant="outline"
+                    className="flex items-center gap-2"
+                    onClick={() => {
+                        localStorage.removeItem('auth_token');
+                        window.location.href = '/';
+                    }}
+                >
+                    <LogOut className="size-4" />
+                    Logout
+                </Button>
             </SidebarFooter>
         </Sidebar>
     );

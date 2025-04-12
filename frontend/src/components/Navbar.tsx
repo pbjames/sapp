@@ -38,7 +38,6 @@ const routeList: RouteProps[] = [
     },
 ];
 
-    
 export const Navbar = () => {
     const { isAuthenticated } = useProtectedRoute();
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -122,7 +121,14 @@ export const Navbar = () => {
                     </nav>
 
                     <div className="hidden gap-2 md:flex">
-                    {!isAuthenticated && (
+                        {isAuthenticated ? (
+                            <Link
+                                to="/app"
+                                className={`border ${buttonVariants({ variant: 'secondary' })}`}
+                            >
+                                App
+                            </Link>
+                        ) : (
                             <Link
                                 to="/login"
                                 className={`border ${buttonVariants({ variant: 'secondary' })}`}

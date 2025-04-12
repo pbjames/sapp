@@ -58,6 +58,7 @@ const updateProfile = async (
 
 type ReportsResponse = {
     id: string;
+    type: string;
     title: string;
     description: string;
     createdAt: number;

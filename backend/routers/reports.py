@@ -5,6 +5,7 @@ from database import get_db
 from models import Report, User
 from pydantic import BaseModel, Field
 from datetime import datetime
+from routers.users import get_current_user
 
 router = APIRouter()
 
@@ -22,17 +23,12 @@ class ReportCreate(BaseModel):
     report_type: str = Field(..., description="The type of report")
     image_data: str = None  # Optional base64 encoded image
 
-@router.get("/{wallet_address}", response_model=List[ReportResponse])
-def get_reports_by_wallet(wallet_address: str, db: Session = Depends(get_db)):
+@router.get("/", response_model=List[ReportResponse])
+def get_reports_by_wallet(current_user: User = Depends(get_current_user)):
     """
-    Get all reports for a user based on their wallet address.
+    Get all reports for the authenticated user.
     """
-    # Find the user by wallet address
-    user = db.query(User).filter(User.wallet_address == wallet_address).first()
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-
-    # Return all reports for this user
+    # Directly access reports from the authenticated user
     return [
         {
             "id": report.id,
@@ -41,19 +37,19 @@ def get_reports_by_wallet(wallet_address: str, db: Session = Depends(get_db)):
             "image_data": report.image_data,
             "user_id": report.user_id,
             "created_at": report.created_at,
-        } for report in user.reports
+        } for report in current_user.reports
     ]
 
-@router.get("/report/{report_id}", response_model=ReportResponse)
-def get_report_by_id(report_id: int, db: Session = Depends(get_db)):
+@router.get("/{report_id}", response_model=ReportResponse)
+def get_report_by_id(report_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     """
-    Get a specific report by its ID.
+    Get a specific report by its ID for the authenticated user.
     """
     # Find the report by ID
-    report = db.query(Report).filter(Report.id == report_id).first()
+    report = db.query(Report).filter(Report.id == report_id, Report.user_id == current_user.id).first()
     if not report:
-        raise HTTPException(status_code=404, detail="Report not found")
-    
+        raise HTTPException(status_code=404, detail="Report not found or not authorized")
+
     return {
         "id": report.id,
         "content": report.content,
@@ -63,6 +59,8 @@ def get_report_by_id(report_id: int, db: Session = Depends(get_db)):
         "created_at": report.created_at,
     }
 
+
+#This logic is going to be used when we generate reports for the user to automatically post to their database
 @router.post("/report/{wallet_address}", response_model=ReportResponse, status_code=status.HTTP_201_CREATED)
 def create_report(wallet_address: str, report_data: ReportCreate, db: Session = Depends(get_db)):
     """

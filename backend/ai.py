@@ -10,6 +10,8 @@ from typer import Typer
 from coins import explore, get_all_comments, get_coin
 from const import COIN_SUMMARY, IMAGE_PROMPT, MODEL_NAME
 
+from coin_model import predict, get_input
+
 cli = Typer()
 tools = []
 memory = MemorySaver()
@@ -47,18 +49,28 @@ def analyze_image(image_url: str) -> list[str]:
     return model.invoke([message]).text().split(" ")
 
 
-def coin_summary(address: str) -> str:
+def coin_summary(address: str) -> tuple[str,float]:
     coin_data = get_coin(address)
+    input_df = get_input(address)
+    predicted_roi = predict(input_df)
+
     content = COIN_SUMMARY.format(
         creatorEarnings=coin_data.creatorEarnings,
         volume24h=coin_data.volume24h,
         totalVolume=coin_data.totalVolume,
         name=coin_data.name,
         description=coin_data.description,
+        predictedROI=f"{(predicted_roi)*100}%",
+        marketCap=coin_data.marketCap,
+        market_cap_change_24h=coin_data.marketCapDelta24h,
+        days_since_created=input_df['days_since_created'],
+        unique_holders=coin_data.uniqueHolders,
+        transfers=coin_data.transfers,
+        comments_sentimental_score=input_df['comments_sentimental_score'],
         comments="\n".join([n.comment for n in get_all_comments(address, count=10)]),
     )
     message = HumanMessage(content=[{"type": "text", "text": content}])
-    return model.invoke([message]).text()
+    return model.invoke([message]).text(), predicted_roi
 
 
 @cli.command()

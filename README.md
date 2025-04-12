@@ -13,10 +13,9 @@ bun run dev
 ### Backend
 
 ```sh
-cd backend
-uv sync
-uv run fastapi dev main.py
+docker-compose up --build
 ```
+Locally accessible through `http://127.0.0.1:8000/`
 
 ### Extra
 

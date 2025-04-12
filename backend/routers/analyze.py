@@ -6,26 +6,29 @@ from models import Report, User
 from pydantic import BaseModel, Field
 from datetime import datetime
 from coin_model import get_input, predict
+from ai import coin_summary
 
 router = APIRouter()
 
 class CoinAnalyzeResponse(BaseModel):
     address: str
     predicted_roi: float
+    summary: str
     created_at: datetime
 
 @router.get("/{token_address}", response_model=List[CoinAnalyzeResponse])
-def get_predicted_roi_by_token_address(token_address: str, db: Session = Depends(get_db)):
+def get_analyze_by_token_address(token_address: str, db: Session = Depends(get_db)):
     """
     Get Token ROI Prediction.
     """
-    input_df = get_input(token_address)
-    predicted_roi = predict(input_df)
+    summary, predicted_roi = coin_summary(token_address)
 
     return [
         CoinAnalyzeResponse(
             address=token_address,
-            predicted_roi=predicted_roi[0],
-            created_at=datetime.utcnow()
+            predicted_roi=predicted_roi,
+            summary=summary,
+            created_at=datetime.utcnow(),
+            
         )
     ]

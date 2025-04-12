@@ -98,7 +98,6 @@ def trending_coins(count: int = 5):
         for coin in coins
     ]
 
-
 class ProfileHolding(BaseModel):
     id: str
     symbol: str

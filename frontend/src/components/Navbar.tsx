@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/sheet';
 import { GitHubLogoIcon } from '@radix-ui/react-icons';
 import { buttonVariants } from './ui/button';
-import { Menu, Flame } from 'lucide-react';
+import { Menu, Flame, Orbit } from 'lucide-react';
 import { ModeToggle } from './mode-toggle';
 import { Link } from '@tanstack/react-router';
 import { useProtectedRoute } from '@/context/ProtectedRouteContext';
@@ -46,8 +46,11 @@ export const Navbar = () => {
             <NavigationMenu className="mx-auto w-full max-w-5xl [&>div]:w-full">
                 <NavigationMenuList className="flex h-14 w-full justify-between px-4">
                     <NavigationMenuItem className="flex font-bold">
-                        <Link to="/" className="ml-2 flex text-xl font-bold">
-                            <Flame className="text-primary mr-2 h-6 w-6" />
+                        <Link
+                            to="/"
+                            className="ml-2 flex items-center text-xl font-bold"
+                        >
+                            <Orbit className="mr-2 h-6 w-6 text-slate-900 dark:text-slate-100" />
                             SAPP
                         </Link>
                     </NavigationMenuItem>

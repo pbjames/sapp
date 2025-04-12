@@ -19,8 +19,10 @@ import {
     LayoutDashboard,
     Lightbulb,
     List,
+    Orbit,
     Users,
 } from 'lucide-react';
+import { Link } from '@tanstack/react-router';
 
 const data = {
     user: {
@@ -117,18 +119,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <Sidebar collapsible="offcanvas" {...props}>
             <SidebarHeader>
                 <SidebarMenu>
-                    <SidebarMenuItem>
-                        <SidebarMenuButton
-                            asChild
-                            className="data-[slot=sidebar-menu-button]:!p-1.5"
-                        >
-                            <a href="#">
-                                <span className="text-base font-semibold">
-                                    SAPP
-                                </span>
-                            </a>
-                        </SidebarMenuButton>
-                    </SidebarMenuItem>
+                    <Link
+                        to="/app"
+                        className="mt-4 ml-2 flex items-center space-x-2 md:mt-0"
+                    >
+                        <Orbit className="size-6" />
+                        <span className="text-lg font-semibold">SAPP</span>
+                    </Link>
                 </SidebarMenu>
             </SidebarHeader>
             <SidebarContent>

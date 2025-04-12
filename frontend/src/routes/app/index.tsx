@@ -177,7 +177,11 @@ function RouteComponent() {
                                 </div>
                                 <div className="flex max-h-[calc(400px-2rem)] flex-col gap-2 overflow-y-auto">
                                     {profileQ.data.holdings.map((holding) => (
-                                        <div
+                                        <a
+                                            href={
+                                                'https://zora.co/coin/base:' +
+                                                atob(holding.id).split('.')[1]
+                                            }
                                             key={holding.id}
                                             className="flex flex-row items-center gap-2"
                                         >
@@ -220,7 +224,7 @@ function RouteComponent() {
                                             >
                                                 <ChartLine className="h-5 w-5 text-gray-500" />
                                             </button>
-                                        </div>
+                                        </a>
                                     ))}
                                 </div>
                             </>
@@ -246,7 +250,11 @@ function RouteComponent() {
                                 </div>
                                 <div className="flex flex-col gap-2">
                                     {trendingQ.data.map((coin) => (
-                                        <div
+                                        <a
+                                            href={
+                                                'https://zora.co/coin/base:' +
+                                                coin.id
+                                            }
                                             key={coin.id}
                                             className="flex flex-row items-center gap-2"
                                         >
@@ -319,7 +327,7 @@ function RouteComponent() {
                                             >
                                                 <ChartLine className="h-5 w-5 text-gray-500" />
                                             </button>
-                                        </div>
+                                        </a>
                                     ))}
                                 </div>
                             </>

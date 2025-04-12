@@ -1,21 +1,4 @@
 import * as React from 'react';
-import {
-    IconCamera,
-    IconChartBar,
-    IconDashboard,
-    IconDatabase,
-    IconFileAi,
-    IconFileDescription,
-    IconFileWord,
-    IconFolder,
-    IconHelp,
-    IconInnerShadowTop,
-    IconListDetails,
-    IconReport,
-    IconSearch,
-    IconSettings,
-    IconUsers,
-} from '@tabler/icons-react';
 
 import { NavDocuments } from '@/components/nav-documents';
 import { NavMain } from '@/components/nav-main';
@@ -30,6 +13,15 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
+import {
+    BarChart,
+    Camera,
+    File,
+    LayoutDashboard,
+    Lightbulb,
+    List,
+    Users,
+} from 'lucide-react';
 
 const data = {
     user: {
@@ -41,33 +33,33 @@ const data = {
         {
             title: 'Dashboard',
             url: '/app',
-            icon: IconDashboard,
+            icon: <LayoutDashboard className="size-5" />,
         },
         {
             title: 'Analyse Profile',
             url: '/app/analyse-profile',
-            icon: IconUsers,
+            icon: <Users className="size-5" />,
         },
         {
             title: 'Analyse Coin',
             url: '/app/analyse-coin',
-            icon: IconChartBar,
+            icon: <BarChart className="size-5" />,
         },
         {
             title: 'Generate Ideas',
             url: '/app/generate-ideas',
-            icon: IconFolder,
+            icon: <Lightbulb className="size-5" />,
         },
         {
             title: 'Previous Reports',
             url: '/app/reports',
-            icon: IconListDetails,
+            icon: <List className="size-5" />,
         },
     ],
     navClouds: [
         {
             title: 'Capture',
-            icon: IconCamera,
+            icon: <Camera className="size-5" />,
             isActive: true,
             url: '#',
             items: [
@@ -83,7 +75,7 @@ const data = {
         },
         {
             title: 'Proposal',
-            icon: IconFileDescription,
+            icon: <File className="size-5" />,
             url: '#',
             items: [
                 {
@@ -98,7 +90,7 @@ const data = {
         },
         {
             title: 'Prompts',
-            icon: IconFileAi,
+            icon: <Lightbulb className="size-5" />,
             url: '#',
             items: [
                 {
@@ -116,7 +108,7 @@ const data = {
         {
             title: 'Settings',
             url: '/app/settings',
-            icon: IconSettings,
+            icon: <LayoutDashboard className="size-5" />,
         },
     ],
 };
@@ -132,7 +124,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                             className="data-[slot=sidebar-menu-button]:!p-1.5"
                         >
                             <a href="#">
-                                <IconInnerShadowTop className="!size-5" />
                                 <span className="text-base font-semibold">
                                     SAPP
                                 </span>

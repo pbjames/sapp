@@ -1,11 +1,3 @@
-import {
-    IconCreditCard,
-    IconDotsVertical,
-    IconLogout,
-    IconNotification,
-    IconUserCircle,
-} from '@tabler/icons-react';
-
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
     DropdownMenu,
@@ -22,6 +14,7 @@ import {
     SidebarMenuItem,
     useSidebar,
 } from '@/components/ui/sidebar';
+import { Bell, CreditCard, DotSquare, LogOut, User } from 'lucide-react';
 
 export function NavUser({
     user,
@@ -60,7 +53,7 @@ export function NavUser({
                                     {user.email}
                                 </span>
                             </div>
-                            <IconDotsVertical className="ml-auto size-4" />
+                            <DotSquare className="ml-auto size-4" />
                         </SidebarMenuButton>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent
@@ -93,21 +86,21 @@ export function NavUser({
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
                             <DropdownMenuItem>
-                                <IconUserCircle />
+                                <User />
                                 Account
                             </DropdownMenuItem>
                             <DropdownMenuItem>
-                                <IconCreditCard />
+                                <CreditCard />
                                 Billing
                             </DropdownMenuItem>
                             <DropdownMenuItem>
-                                <IconNotification />
+                                <Bell />
                                 Notifications
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem>
-                            <IconLogout />
+                            <LogOut />
                             Log out
                         </DropdownMenuItem>
                     </DropdownMenuContent>

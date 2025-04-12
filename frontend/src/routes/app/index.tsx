@@ -13,13 +13,22 @@ import {
 } from '@/components/ui/dialog';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { TrendingResponse } from '@/lib/api/analysis';
-import { ProfileResponse } from '@/lib/api/profile';
+import { ProfileResponse, ReportsResponse } from '@/lib/api/profile';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { ChartLine, ChartNoAxesCombined, Coins } from 'lucide-react';
 import { useState } from 'react';
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 import { ProtectedRoute } from '@/context/ProtectedRouteContext';
+import { Button } from '@/components/ui/button';
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
 
 export const Route = createFileRoute('/app/')({
     component: RouteComponent,
@@ -81,6 +90,20 @@ function RouteComponent() {
                     ],
                 },
             };
+        },
+    });
+
+    const reportsQ = useQuery<ReportsResponse>({
+        queryKey: ['reports'],
+        queryFn: () => {
+            return [
+                {
+                    id: '1',
+                    title: 'My first report',
+                    description: 'This is my first report',
+                    createdAt: 1672531199,
+                },
+            ];
         },
     });
 
@@ -185,7 +208,11 @@ function RouteComponent() {
         ],
     });
 
-    if (profileQ.status === 'pending' || trendingQ.status === 'pending') {
+    if (
+        profileQ.status === 'pending' ||
+        trendingQ.status === 'pending' ||
+        reportsQ.status === 'pending'
+    ) {
         return <div>Loading...</div>;
     }
 
@@ -195,6 +222,10 @@ function RouteComponent() {
 
     if (trendingQ.status === 'error') {
         return <div>Trending Error: {JSON.stringify(trendingQ.error)}</div>;
+    }
+
+    if (reportsQ.status === 'error') {
+        return <div>Reports Error: {JSON.stringify(reportsQ.error)}</div>;
     }
 
     return (
@@ -364,6 +395,49 @@ function RouteComponent() {
                         </div>
                     </Card>
                 </div>
+                <Card className="mt-4 flex flex-grow basis-0 flex-col p-4">
+                    <h1 className="mb-4 text-xl font-bold">Recent Reports..</h1>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead className="w-[200px]">
+                                    Title
+                                </TableHead>
+                                <TableHead>Description</TableHead>
+                                <TableHead className="w-[160px]">
+                                    Created
+                                </TableHead>
+                                <TableHead className="w-[140px] text-right">
+                                    Action
+                                </TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {reportsQ.data.map((report) => (
+                                <TableRow key={report.id}>
+                                    <TableCell className="font-medium">
+                                        {report.title}
+                                    </TableCell>
+                                    <TableCell className="text-gray-500">
+                                        {report.description}
+                                    </TableCell>
+                                    <TableCell className="text-gray-500">
+                                        {new Date(
+                                            report.createdAt
+                                        ).toLocaleDateString('en-US', {
+                                            month: 'short',
+                                            day: 'numeric',
+                                            year: 'numeric',
+                                        })}
+                                    </TableCell>
+                                    <TableCell className="text-right">
+                                        <Button>Go to report</Button>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </Card>
                 <Dialog
                     open={!!focusedCoin}
                     onOpenChange={() => setFocusedCoin(null)}

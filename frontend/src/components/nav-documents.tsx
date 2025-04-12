@@ -1,14 +1,6 @@
 'use client';
 
 import {
-    IconDots,
-    IconFolder,
-    IconShare3,
-    IconTrash,
-    type Icon,
-} from '@tabler/icons-react';
-
-import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
@@ -24,6 +16,7 @@ import {
     SidebarMenuItem,
     useSidebar,
 } from '@/components/ui/sidebar';
+import { DotSquare, Folder, Share, Trash } from 'lucide-react';
 
 export function NavDocuments({
     items,
@@ -31,7 +24,7 @@ export function NavDocuments({
     items: {
         name: string;
         url: string;
-        icon: Icon;
+        icon: React.ReactNode;
     }[];
 }) {
     const { isMobile } = useSidebar();
@@ -44,7 +37,7 @@ export function NavDocuments({
                     <SidebarMenuItem key={item.name}>
                         <SidebarMenuButton asChild>
                             <a href={item.url}>
-                                <item.icon />
+                                {item.icon}
                                 <span>{item.name}</span>
                             </a>
                         </SidebarMenuButton>
@@ -54,7 +47,7 @@ export function NavDocuments({
                                     showOnHover
                                     className="data-[state=open]:bg-accent rounded-sm"
                                 >
-                                    <IconDots />
+                                    <DotSquare className="text-sidebar-foreground/70" />
                                     <span className="sr-only">More</span>
                                 </SidebarMenuAction>
                             </DropdownMenuTrigger>
@@ -64,16 +57,16 @@ export function NavDocuments({
                                 align={isMobile ? 'end' : 'start'}
                             >
                                 <DropdownMenuItem>
-                                    <IconFolder />
+                                    <Folder className="text-sidebar-foreground/70" />
                                     <span>Open</span>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>
-                                    <IconShare3 />
+                                    <Share className="text-sidebar-foreground/70" />
                                     <span>Share</span>
                                 </DropdownMenuItem>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem variant="destructive">
-                                    <IconTrash />
+                                    <Trash className="text-sidebar-foreground/70" />
                                     <span>Delete</span>
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
@@ -82,7 +75,7 @@ export function NavDocuments({
                 ))}
                 <SidebarMenuItem>
                     <SidebarMenuButton className="text-sidebar-foreground/70">
-                        <IconDots className="text-sidebar-foreground/70" />
+                        <DotSquare className="text-sidebar-foreground/70" />
                         <span>More</span>
                     </SidebarMenuButton>
                 </SidebarMenuItem>

@@ -61,7 +61,7 @@ type ReportsResponse = {
     title: string;
     description: string;
     createdAt: number;
-};
+}[];
 
 const getReports = async (jwt: string): Promise<ReportsResponse[]> => {
     const response = await axios.get<ReportsResponse[]>(
@@ -99,8 +99,15 @@ const getReport = async (id: string, jwt: string): Promise<ReportResponse> => {
     return response.data;
 };
 
-export type { ProfileResponse, UpdateProfileData };
+export type {
+    ProfileResponse,
+    UpdateProfileData,
+    ReportsResponse,
+    ReportResponse,
+};
 export default {
     getProfile,
     updateProfile,
+    getReports,
+    getReport,
 };

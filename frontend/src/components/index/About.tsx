@@ -19,7 +19,7 @@ export const About = () => {
                             <h2 className="text-3xl font-bold md:text-4xl">
                                 <span className="from-primary/60 to-primary bg-gradient-to-b bg-clip-text text-transparent">
                                     About
-                                </span>
+                                </span>{' '}
                                 SAPP
                             </h2>
                             <p className="text-muted-foreground mt-4 text-xl">

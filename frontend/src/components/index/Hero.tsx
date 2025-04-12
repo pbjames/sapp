@@ -8,7 +8,10 @@ const zoraImg = 'https://img.cryptorank.io/coins/zora1718819483850.png';
 export const Hero = () => {
     return (
         <section className="mx-auto grid w-full max-w-5xl items-center gap-x-6 gap-y-8 px-4 py-10 sm:py-16 md:py-24 lg:grid-cols-2 lg:py-32">
-            <img className="absolute hidden pl-[50%] lg:block" src={zoraImg} />
+            <img
+                className="absolute -z-10 hidden pl-[50%] lg:block"
+                src={zoraImg}
+            />
             {/* Left Content */}
             <div className="w-full space-y-6 text-center sm:min-w-lg lg:text-left">
                 <main className="w-full text-3xl leading-tight font-bold sm:text-4xl md:text-5xl">
@@ -35,13 +38,13 @@ export const Hero = () => {
                             Get Started{' '}
                         </Link>
                     </Button>
-                    <Link
-                        to="/app"
+                    <a
+                        href="https://github.com/pbjames/sapp"
                         className={`flex w-full items-center justify-center sm:w-auto sm:justify-start ${buttonVariants({ variant: 'outline' })} `}
                     >
                         Github Repository
                         <GitHubLogoIcon className="ml-2 h-5 w-5" />
-                    </Link>
+                    </a>
                 </div>
             </div>
             <div className="shadow"></div>

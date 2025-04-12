@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 type LoginData = {
-    username: string;
-    password: string;
+  username: string;
+  password: string;
 };
 
 type LoginResponse = {
@@ -38,7 +38,7 @@ type RegisterData = {
 };
 
 type RegisterResponse = {
-    token: string;
+  token: string;
 };
 
 const register = async (data: RegisterData): Promise<RegisterResponse> => {
@@ -52,7 +52,8 @@ const register = async (data: RegisterData): Promise<RegisterResponse> => {
         }
     );
 
-    return response.data;
+
+  return response.data;
 };
 
 // Authentication helper functions

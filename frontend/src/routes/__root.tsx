@@ -1,20 +1,36 @@
-import { createRootRoute, Outlet } from '@tanstack/react-router';
+import {
+    createRootRoute,
+    Outlet,
+    useRouterState,
+} from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import { Footer } from '@/components/Footer';
 import { Navbar } from '@/components/Navbar';
 import { ProtectedRouteProvider } from '@/context/ProtectedRouteContext';
 
-export const Route = createRootRoute({
-    component: () => (
-        <ProtectedRouteProvider>
-            <div className="flex h-dvh flex-col">
-                <Navbar />
-                <div className="flex flex-grow flex-col">
-                    <Outlet />
-                </div>
-                <Footer />
-                <TanStackRouterDevtools />
+
+function RootLayout() {
+    const location = useRouterState({ select: (state) => state.location });
+
+    // Check if the current pathname is exactly "/app"
+    const hideLayout = location.pathname === '/app/';
+    console.log(location.pathname);
+
+    return (
+      <ProtectedRouteProvider>
+        <div className="flex h-dvh flex-col">
+            {!hideLayout && <Navbar />}
+
+            <div className="flex flex-grow flex-col">
+                <Outlet />
             </div>
-        </ProtectedRouteProvider>
-    ),
+
+            {!hideLayout && <Footer />}
+        </div>
+      </ProtectedRouteProvider>
+    );
+}
+
+export const Route = createRootRoute({
+    component: RootLayout,
 });

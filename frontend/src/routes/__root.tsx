@@ -6,15 +6,15 @@ import {
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import { Footer } from '@/components/Footer';
 import { Navbar } from '@/components/Navbar';
+import { ProtectedRouteProvider } from '@/context/ProtectedRouteContext';
+
 
 function RootLayout() {
     const location = useRouterState({ select: (state) => state.location });
-
-    // Check if the current pathname is exactly "/app"
-    const hideLayout = location.pathname === '/app/';
-    console.log(location.pathname);
+    const hideLayout = location.pathname.includes('/app');
 
     return (
+      <ProtectedRouteProvider>
         <div className="flex h-dvh flex-col">
             {!hideLayout && <Navbar />}
 
@@ -24,6 +24,7 @@ function RootLayout() {
 
             {!hideLayout && <Footer />}
         </div>
+      </ProtectedRouteProvider>
     );
 }
 

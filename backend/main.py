@@ -5,6 +5,7 @@ import logging
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import text
+from coins import get_profile
 from database import SessionLocal, engine, Base, get_db
 from models import User  # Import your models
 from routers.users import router as user_router
@@ -46,9 +47,9 @@ def say_hello():
     print("hello from backend")
 
 
-@app.get("/")
-def read_root():
-    return {"Hello": "World"}
+@app.get("/profile/{profile_id}")
+def profile_details(profile_id: str):
+    return get_profile(profile_id)
 
 
 # @app.get("/items/{item_id}")

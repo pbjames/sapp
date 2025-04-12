@@ -16,38 +16,16 @@ export const Route = createFileRoute('/app/analyse-profile')({
     component: ProfileAnalysis,
 });
 
-interface PreviewImage {
-    blurhash: string;
-    medium: string;
-    small: string;
-}
-interface Avatar {
-    small: PreviewImage;
-    medium: PreviewImage;
-}
-interface BasicProfile {
-    handle: string;
-    avatar: Avatar;
-    displayName: string;
-    website: string;
-}
-
 interface TargetState {
     targetProfile: string | undefined;
     setTargetProfile: Dispatch<SetStateAction<string | undefined>>;
 }
 
 function ProfileAnalysis() {
-    const [targetProfile, setTargetProfile] = useState<string>();
-    const handleMeProfile = () => {
-        setTargetProfile('0xme');
-    };
-    const handleOtherProfile = () => {
-        setTargetProfile('0xother');
-    };
+    const [targetProfile, setTargetProfile] = useState<string>(undefined);
     return (
         <Dashboard>
-            {targetProfile?.length == 0 || targetProfile == undefined ? (
+            {targetProfile == undefined ? (
                 <TargetSelection
                     targetProfile={targetProfile}
                     setTargetProfile={setTargetProfile}
@@ -72,13 +50,13 @@ function TargetSelection(props: TargetState) {
             <section className="grid min-h-screen grid-cols-2">
                 <button
                     className="grid cursor-pointer grid-cols-1 items-center justify-items-center transition-colors hover:bg-gray-300"
-                    onClick={() => props.setTargetProfile('0xme')}
+                    onClick={() => props.setTargetProfile('')}
                 >
                     <p className="text-2xl font-semibold">My profile</p>
                 </button>
                 <button
                     className="grid cursor-pointer grid-flow-col grid-cols-1 items-center justify-items-center transition-colors hover:bg-gray-300"
-                    onClick={() => props.setTargetProfile('0xother')}
+                    onClick={() => props.setTargetProfile('')}
                 >
                     <p className="text-2xl font-semibold">Another profile</p>
                 </button>

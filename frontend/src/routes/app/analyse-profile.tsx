@@ -113,7 +113,7 @@ function TargetSelection(props: TargetState) {
 }
 function TargetAnalysis(props: TargetState) {
     const profileQ = useQuery<ProfileResponse>({
-        queryKey: ['profile', 'analysis'],
+        queryKey: ['profile', props.targetProfile],
         queryFn: async () => {
             const p = await profile.getProfileByWallet(
                 localStorage.getItem('jwt') || '',
@@ -123,10 +123,11 @@ function TargetAnalysis(props: TargetState) {
         },
     });
     const analysisQ = useQuery<AIProfileResponse>({
-        queryKey: ['analysisProfile'],
+        queryKey: ['analysisProfile', props.targetProfile],
         queryFn: async () => ai.getAIProfileAnalysis(),
     });
-    if (profileQ.status == 'pending') {
+
+    if (profileQ.status == 'pending' || analysisQ.status == 'pending') {
         return (
             <div className="flex h-[calc(122px-2rem)] w-full items-center justify-center">
                 <Loader2 className="h-6 w-6 animate-spin text-gray-500" />

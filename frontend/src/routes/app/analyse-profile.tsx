@@ -124,7 +124,7 @@ function TargetAnalysis(props: TargetState) {
     });
     const analysisQ = useQuery<AIProfileResponse>({
         queryKey: ['analysisProfile', props.targetProfile],
-        queryFn: async () => ai.getAIProfileAnalysis(),
+        queryFn: async () => ai.getAIProfileAnalysis(props.targetProfile),
     });
 
     if (profileQ.status == 'pending' || analysisQ.status == 'pending') {

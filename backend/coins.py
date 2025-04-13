@@ -6,6 +6,8 @@ import requests
 
 from const import BASE_URL
 
+from time import sleep
+
 
 class Amount(BaseModel):
     currencyAddress: str
@@ -207,12 +209,14 @@ def explore(
 
     response = requests.get(f"{BASE_URL}/explore", params=params)
     response.raise_for_status()
+    sleep(1)
 
     return ExploreResponse(**response.json())
 
 
 def get_coin(address: str) -> Zora20Token:
     response = requests.get(f"{BASE_URL}/coin", params={"address": address})
+    sleep(1)
     return Zora20Token(**response.json()["zora20Token"])
 
 
@@ -220,6 +224,7 @@ def get_all_comments(address: str, count: int) -> list[ZoraCommentNode]:
     response = requests.get(
         f"{BASE_URL}/coinComments", params={"address": address, "count": count}
     )
+    sleep(1)
     comments = ZoraComments(**response.json()["zora20Token"]["zoraComments"])
     return [e.node for e in comments.edges]
 
@@ -228,9 +233,11 @@ def get_profile_balances(address: str) -> BasicProfile:
     response = requests.get(
         f"{BASE_URL}/profileBalances", params={"identifier": address}
     )
+    sleep(1)
     return BasicProfile(**response.json()["profile"])
 
 
 def get_profile(address: str) -> Profile:
     response = requests.get(f"{BASE_URL}/profile", params={"identifier": address})
+    sleep(1)
     return Profile(**response.json()["profile"])

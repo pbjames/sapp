@@ -2,6 +2,7 @@ import logging
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage
 from langchain_core.runnables import RunnableConfig
+from langchain_core.output_parsers import StrOutputParser
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.prebuilt import create_react_agent
 from pydantic import BaseModel
@@ -16,7 +17,9 @@ cli = Typer()
 tools = []
 memory = MemorySaver()
 model = ChatOpenAI(model=MODEL_NAME)
-agent_executor = create_react_agent(model, tools, checkpointer=memory)
+agent_executor = (
+    create_react_agent(model, tools, checkpointer=memory) | StrOutputParser()
+)
 config = RunnableConfig(
     configurable={"thread_id": "c7661282-da44-464d-a8a7-4307a0df56a0"}
 )
@@ -79,7 +82,7 @@ def general_coin_summary(summaries: list[str]) -> str:
     {'- \n'.join(summaries)}
     """
     message = HumanMessage(content=[{"type": "text", "text": content}])
-    return agent_executor.invoke([message]).text()
+    return model.invoke([message]).text()
 
 
 def bio_summary(profile: Profile) -> str:
@@ -92,7 +95,7 @@ def bio_summary(profile: Profile) -> str:
     - display name: {profile.displayName}
     """
     message = HumanMessage(content=[{"type": "text", "text": content}])
-    return agent_executor.invoke([message]).text()
+    return model.invoke([message]).text()
 
 
 def summary_summary() -> str:
@@ -101,7 +104,7 @@ def summary_summary() -> str:
     actionable items the user can take note of. Keep it brief.
     """
     message = HumanMessage(content=[{"type": "text", "text": content}])
-    return agent_executor.invoke([message]).text()
+    return model.invoke([message]).text()
 
 
 @cli.command()

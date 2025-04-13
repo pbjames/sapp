@@ -1,3 +1,4 @@
+from typing import Any
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 from langchain_core.messages import HumanMessage
@@ -171,13 +172,29 @@ def profile_details_me(user: User = Depends(get_current_user)):
     return _profile_details(user.wallet_address)
 
 
+@app.get("/analyze-profile")
+def analyze_profile_kms(user=Depends(get_current_user)):
+    wallet_id = user.wallet_address
+    return analyze_profile_kms(wallet_id)
+
+
 @app.get("/analyze-profile/{wallet_id}")
-def analyze_profile(wallet_id: str) -> str:
+def analyze_profile(wallet_id: str) -> dict[str, Any]:
+    return _analyze_profile(wallet_id)
+
+
+def _analyze_profile(wallet_id: str) -> dict[str, Any]:
+    def try_summary(address):
+        try:
+            return coin_summary(address)
+        except:
+            return ("", 0.0)
+
     profile = get_profile(wallet_id)
     balances = get_profile_balances(wallet_id)
     coins = [e.node.coin for e in balances.coinBalances.edges]
-    summaries = [coin_summary(coin) for coin in coins]
-    total_coin_summary = general_coin_summary(summaries)
+    summaries = [try_summary(coin.address) for coin in coins]
+    total_coin_summary = general_coin_summary([s for (s, e) in summaries])
     bio = bio_summary(profile)
     super_summary = summary_summary()
     return {

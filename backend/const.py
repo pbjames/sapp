@@ -36,4 +36,5 @@ Consider the following background context from the user's previous reports (if a
 {prev}
 
 The response should be concise, practical, and in a conversational tone. If the user's history contains relevant insights, incorporate them to personalize the response.
+Do not include any markdown formatting.
 """

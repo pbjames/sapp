@@ -52,7 +52,7 @@ def analyze_image(image_url: str) -> list[str]:
     return model.invoke([message]).text().split(" ")
 
 
-def coin_summary(address: str) -> tuple[str, float]:
+def coin_summary(address: str, image_url: str) -> tuple[str, float]:
     coin_data = get_coin(address)
     input_df = get_input(address)
     predicted_roi = predict(input_df)
@@ -69,10 +69,30 @@ def coin_summary(address: str) -> tuple[str, float]:
         unique_holders=coin_data.uniqueHolders,
         transfers=coin_data.transfers,
         comments_sentimental_score=input_df["comments_sentimental_score"],
+        image_url=image_url,
         comments="\n".join([n.comment for n in get_all_comments(address, count=10)]),
     )
     message = HumanMessage(content=[{"type": "text", "text": content}])
     return model.invoke([message]).text(), predicted_roi
+
+
+def analyze_coin_and_image(address: str, image_url: str) -> str:
+    summary_text, predicted_roi = coin_summary(address, image_url)
+
+    combined_message = HumanMessage(
+        content=[
+            {
+                "type": "text",
+                "text": summary_text
+                + "\n\nNow look at the attached image and describe it:\n",
+            },
+            {"type": "image_url", "image_url": {"url": image_url}},
+        ]
+    )
+
+    response_text = model.invoke([combined_message]).text()
+
+    return response_text, summary_text, predicted_roi
 
 
 def get_concatenated_reports(user: User) -> str:

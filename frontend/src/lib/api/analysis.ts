@@ -116,7 +116,7 @@ export type {
     AnalysisCoinResponse,
 };
 
-export default{
+export default {
     getTrending,
     startAnalysisProfile,
     getAnalysisProfile,

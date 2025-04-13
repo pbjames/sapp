@@ -6,6 +6,7 @@ import { TriangleUpIcon } from '@radix-ui/react-icons';
 import { Loader2 } from 'lucide-react';
 import { createFileRoute } from '@tanstack/react-router';
 import profile, { ProfileResponse, ReportsResponse } from '@/lib/api/profile';
+import ai, { AIProfileResponse } from '@/lib/api/ai';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
@@ -109,7 +110,10 @@ function TargetAnalysis(props: TargetState) {
             return p;
         },
     });
-    console.log(props.targetProfile);
+    const analysisQ = useQuery<AIProfileResponse>({
+        queryKey: ['analysisProfile'],
+        queryFn: async () => ai.getAIProfileAnalysis(),
+    });
     if (profileQ.status == 'pending') {
         return (
             <div className="flex h-[calc(122px-2rem)] w-full items-center justify-center">
@@ -120,30 +124,51 @@ function TargetAnalysis(props: TargetState) {
     return (
         <section className="flex flex-col items-center justify-items-center space-y-2 px-[15%]">
             <section className="flex pt-10">
-                <div className="flex h-auto max-w-[25%] justify-items-start p-4">
+                <div className="flex h-auto max-w-[25%] items-center justify-items-start p-4">
                     <img
                         src={profileQ.data?.avatar || null}
                         className="rounded-full object-contain"
                     />
                 </div>
-                <div className="flex flex-col justify-items-start space-y-1">
+                <div className="flex flex-col justify-items-center space-y-1">
                     <h1 className="text-2xl font-bold">
                         {profileQ.data?.displayName}
                     </h1>
                     <h1 className="text-xs text-gray-500">
                         {profileQ.data?.handle}
+                        {' @ '}
+                        {profileQ.data?.wallet}
                     </h1>
                     <h1 className="text-[0.8rem] text-gray-500">
                         {profileQ.data?.bio}
                     </h1>
                 </div>
             </section>
-            <p>hello</p>
-            <section className="h-50 w-full rounded-lg bg-gradient-to-br from-purple-300 to-blue-500 p-1">
-                <textarea
-                    className="bg-accent h-full w-full rounded-md p-2 outline-0"
-                    placeholder="✨ Customize your feedback.."
-                ></textarea>
+            <section className="rounded-lg bg-gradient-to-br from-purple-300 to-blue-400 p-1">
+                <section className="bg-accent flex flex-col items-start justify-items-start space-y-2 space-x-4 rounded-md">
+                    <div className="min-w-[50%] grow basis-0 p-2">
+                        <h1 className="text-[1.10rem] font-semibold">
+                            Bio Analysis
+                        </h1>
+                        {analysisQ.data?.bio_analysis}
+                    </div>
+                    <div className="grow basis-0 p-2">
+                        <h1 className="text-[1.10rem] font-semibold">
+                            General Coin Performance
+                        </h1>
+                        <divContent>
+                            {analysisQ.data?.all_coin_summary}
+                        </divContent>
+                    </div>
+                    <div className="grow basis-0 p-2">
+                        <h1 className="text-[1.10rem] font-semibold">
+                            Summary
+                        </h1>
+                        <divContent>
+                            {analysisQ.data?.prompt_summary}
+                        </divContent>
+                    </div>
+                </section>
             </section>
         </section>
     );

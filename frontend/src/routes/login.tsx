@@ -53,7 +53,7 @@ function RouteComponent() {
                 type: 'manual',
                 message: error.message,
             });
-           
+
             return;
         }
     };

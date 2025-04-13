@@ -84,38 +84,19 @@ const getAnalysisProfile = async (
     return response.data;
 };
 
-type AnalysisCoinRequest = {
-    coin: string;
-};
-
 type AnalysisCoinResponse = {
-    task_id: string;
-};
-
-const startAnalysisCoin = async (
-    data: AnalysisCoinRequest,
-    jwt: string
-): Promise<AnalysisCoinResponse> => {
-    const response = await axios.post<AnalysisCoinResponse>(
-        `${import.meta.env.VITE_API_URL}/analysis/coin`,
-        data,
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${jwt}`,
-            },
-        }
-    );
-
-    return response.data;
+    address: string;
+    predicted_roi: number;
+    summary: string;
+    created_at: string;
 };
 
 const getAnalysisCoin = async (
-    taskId: string,
+    token_address: string,
     jwt: string
-): Promise<AnalysisProfileResponse> => {
-    const response = await axios.get<AnalysisProfileResponse>(
-        `${import.meta.env.VITE_API_URL}/analysis/${taskId}`,
+): Promise<AnalysisCoinResponse[]> => {
+    const response = await axios.get<AnalysisCoinResponse[]>(
+        `${import.meta.env.VITE_API_URL}/analyze/${token_address}`,
         {
             headers: {
                 'Content-Type': 'application/json',
@@ -132,13 +113,12 @@ export type {
     StartAnalysisProfileResponse,
     AnalysisProfileResponse,
     StartAnalysisProfileRequest,
-    AnalysisCoinRequest,
+    AnalysisCoinResponse,
 };
 
-export default {
+export default{
     getTrending,
     startAnalysisProfile,
     getAnalysisProfile,
-    startAnalysisCoin,
     getAnalysisCoin,
 };

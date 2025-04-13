@@ -47,11 +47,11 @@ function RouteComponent() {
             nav({ to: '/app' });
         }
     }, [isAuthenticated, loading, nav]);
-    
+
     if (loading) {
         return <div>Loading...</div>;
     }
-    
+
     if (isAuthenticated) {
         return null;
     }

@@ -1,7 +1,7 @@
-zapiVersion: networking.gke.io/v1
+apiVersion: networking.gke.io/v1
 kind: ManagedCertificate
 metadata:
-  name: new-cert
+  name: longbow-cert
 spec:
   domains:
     - "34.120.222.110.nip.io"

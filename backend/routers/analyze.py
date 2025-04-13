@@ -129,4 +129,3 @@ def generate_idea(
 @router.post("/generate/image")
 def generate_image(prompt: str):
     return {"content": gen_image(prompt)}
-

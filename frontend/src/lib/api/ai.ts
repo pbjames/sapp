@@ -48,12 +48,12 @@ const getImageGeneration = async (prompt: string) => {
       },
     }
   );
-}
+};
 
 export default {
   getAIProfileAnalysis,
   getIdeaGeneration,
-  getImageGeneration
+  getImageGeneration,
 };
 // import axios from 'axios';
 //

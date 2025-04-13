@@ -3,7 +3,7 @@ import Dashboard from '@/components/dashboard/dashboard';
 import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { TriangleUpIcon } from '@radix-ui/react-icons';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Rocket } from 'lucide-react';
 import { createFileRoute } from '@tanstack/react-router';
 import profile, { ProfileResponse, ReportsResponse } from '@/lib/api/profile';
 import ai, { AIProfileResponse } from '@/lib/api/ai';
@@ -52,24 +52,30 @@ function ProfileAnalysis() {
 }
 
 function ChooseTarget(props: TargetState) {
-    function handleForm(formData: FormData) {
-        props.setTargetProfile(formData.get('wallet'));
-    }
+    const [value, setValue] = useState<string>('');
     return (
-        <section className="grid h-full w-full grid-cols-1 grid-rows-1 items-center justify-items-center">
-            <form
-                action={handleForm}
-                className="space-x-2 rounded-lg p-4 outline"
-            >
-                <label htmlFor="wallet">Wallet: </label>
-                <input
-                    name="wallet"
-                    type="text"
-                    placeholder="0x123456789a..ff"
-                    className="rounded outline"
-                />
-                <Button type="submit">Submit</Button>
-            </form>
+        <section className="mx-auto flex max-w-2xl flex-grow flex-col items-center justify-center gap-4 p-4">
+            <h1 className="text-3xl font-bold">Analyze a profile</h1>
+            <p>
+                Analyze a profile by entering the wallet address of the profile
+                you want to analyze.
+            </p>
+            <div className="flex w-full flex-row gap-2">
+                <section className="w-full rounded-lg bg-gradient-to-br from-purple-300 to-blue-500 p-1">
+                    <input
+                        className="bg-accent w-full rounded-md p-2 outline-0"
+                        placeholder="0x123456789a..ff"
+                        onChange={(e) => setValue(e.target.value)}
+                    ></input>
+                </section>
+                <Button
+                    className="flex h-full cursor-pointer items-center gap-2 !px-4 py-0"
+                    onClick={() => props.setTargetProfile(value)}
+                >
+                    Analyze
+                    <Rocket className="h-4 w-4" />
+                </Button>
+            </div>
         </section>
     );
 }
@@ -84,16 +90,22 @@ function TargetSelection(props: TargetState) {
             </div>
             <section className="grid w-full flex-grow grid-cols-2">
                 <button
-                    className="grid cursor-pointer grid-cols-1 items-center justify-items-center transition-colors hover:bg-gray-300"
+                    className="flex cursor-pointer flex-col items-center justify-center gap-2 transition-colors hover:bg-gray-300"
                     onClick={() => props.setTargetProfile('')}
                 >
-                    <p className="text-2xl font-semibold">My profile</p>
+                    <h1 className="text-2xl font-semibold">My profile</h1>
+                    <p className="text-sm text-gray-500">
+                        Analyze your own profile.
+                    </p>
                 </button>
                 <button
-                    className="grid cursor-pointer grid-flow-col grid-cols-1 items-center justify-items-center transition-colors hover:bg-gray-300"
+                    className="flex cursor-pointer flex-col items-center justify-center gap-2 transition-colors hover:bg-gray-300"
                     onClick={() => props.setTargetProfile('replaceMe')}
                 >
-                    <p className="text-2xl font-semibold">Another profile</p>
+                    <h1 className="text-2xl font-semibold">Another profile</h1>
+                    <p className="text-sm text-gray-500">
+                        Analyze another profile by entering the wallet address.
+                    </p>
                 </button>
             </section>
         </section>

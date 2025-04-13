@@ -38,9 +38,10 @@ function RouteComponent() {
         <Dashboard>
             <section className="mx-auto flex max-w-2xl flex-grow flex-col items-center justify-center gap-4 p-4">
                 <h1 className="text-3xl font-bold">Generate Ideas</h1>
-                <p>
+                <p className="text-center">
                     Have an idea for a coin? Put it in below, and we will
-                    generate you a coin and photo for it!
+                    generate you a coin and photo for it! We will also include
+                    your last 5 reports in the context.
                 </p>
                 <section className="h-50 w-full rounded-lg bg-gradient-to-br from-purple-300 to-blue-500 p-1">
                     <textarea

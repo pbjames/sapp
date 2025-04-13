@@ -1,8 +1,8 @@
-apiVersion: networking.gke.io/v1
+zapiVersion: networking.gke.io/v1
 kind: ManagedCertificate
 metadata:
-  name: skibidi
+  name: new-cert
 spec:
   domains:
-    - "34.147.183.195.nip.io"
+    - "34.120.222.110.nip.io"
   

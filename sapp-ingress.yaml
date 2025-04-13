@@ -8,9 +8,9 @@ spec:
   ingressClassName: gce
   tls:
     - hosts:
-        - "34.147.183.195.nip.io"
+        - "34.120.222.110.nip.io"
   rules:
-    - host: "34.147.183.195.nip.io"
+    - host: "34.120.222.110.nip.io"
       http:
         paths:
           - path: /

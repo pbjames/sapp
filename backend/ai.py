@@ -7,7 +7,7 @@ from langgraph.prebuilt import create_react_agent
 from pydantic import BaseModel
 from typer import Typer
 
-from coins import explore, get_all_comments, get_coin
+from coins import Profile, explore, get_all_comments, get_coin
 from const import COIN_SUMMARY, IMAGE_PROMPT, MODEL_NAME, IDEA_GEN
 from models import User
 
@@ -60,14 +60,15 @@ def coin_summary(address: str) -> tuple[str, float]:
         totalVolume=coin_data.totalVolume,
         name=coin_data.name,
         description=coin_data.description,
-        predictedROI=f"{(predicted_roi)*100}%",
+        predictedROI=f"{(predicted_roi) * 100}%",
         marketCap=coin_data.marketCap,
         market_cap_change_24h=coin_data.marketCapDelta24h,
         days_since_created=input_df["days_since_created"],
         unique_holders=coin_data.uniqueHolders,
         transfers=coin_data.transfers,
         comments_sentimental_score=input_df["comments_sentimental_score"],
-        comments="\n".join([n.comment for n in get_all_comments(address, count=10)]),
+        comments="\n".join(
+            [n.comment for n in get_all_comments(address, count=10)]),
     )
     message = HumanMessage(content=[{"type": "text", "text": content}])
     return model.invoke([message]).text(), predicted_roi
@@ -80,10 +81,12 @@ def get_concatenated_reports(user: User) -> str:
     """
     if not user.reports or len(user.reports) == 0:
         return "No previous reports available."
-    
+
     # Take the most recent 5 reports to avoid context length issues
-    recent_reports = sorted(user.reports, key=lambda r: r.created_at, reverse=True)[:5]
-    concatenated_content = "\n\n".join(report.content for report in recent_reports)
+    recent_reports = sorted(
+        user.reports, key=lambda r: r.created_at, reverse=True)[:5]
+    concatenated_content = "\n\n".join(
+        report.content for report in recent_reports)
     return concatenated_content
 
 
@@ -132,7 +135,6 @@ def summary_summary() -> str:
     return agent_executor.invoke([message]).text()
 
 
-
 @cli.command()
 def coin_summary_test(address: str) -> None:
     coin_summary(address)
@@ -154,4 +156,3 @@ def idea_gen_test(prompt: str, user_id: int = 1):
 
 if __name__ == "__main__":
     cli()
-    

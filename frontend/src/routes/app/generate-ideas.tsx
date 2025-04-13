@@ -1,5 +1,6 @@
 import Dashboard from '@/components/dashboard/dashboard';
 import { Button } from '@/components/ui/button';
+import ai from '@/lib/api/ai';
 import { createFileRoute } from '@tanstack/react-router';
 import { Loader2, Rocket } from 'lucide-react';
 import React, { useState } from 'react';
@@ -11,18 +12,16 @@ export const Route = createFileRoute('/app/generate-ideas')({
 function RouteComponent() {
     const [value, setValue] = useState('');
     const [idea, setIdea] = useState<{
-        name: string;
-        description: string;
+        content: string;
         image: string | null;
     } | null>(null);
     const [loading, setLoading] = useState(false);
 
     const handleGenerate = async () => {
         setLoading(true);
+        const response = await ai.getIdeaGeneration(value);
         setIdea({
-            name: 'Fart Coin',
-            description:
-                'Lorem ipsum\nLorem ipsum dolor sit amet, consectetur adipiscing elit.',
+            content: response.data.content,
             image: null,
         });
         setLoading(false);
@@ -50,10 +49,9 @@ function RouteComponent() {
                         information below to create your coin.
                     </p>
                     <div className="flex w-full flex-col gap-2 rounded-md border bg-white p-4 shadow">
-                        <h2 className="text-xl font-semibold">{idea.name}</h2>
-                        <h2 className="text-lg font-semibold">Description</h2>
+                        <h2 className="text-lg font-semibold">Content</h2>
                         <p className="text-gray-700">
-                            {idea.description.split('\n').map((line, i) => (
+                            {idea.content.split('\n').map((line, i) => (
                                 <React.Fragment key={i}>
                                     {line}
                                     <br />

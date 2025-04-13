@@ -22,8 +22,25 @@ const getAIProfileAnalysis = async (walletId: string) => {
 
 export type { AIProfileResponse };
 
+export type IdeaGenerationResponse = {
+    content: string;
+};
+
+const getIdeaGeneration = async (prompt: string) => {
+    return await axios.get<IdeaGenerationResponse>(
+        `${import.meta.env.VITE_API_URL}/analyze/generate/idea?prompt=${encodeURIComponent(prompt)}`,
+
+        {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+            },
+        }
+    );
+};
+
 export default {
     getAIProfileAnalysis,
+    getIdeaGeneration,
 };
 // import axios from 'axios';
 //

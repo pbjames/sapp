@@ -26,3 +26,14 @@ This coin has:
 What makes it stand out and what inspiration can we draw from it?
 Don't give too much of a boilerplate answer.
 """
+
+IDEA_GEN: Final[
+    str
+] = """
+Generate a creative idea based on the user's prompt: {prompt}
+
+Consider the following background context from the user's previous reports (if available):
+{prev}
+
+The response should be concise, practical, and in a conversational tone. If the user's history contains relevant insights, incorporate them to personalize the response.
+"""

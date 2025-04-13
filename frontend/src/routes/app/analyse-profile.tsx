@@ -76,13 +76,13 @@ function ChooseTarget(props: TargetState) {
 
 function TargetSelection(props: TargetState) {
     return (
-        <section className="h-full items-center">
+        <section className="flex h-full flex-col items-center">
             <div className="flex flex-col items-center justify-items-center text-center">
                 <h1 className="flex items-center justify-items-center p-4 text-4xl font-black">
                     Analyze..
                 </h1>
             </div>
-            <section className="grid min-h-screen grid-cols-2">
+            <section className="grid w-full flex-grow grid-cols-2">
                 <button
                     className="grid cursor-pointer grid-cols-1 items-center justify-items-center transition-colors hover:bg-gray-300"
                     onClick={() => props.setTargetProfile('')}
@@ -123,7 +123,7 @@ function TargetAnalysis(props: TargetState) {
     }
     return (
         <section className="flex flex-col items-center justify-items-center space-y-2 px-[15%]">
-            <section className="flex pt-10">
+            <section className="flex items-center pt-10">
                 <div className="flex h-auto max-w-[25%] items-center justify-items-start p-4">
                     <img
                         src={profileQ.data?.avatar || null}

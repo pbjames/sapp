@@ -35,8 +35,8 @@ spec:
               value: "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"
           resources:
             limits:
-              memory: "512Mi"
-              cpu: "500m"
+              memory: "1024Mi"
+              cpu: "3000m"
             requests:
               memory: "256Mi"
               cpu: "250m"

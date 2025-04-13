@@ -6,9 +6,14 @@ from models import Report, User
 from pydantic import BaseModel, Field
 from datetime import datetime
 from coin_model import get_input, predict
-from ai import coin_summary
+from ai import coin_summary, analyze_coin_and_image
 from routers.users import get_current_user
+from database import get_db
 import json
+import coins
+import requests
+import base64
+
 
 router = APIRouter()
 
@@ -17,6 +22,12 @@ class CoinAnalyzeResponse(BaseModel):
     predicted_roi: float
     summary: str
     created_at: datetime
+
+# def ipfs_to_http(ipfs_uri: str, gateway: str = "https://ipfs.io/ipfs/") -> str:
+#     if not ipfs_uri.startswith("ipfs://"):
+#         raise ValueError(f"Invalid IPFS URI: {ipfs_uri}")
+#     cid_or_path = ipfs_uri.replace("ipfs://", "")
+#     return gateway + cid_or_path
 
 @router.get("/{token_address}", response_model=List[CoinAnalyzeResponse])
 def get_analyze_by_token_address(
@@ -27,7 +38,19 @@ def get_analyze_by_token_address(
     """
     Get Token ROI Prediction and save it to user's reports.
     """
-    summary, predicted_roi = coin_summary(token_address)
+    coin_data = coins.get_coin(token_address)
+    image_url = coin_data.mediaContent.previewImage.medium
+
+    print(image_url)
+
+    # response = requests.get(http_url)
+    # response.raise_for_status()
+
+    # image_bytes = response.content
+    # encoded = base64.b64encode(image_bytes).decode("utf-8")
+
+    response_text, summary_text, predicted_roi = analyze_coin_and_image(token_address, image_url)
+    summary = response_text + summary_text
     
     # Create response object
     current_time = datetime.utcnow()

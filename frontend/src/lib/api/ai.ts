@@ -38,9 +38,21 @@ const getIdeaGeneration = async (prompt: string) => {
     );
 };
 
+const getImageGeneration = async (prompt: string) => {
+    return await axios.post<IdeaGenerationResponse>(
+        `${import.meta.env.VITE_API_URL}/analyze/generate/image?prompt=${encodeURIComponent(prompt)}`,
+        {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+            },
+        }
+    );
+}
+
 export default {
     getAIProfileAnalysis,
     getIdeaGeneration,
+    getImageGeneration
 };
 // import axios from 'axios';
 //

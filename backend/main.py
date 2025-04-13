@@ -173,9 +173,8 @@ def profile_details_me(user: User = Depends(get_current_user)):
 
 
 @app.get("/analyze-profile")
-def analyze_profile_kms(user=Depends(get_current_user)):
-    wallet_id = user.wallet_address
-    return analyze_profile_kms(wallet_id)
+def analyze_profile_kms(user: User = Depends(get_current_user)):
+    return _analyze_profile(user.wallet_address)
 
 
 @app.get("/analyze-profile/{wallet_id}")

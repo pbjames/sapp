@@ -109,6 +109,7 @@ def general_coin_summary(summaries: list[str]) -> str:
     Provide a general review of the performance of created coins based on
     the both financial data and energy of the comments:
     {'- \n'.join(summaries)}
+    Use plenty of newlines.
     """
     message = HumanMessage(content=[{"type": "text", "text": content}])
     return model.invoke([message]).text()
@@ -122,6 +123,7 @@ def bio_summary(profile: Profile) -> str:
     - website: {profile.website}
     - handle: {profile.handle}
     - display name: {profile.displayName}
+    Use plenty of newlines.
     """
     message = HumanMessage(content=[{"type": "text", "text": content}])
     return model.invoke([message]).text()
@@ -130,7 +132,7 @@ def bio_summary(profile: Profile) -> str:
 def summary_summary() -> str:
     content = f"""
     Write a summary based on the last 2 summaries about coins and branding that outlines
-    actionable items the user can take note of. Keep it brief.
+    actionable items the user can take note of. Keep it brief, use plenty of new lines.
     """
     message = HumanMessage(content=[{"type": "text", "text": content}])
     return model.invoke([message]).text()

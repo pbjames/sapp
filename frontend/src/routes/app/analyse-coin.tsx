@@ -102,12 +102,17 @@ function CoinAnalysisResult({ tokenAddress, setTokenAddress }) {
     }
 
     return (
-        <section className="flex flex-col items-center space-y-6 px-[15%] pt-10">
-            <h1 className="text-2xl font-bold">Analysis for {tokenAddress}</h1>
+        <section className="flex flex-col items-center px-[15%] pt-10">
+            <h1 className="mb-2 text-2xl font-bold">Coin Analysis</h1>
+
+            <p className="mb-6 text-center">
+                We have analyzed the token address you provided. Below are the
+                details of the analysis.
+            </p>
             {data.map((item, i) => (
                 <div
                     key={i}
-                    className="w-full rounded-md border bg-white p-4 shadow"
+                    className="mb-4 w-full rounded-md border bg-white p-4 shadow"
                 >
                     <p className="text-sm text-gray-500">
                         Created: {new Date(item.created_at).toLocaleString()}

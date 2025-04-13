@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/sheet';
 import { GitHubLogoIcon } from '@radix-ui/react-icons';
 import { buttonVariants } from './ui/button';
-import { Menu, Flame, Orbit } from 'lucide-react';
+import { Menu, Orbit } from 'lucide-react';
 import { ModeToggle } from './mode-toggle';
 import { Link } from '@tanstack/react-router';
 import { useProtectedRoute } from '@/context/ProtectedRouteContext';

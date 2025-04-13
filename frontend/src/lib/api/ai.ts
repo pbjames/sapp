@@ -1,5 +1,5 @@
 // import axios from 'axios';
-// 
+//
 // type ProfileResponse = {
 //   username: string;
 //   wallet: string;
@@ -22,12 +22,12 @@
 //     }[];
 //   }[];
 // };
-// 
+//
 // type UpdateProfileData = {
 //   username: string;
 //   password: string;
 // };
-// 
+//
 // const getProfile = async (jwt: string): Promise<ProfileResponse> => {
 //   const response = await axios.get<ProfileResponse>(
 //     `${import.meta.env.VITE_API_URL}/profile`,
@@ -38,10 +38,10 @@
 //       },
 //     }
 //   );
-// 
+//
 //   return response.data;
 // };
-// 
+//
 // const updateProfile = async (
 //   data: UpdateProfileData,
 //   jwt: string
@@ -53,7 +53,7 @@
 //     },
 //   });
 // };
-// 
+//
 // type Report = {
 //   id: string;
 //   report_type: string;
@@ -61,9 +61,9 @@
 //   created_at: number;
 //   image_data: string;
 // };
-// 
+//
 // type ReportsResponse = Report[];
-// 
+//
 // const getReports = async (jwt: string): Promise<ReportsResponse> => {
 //   const response = await axios.get<ReportsResponse>(
 //     `${import.meta.env.VITE_API_URL}/reports`,
@@ -74,12 +74,12 @@
 //       },
 //     }
 //   );
-// 
+//
 //   return response.data;
 // };
-// 
+//
 // type ReportResponse = Report;
-// 
+//
 // const getReport = async (id: string, jwt: string): Promise<ReportResponse> => {
 //   const response = await axios.get<ReportResponse>(
 //     `${import.meta.env.VITE_API_URL}/reports/${id}`,
@@ -90,10 +90,10 @@
 //       },
 //     }
 //   );
-// 
+//
 //   return response.data;
 // };
-// 
+//
 // export type {
 //   ProfileResponse,
 //   UpdateProfileData,

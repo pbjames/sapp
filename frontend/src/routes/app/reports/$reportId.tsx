@@ -5,6 +5,7 @@ import profile, { ReportResponse } from '@/lib/api/profile';
 import { useQuery } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { Loader2 } from 'lucide-react';
+import React from 'react';
 
 export const Route = createFileRoute('/app/reports/$reportId')({
     component: RouteComponent,
@@ -50,7 +51,17 @@ function RouteComponent() {
                                     year: 'numeric',
                                 })}
                             </p>
-                            <h2 className="text-lg">{reportsQ.data.content}</h2>
+
+                            <p className="text-lg">
+                                {reportsQ.data.content
+                                    .split('\n')
+                                    .map((line, i) => (
+                                        <React.Fragment key={i}>
+                                            {line}
+                                            <br />
+                                        </React.Fragment>
+                                    ))}
+                            </p>
                             {reportsQ.data.image_data && (
                                 <img
                                     src={reportsQ.data.image_data}

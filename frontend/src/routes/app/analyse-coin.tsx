@@ -2,7 +2,7 @@
 import Dashboard from '@/components/dashboard/dashboard';
 import { createFileRoute } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Loader2, Rocket } from 'lucide-react';
@@ -13,7 +13,6 @@ export const Route = createFileRoute('/app/analyse-coin')({
 });
 
 function CoinAnalysis() {
-
     const [tokenAddress, setTokenAddress] = useState<string | undefined>(
         undefined
     );
@@ -114,9 +113,14 @@ function CoinAnalysisResult({ tokenAddress, setTokenAddress }) {
                         Created: {new Date(item.created_at).toLocaleString()}
                     </p>
                     <h2 className="mt-2 text-xl font-semibold">Summary</h2>
-                    <p className="text-gray-700">{item.summary}</p>
-
-
+                    <p className="text-gray-700">
+                        {item.summary.split('\n').map((line, i) => (
+                            <React.Fragment key={i}>
+                                {line}
+                                <br />
+                            </React.Fragment>
+                        ))}
+                    </p>
                     <h2 className="mt-4 text-lg font-semibold">
                         Predicted ROI
                     </h2>

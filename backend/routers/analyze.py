@@ -20,7 +20,7 @@ class CoinAnalyzeResponse(BaseModel):
 
 @router.get("/{token_address}", response_model=List[CoinAnalyzeResponse])
 def get_analyze_by_token_address(
-    token_address: str, 
+    token_address: str,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
@@ -28,7 +28,7 @@ def get_analyze_by_token_address(
     Get Token ROI Prediction and save it to user's reports.
     """
     summary, predicted_roi = coin_summary(token_address)
-    
+
     # Create response object
     current_time = datetime.utcnow()
     response = CoinAnalyzeResponse(
@@ -37,7 +37,7 @@ def get_analyze_by_token_address(
         summary=summary,
         created_at=current_time,
     )
-    
+
     # Prepare data for saving as a report
     report_content = {
         "address": response.address,
@@ -45,17 +45,22 @@ def get_analyze_by_token_address(
         "summary": response.summary,
         "analyzed_at": response.created_at.isoformat()
     }
-    
+
+    report_text = report_content["summary"]
+    report_text += f"\n\nPredicted ROI: {int(report_content['predicted_roi'] * 100)}%"
+
+    print("Report content:", report_text)
+
     # Create a new report
     new_report = Report(
-        content=json.dumps(report_content),
+        content=report_text,
         report_type="Coin Analysis",
         user_id=current_user.id
     )
-    
+
     # Save to database
     db.add(new_report)
     db.commit()
-    
+
     # Return the same response as before
     return [response]

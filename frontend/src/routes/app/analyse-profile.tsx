@@ -9,6 +9,7 @@ import profile, { ProfileResponse, ReportsResponse } from '@/lib/api/profile';
 import ai, { AIProfileResponse } from '@/lib/api/ai';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import Markdown from 'react-markdown';
 import {
     Carousel,
     CarouselContent,
@@ -160,22 +161,18 @@ function TargetAnalysis(props: TargetState) {
             <section className="rounded-lg bg-gradient-to-br from-purple-300 to-blue-400 p-1">
                 <section className="bg-accent flex flex-col items-start justify-items-start space-y-2 space-x-4 rounded-md">
                     <div className="min-w-[50%] grow basis-0 p-2">
-                        <h1 className="text-[1.10rem] font-semibold">
-                            Bio Analysis
-                        </h1>
-                        {analysisQ.data.bio_analysis}
+                        <h1 className="text-2xl font-semibold">Bio Analysis</h1>
+                        <Markdown>{analysisQ.data.bio_analysis}</Markdown>
                     </div>
                     <div className="grow basis-0 p-2">
-                        <h1 className="text-[1.10rem] font-semibold">
+                        <h1 className="text-2xl font-semibold">
                             General Coin Performance
                         </h1>
-                        {analysisQ.data.all_coin_summary}
+                        <Markdown>{analysisQ.data.all_coin_summary}</Markdown>
                     </div>
                     <div className="grow basis-0 p-2">
-                        <h1 className="text-[1.10rem] font-semibold">
-                            Summary
-                        </h1>
-                        {analysisQ.data.prompt_summary}
+                        <h1 className="text-2xl font-semibold">Summary</h1>
+                        <Markdown>{analysisQ.data.prompt_summary}</Markdown>
                     </div>
                 </section>
             </section>

@@ -77,7 +77,8 @@ type Report = {
     report_type: string;
     content: string;
     created_at: number;
-    image_data: string;
+
+    image_data: string | null;
 };
 
 type ReportsResponse = Report[];

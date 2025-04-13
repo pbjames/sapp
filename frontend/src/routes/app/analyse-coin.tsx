@@ -13,6 +13,7 @@ export const Route = createFileRoute('/app/analyse-coin')({
 });
 
 function CoinAnalysis() {
+
     const [tokenAddress, setTokenAddress] = useState<string | undefined>(
         undefined
     );
@@ -115,6 +116,7 @@ function CoinAnalysisResult({ tokenAddress, setTokenAddress }) {
                     <h2 className="mt-2 text-xl font-semibold">Summary</h2>
                     <p className="text-gray-700">{item.summary}</p>
 
+
                     <h2 className="mt-4 text-lg font-semibold">
                         Predicted ROI
                     </h2>
@@ -129,6 +131,7 @@ function CoinAnalysisResult({ tokenAddress, setTokenAddress }) {
                     placeholder="Write your thoughts or feedback..."
                 />
             </section>
+
             <Button
                 variant="outline"
                 onClick={() => setTokenAddress(undefined)}

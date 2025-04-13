@@ -6,9 +6,8 @@ from models import Report, User
 from pydantic import BaseModel, Field
 from datetime import datetime
 from coin_model import get_input, predict
-from ai import coin_summary, gen_idea
+from ai import coin_summary, gen_idea, gen_image
 from routers.users import get_current_user
-import json
 
 router = APIRouter()
 
@@ -20,6 +19,9 @@ class CoinAnalyzeResponse(BaseModel):
 
 class GenerateIdeaResponse(BaseModel):
     content: str
+
+class GenerateImageResponse(BaseModel):
+    image_url: str
 
 @router.get("/{token_address}", response_model=List[CoinAnalyzeResponse])
 def get_analyze_by_token_address(
@@ -94,4 +96,10 @@ def generate_idea(
     # Return the generated idea
     return {
         "content": generated_idea
+    }
+
+@router.post("/generate/image")
+def generate_image(prompt: str):
+    return {
+        "content": gen_image(prompt)
     }

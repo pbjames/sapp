@@ -16,10 +16,12 @@ function RouteComponent() {
         image: string | null;
     } | null>(null);
     const [loading, setLoading] = useState(false);
+    const [imgLoading, setImgLoading] = useState<boolean>(false);
 
     const handleGenerate = async () => {
         setLoading(true);
         const response = await ai.getIdeaGeneration(value);
+
         setIdea({
             content: response.data.content,
             image: null,
@@ -68,12 +70,19 @@ function RouteComponent() {
                         ) : (
                             <>
                                 <p className="text-gray-700">
-                                    No image generated yet.
+                                    {!imgLoading ? "No image generated yet.": <Loader2 className="h-8 w-8 animate-spin" />}
+                                    
                                 </p>
                                 <Button
                                     className="mt-4 flex w-full max-w-xs cursor-pointer items-center gap-2"
-                                    onClick={() => {
+                                    onClick={async () => {
                                         // Handle image generation here
+                                        setImgLoading(true);
+                                        setIdea({
+                                            content: idea.content,
+                                            image: (await ai.getImageGeneration(idea.content)).data.content || null,
+                                        });
+                                        setImgLoading(false);
                                     }}
                                 >
                                     Generate Image
@@ -81,6 +90,7 @@ function RouteComponent() {
                                 </Button>
                             </>
                         )}
+                        <img src="" alt="" />
                     </div>
                 </section>
             </Dashboard>

@@ -5,7 +5,7 @@ from database import get_db
 from models import Report, User
 from pydantic import BaseModel, Field
 from datetime import datetime
-from routers.users import get_current_user
+from users import get_current_user
 
 router = APIRouter()
 

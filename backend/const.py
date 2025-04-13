@@ -26,3 +26,14 @@ This coin has:
 What makes it stand out and what inspiration can we draw from it?
 Don't give too much of a boilerplate answer.
 """
+IDEA_GEN: Final[
+    str
+] = """
+Use the prompt {prompt} to generate an idea for a coin, and make an image for the coin too that could be good for earnings.
+Do this by using some previous responses from coins.
+{prev}.
+
+The output format should be ONLY:
+description:
+where description is a description for a coin on the zora blockchain.
+"""

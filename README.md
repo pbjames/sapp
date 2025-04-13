@@ -28,7 +28,6 @@ On the index of the page, we showcase the features of our application in more de
 
 <img width="1063" alt="image" src="https://github.com/user-attachments/assets/f2b94a93-ae76-48c1-b86e-eb40416f2bf5" />
 
-
 ### View your own assets
 
 On the main dashboard, you'll find all your assets listed sorted by your current holdings, with a button to open a modal to view the value of your holdings over the last few days. Clicking on the coin will take you to the respective Zora page.
@@ -40,7 +39,6 @@ On the main dashboard, you'll find coins on Zora that are currently trending. Yo
 <img width="1181" alt="image" src="https://github.com/user-attachments/assets/5bb925b8-248d-41f6-a3ab-a2523b78b673" />
 
 <img width="904" alt="image" src="https://github.com/user-attachments/assets/cc480f6c-cd57-4454-bfb4-924daac7abf9" />
-
 
 ### Analyze your own profile
 
@@ -82,7 +80,6 @@ Similar to the above but more focused on when you want to know about a specific 
 
 <img width="991" alt="image" src="https://github.com/user-attachments/assets/d7863792-20c0-4582-9e82-4434bc78ee3e" />
 
-
 ### Generate ideas
 
 Going to the generate ideas tab, you can now generate coin ideas. This is based on a custom prompt, and your latest reports are also fed in as context to the artificial intelligence. You will now be given post suggestions to make to maximise your earnings!
@@ -101,8 +98,6 @@ Analyzing your profile, other profiles, coins, or generating an idea will save t
 
 <img width="1213" alt="image" src="https://github.com/user-attachments/assets/a1cdf0d2-b69f-49fd-9c91-755f27b47ccb" />
 
-You can go to a report to see the full text
+You can go to a report to see the full text.
 
 <img width="1187" alt="image" src="https://github.com/user-attachments/assets/f5f497b8-582d-4fb9-a81f-f4eff0a0bdce" />
-
-

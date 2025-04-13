@@ -1,14 +1,14 @@
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from langchain_core.messages import HumanMessage
 from pydantic import BaseModel
 from typer import Typer
 import logging
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy import text
+from ai import coin_summary, general_coin_summary, bio_summary, summary_summary
 from coins import (
-    MediaContent,
-    Profile,
     Zora20Token,
     explore,
     get_profile,
@@ -98,6 +98,7 @@ def trending_coins(count: int = 5):
         for coin in coins
     ]
 
+
 class ProfileHolding(BaseModel):
     id: str
     symbol: str
@@ -168,6 +169,23 @@ def profile_details(profile_id):
 @app.get("/profile")
 def profile_details_me(user: User = Depends(get_current_user)):
     return _profile_details(user.wallet_address)
+
+
+@app.get("/analyze-profile/{wallet_id}")
+def analyze_profile(wallet_id: str) -> str:
+    profile = get_profile(wallet_id)
+    balances = get_profile_balances(wallet_id)
+    coins = [e.node.coin for e in balances.coinBalances.edges]
+    summaries = [coin_summary(coin) for coin in coins]
+    total_coin_summary = general_coin_summary(summaries)
+    bio = bio_summary(profile)
+    super_summary = summary_summary()
+    return {
+        "bio_analysis": bio,
+        "coins_summaries": [],
+        "all_coin_summary": total_coin_summary,
+        "prompt_summary": super_summary,
+    }
 
 
 # def get_reports_by_wallet(current_user: User = Depends(get_current_user)):

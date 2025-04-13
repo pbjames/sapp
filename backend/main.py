@@ -21,6 +21,9 @@ from routers.users import router as user_router
 from routers.users import get_current_user
 from routers.reports import router as report_router
 from routers.analyze import router as analyze_router
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)

@@ -169,15 +169,13 @@ function TargetAnalysis(props: TargetState) {
                         <h1 className="text-[1.10rem] font-semibold">
                             General Coin Performance
                         </h1>
-                        <divContent>
-                            {analysisQ.data.all_coin_summary}
-                        </divContent>
+                        {analysisQ.data.all_coin_summary}
                     </div>
                     <div className="grow basis-0 p-2">
                         <h1 className="text-[1.10rem] font-semibold">
                             Summary
                         </h1>
-                        <divContent>{analysisQ.data.prompt_summary}</divContent>
+                        {analysisQ.data.prompt_summary}
                     </div>
                 </section>
             </section>

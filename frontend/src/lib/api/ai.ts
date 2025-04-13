@@ -1,46 +1,47 @@
 import axios from 'axios';
 
 interface AIProfileResponse {
-    bio_analysis: string;
-    coins_summaries: string[];
-    all_coin_summary: string;
-    prompt_summary: string;
+  bio_analysis: string;
+  coins_summaries: string[];
+  all_coin_summary: string;
+  prompt_summary: string;
 }
 
 // TODO: Finish
 const getAIProfileAnalysis = async (walletId: string) => {
-    return await axios.get<AIProfileResponse>(
-        `${import.meta.env.VITE_API_URL}/analyze-profile/${walletId}`,
-        {
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${localStorage.getItem('jwt')}`,
-            },
-        }
-    );
+  const response = await axios.get<AIProfileResponse>(
+    `${import.meta.env.VITE_API_URL}/analyze-profile/${walletId}`,
+    {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+      },
+    }
+  );
+  return response.data;
 };
 
 export type { AIProfileResponse };
 
 export type IdeaGenerationResponse = {
-    content: string;
+  content: string;
 };
 
 const getIdeaGeneration = async (prompt: string) => {
-    return await axios.get<IdeaGenerationResponse>(
-        `${import.meta.env.VITE_API_URL}/analyze/generate/idea?prompt=${encodeURIComponent(prompt)}`,
+  return await axios.get<IdeaGenerationResponse>(
+    `${import.meta.env.VITE_API_URL}/analyze/generate/idea?prompt=${encodeURIComponent(prompt)}`,
 
-        {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('jwt')}`,
-            },
-        }
-    );
+    {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('jwt')}`,
+      },
+    }
+  );
 };
 
 export default {
-    getAIProfileAnalysis,
-    getIdeaGeneration,
+  getAIProfileAnalysis,
+  getIdeaGeneration,
 };
 // import axios from 'axios';
 //

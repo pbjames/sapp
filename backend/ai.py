@@ -10,6 +10,7 @@ from typer import Typer
 from coins import explore, get_all_comments, get_coin
 from const import COIN_SUMMARY, IMAGE_PROMPT, MODEL_NAME, IDEA_GEN
 from models import User
+
 from coin_model import predict, get_input
 
 cli = Typer()
@@ -49,11 +50,10 @@ def analyze_image(image_url: str) -> list[str]:
     return model.invoke([message]).text().split(" ")
 
 
-def coin_summary(address: str) -> tuple[str,float]:
+def coin_summary(address: str) -> tuple[str, float]:
     coin_data = get_coin(address)
     input_df = get_input(address)
     predicted_roi = predict(input_df)
-
     content = COIN_SUMMARY.format(
         creatorEarnings=coin_data.creatorEarnings,
         volume24h=coin_data.volume24h,
@@ -63,10 +63,10 @@ def coin_summary(address: str) -> tuple[str,float]:
         predictedROI=f"{(predicted_roi)*100}%",
         marketCap=coin_data.marketCap,
         market_cap_change_24h=coin_data.marketCapDelta24h,
-        days_since_created=input_df['days_since_created'],
+        days_since_created=input_df["days_since_created"],
         unique_holders=coin_data.uniqueHolders,
         transfers=coin_data.transfers,
-        comments_sentimental_score=input_df['comments_sentimental_score'],
+        comments_sentimental_score=input_df["comments_sentimental_score"],
         comments="\n".join([n.comment for n in get_all_comments(address, count=10)]),
     )
     message = HumanMessage(content=[{"type": "text", "text": content}])
@@ -99,6 +99,38 @@ def gen_idea(prompt: str, user: User) -> str:
     )
     message = HumanMessage(content=[{"type": "text", "text": content}])
     return model.invoke([message]).text()
+
+def general_coin_summary(summaries: list[str]) -> str:
+    content = f"""
+    Provide a general review of the performance of created coins based on
+    the both financial data and energy of the comments:
+    {'- \n'.join(summaries)}
+    """
+    message = HumanMessage(content=[{"type": "text", "text": content}])
+    return agent_executor.invoke([message]).text()
+
+
+def bio_summary(profile: Profile) -> str:
+    content = f"""
+    Using what you know about this users created coins, write a brief review of how
+    they could improve on the content of their bio, maybe even their name of branding:
+    - bio: {profile.bio}
+    - website: {profile.website}
+    - handle: {profile.handle}
+    - display name: {profile.displayName}
+    """
+    message = HumanMessage(content=[{"type": "text", "text": content}])
+    return agent_executor.invoke([message]).text()
+
+
+def summary_summary() -> str:
+    content = f"""
+    Write a summary based on the last 2 summaries about coins and branding that outlines
+    actionable items the user can take note of. Keep it brief.
+    """
+    message = HumanMessage(content=[{"type": "text", "text": content}])
+    return agent_executor.invoke([message]).text()
+
 
 
 @cli.command()

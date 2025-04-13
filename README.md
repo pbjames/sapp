@@ -6,6 +6,14 @@ Using the SAPP platform you can effortlessly view your own assets, see upcoming 
 
 Built ontop of the Zora SDK, we seamlessly integrate with the platform providing the most up to date and accurate information.
 
+## How it works
+
+We use transformer models of various capabilities, notably this includes image _vision_ and _creation_. On top of this, we use _agents_ in order to freely decide what feedback
+to report to the user, including a chat function with long-term memory for multi-turn conversations.
+
+First, prompts are chained together through a pipeline incrementally refines the output until it conforms to strict standards using a negative feedback loop. Next, we aggregate
+LLM invocations in to one complete response. Finally, we report results as _General Coin Analysis_ as part of the profile analysis.
+
 ## Features
 
 ### View your own assets
@@ -25,6 +33,7 @@ Going to Analyze Profile, then choose "My profile", and the AI will do a deep di
 - Analyzing your coins
 
 For your top 5 coins, the AI will analyze:
+
 - The name of the asset
 - The picture
 - The total supply

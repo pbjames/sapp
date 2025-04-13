@@ -1,9 +1,9 @@
-import logging
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage
 from langchain_core.runnables import RunnableConfig
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.prebuilt import create_react_agent
+from langchain_community.utilities.dalle_image_generator import DallEAPIWrapper
 from pydantic import BaseModel
 from typer import Typer
 
@@ -17,6 +17,7 @@ cli = Typer()
 tools = []
 memory = MemorySaver()
 model = ChatOpenAI(model=MODEL_NAME)
+dall_e = DallEAPIWrapper(model="dall-e-3")
 agent_executor = create_react_agent(model, tools, checkpointer=memory)
 config = RunnableConfig(
     configurable={"thread_id": "c7661282-da44-464d-a8a7-4307a0df56a0"}
@@ -102,6 +103,9 @@ def gen_idea(prompt: str, user: User) -> str:
     )
     message = HumanMessage(content=[{"type": "text", "text": content}])
     return model.invoke([message]).text()
+
+def gen_image(prompt: str) -> str:
+    return dall_e.run(prompt)
 
 def general_coin_summary(summaries: list[str]) -> str:
     content = f"""

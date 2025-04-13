@@ -6,9 +6,8 @@ from models import Report, User
 from pydantic import BaseModel, Field
 from datetime import datetime
 from coin_model import get_input, predict
-from ai import coin_summary
+from ai import coin_summary, gen_idea, gen_image
 from routers.users import get_current_user
-import json
 
 router = APIRouter()
 
@@ -17,6 +16,12 @@ class CoinAnalyzeResponse(BaseModel):
     predicted_roi: float
     summary: str
     created_at: datetime
+
+class GenerateIdeaResponse(BaseModel):
+    content: str
+
+class GenerateImageResponse(BaseModel):
+    image_url: str
 
 @router.get("/{token_address}", response_model=List[CoinAnalyzeResponse])
 def get_analyze_by_token_address(
@@ -64,3 +69,37 @@ def get_analyze_by_token_address(
 
     # Return the same response as before
     return [response]
+
+@router.get("/generate/idea", response_model=GenerateIdeaResponse)
+def generate_idea(
+    prompt: str,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    Generate a creative idea based on user's prompt and previous reports.
+    """
+    # Get the generated idea from AI
+    generated_idea = gen_idea(prompt, current_user)
+    
+    # Store the generated idea as a report
+    new_report = Report(
+        content=generated_idea,
+        report_type="Idea Generation",
+        user_id=current_user.id
+    )
+    
+    # Save to database
+    db.add(new_report)
+    db.commit()
+    
+    # Return the generated idea
+    return {
+        "content": generated_idea
+    }
+
+@router.post("/generate/image")
+def generate_image(prompt: str):
+    return {
+        "content": gen_image(prompt)
+    }

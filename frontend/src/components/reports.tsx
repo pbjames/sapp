@@ -24,34 +24,37 @@ export function Reports({ reports }: { reports: ReportsResponse }) {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {reports.map((report) => (
-                    <TableRow key={report.id}>
-                        <TableCell>{report.report_type}</TableCell>
-                        <TableCell>
-                            {report.content.length > 40
-                                ? `${report.content.slice(0, 40)}...`
-                                : report.content}
-                        </TableCell>
-                        <TableCell>
-                            {new Date(report.created_at).toLocaleDateString(
-                                'en-US',
-                                {
-                                    month: 'short',
-                                    day: 'numeric',
-                                    year: 'numeric',
-                                }
-                            )}
-                        </TableCell>
-                        <TableCell className="text-right">
-                            <Link
-                                to={`/app/reports/$reportId`}
-                                params={{ reportId: report.id }}
-                            >
-                                <Button>Go to report</Button>
-                            </Link>
-                        </TableCell>
-                    </TableRow>
-                ))}
+                {reports
+                    .slice()
+                    .reverse()
+                    .map((report) => (
+                        <TableRow key={report.id}>
+                            <TableCell>{report.report_type}</TableCell>
+                            <TableCell>
+                                {report.content.length > 40
+                                    ? `${report.content.slice(0, 40)}...`
+                                    : report.content}
+                            </TableCell>
+                            <TableCell>
+                                {new Date(report.created_at).toLocaleDateString(
+                                    'en-US',
+                                    {
+                                        month: 'short',
+                                        day: 'numeric',
+                                        year: 'numeric',
+                                    }
+                                )}
+                            </TableCell>
+                            <TableCell className="text-right">
+                                <Link
+                                    to={`/app/reports/$reportId`}
+                                    params={{ reportId: report.id }}
+                                >
+                                    <Button>Go to report</Button>
+                                </Link>
+                            </TableCell>
+                        </TableRow>
+                    ))}
             </TableBody>
         </Table>
     );

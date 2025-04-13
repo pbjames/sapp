@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Optional, Union
 from database import get_db
 from models import Report, User
 from pydantic import BaseModel, Field
@@ -14,14 +14,14 @@ class ReportResponse(BaseModel):
     content: str
     report_type: str
     user_id: int
-    image_data: str = None  # Optional base64 encoded image
+    image_data: Optional[str] = None  # Optional base64 encoded image, properly typed to accept None
     created_at: datetime
 
 
 class ReportCreate(BaseModel):
     content: str = Field(..., description="The LLM-generated content for the report")
     report_type: str = Field(..., description="The type of report")
-    image_data: str = None  # Optional base64 encoded image
+    image_data: Optional[str] = None  # Optional base64 encoded image
 
 @router.get("/", response_model=List[ReportResponse])
 def get_reports_by_wallet(current_user: User = Depends(get_current_user)):
@@ -34,7 +34,7 @@ def get_reports_by_wallet(current_user: User = Depends(get_current_user)):
             "id": report.id,
             "content": report.content,
             "report_type": report.report_type,
-            "image_data": report.image_data,
+            "image_data": report.image_data,  # No need for conditional, Optional[str] handles None values
             "user_id": report.user_id,
             "created_at": report.created_at,
         } for report in current_user.reports
@@ -54,7 +54,7 @@ def get_report_by_id(report_id: int, current_user: User = Depends(get_current_us
         "id": report.id,
         "content": report.content,
         "report_type": report.report_type,
-        "image_data": report.image_data,
+        "image_data": report.image_data,  # No need for conditional, Optional[str] handles None values
         "user_id": report.user_id,
         "created_at": report.created_at,
     }

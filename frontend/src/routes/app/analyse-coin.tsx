@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Rocket } from 'lucide-react';
 import analysis from '@/lib/api/analysis';
 
 export const Route = createFileRoute('/app/analyse-coin')({
@@ -13,7 +13,9 @@ export const Route = createFileRoute('/app/analyse-coin')({
 });
 
 function CoinAnalysis() {
-    const [tokenAddress, setTokenAddress] = useState<string | undefined>(undefined);
+    const [tokenAddress, setTokenAddress] = useState<string | undefined>(
+        undefined
+    );
 
     return (
         <Dashboard>
@@ -38,20 +40,32 @@ function CoinSelection({ setTokenAddress }) {
     };
 
     return (
-        <section className="flex h-full flex-col items-center justify-center">
-            <h1 className="p-4 text-4xl font-black">Analyze Coin</h1>
+        <section className="mx-auto flex max-w-2xl flex-grow flex-col items-center justify-center gap-4 p-4">
+            <h1 className="text-3xl font-bold">Analyze Coin</h1>
+            <p>
+                Analyze a coin by entering the token address you want to
+                analyze.
+            </p>
             <form
                 onSubmit={handleSubmit}
-                className="flex flex-col space-y-4 rounded-md border p-6"
+                className="flex w-full flex-row gap-2"
             >
-                <input
-                    type="text"
-                    placeholder="Enter token address"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    className="rounded-md border p-2"
-                />
-                <Button type="submit">Analyze</Button>
+                <section className="w-full rounded-lg bg-gradient-to-br from-purple-300 to-blue-500 p-1">
+                    <input
+                        type="text"
+                        placeholder="0x123456789a..ff"
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        className="bg-accent w-full rounded-md p-2 outline-0"
+                    />
+                </section>
+                <Button
+                    type="submit"
+                    className="flex h-full cursor-pointer items-center gap-2 !px-4 py-0"
+                >
+                    Analyze
+                    <Rocket className="h-4 w-4" />
+                </Button>
             </form>
         </section>
     );
@@ -77,8 +91,12 @@ function CoinAnalysisResult({ tokenAddress, setTokenAddress }) {
     if (error || !data?.length) {
         return (
             <div className="flex h-full w-full flex-col items-center justify-center space-y-2">
-                <p className="text-red-500">Failed to load analysis for this token.</p>
-                <Button onClick={() => setTokenAddress(undefined)}>Try Another</Button>
+                <p className="text-red-500">
+                    Failed to load analysis for this token.
+                </p>
+                <Button onClick={() => setTokenAddress(undefined)}>
+                    Try Another
+                </Button>
             </div>
         );
     }
@@ -97,7 +115,9 @@ function CoinAnalysisResult({ tokenAddress, setTokenAddress }) {
                     <h2 className="mt-2 text-xl font-semibold">Summary</h2>
                     <p className="text-gray-700">{item.summary}</p>
 
-                    <h2 className="mt-4 text-lg font-semibold">Predicted ROI</h2>
+                    <h2 className="mt-4 text-lg font-semibold">
+                        Predicted ROI
+                    </h2>
                     <p className="text-sm text-gray-800">
                         {item.predicted_roi.toFixed(2)}%
                     </p>
@@ -109,7 +129,10 @@ function CoinAnalysisResult({ tokenAddress, setTokenAddress }) {
                     placeholder="Write your thoughts or feedback..."
                 />
             </section>
-            <Button variant="outline" onClick={() => setTokenAddress(undefined)}>
+            <Button
+                variant="outline"
+                onClick={() => setTokenAddress(undefined)}
+            >
                 Analyze Another Token
             </Button>
         </section>

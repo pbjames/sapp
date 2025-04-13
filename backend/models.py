@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime, Text
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime, Text, LargeBinary
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from database import Base
@@ -37,3 +37,9 @@ class Report(Base):
     
     # Relationship to user (many reports belong to one user)
     user = relationship("User", back_populates="reports")
+
+
+class Images(Base):
+    __tablename__ = "images"
+    token_address = Column(String, primary_key=True, index=True)
+    image = Column(LargeBinary, nullable=False)

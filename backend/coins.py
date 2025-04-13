@@ -185,6 +185,7 @@ class CoinBalanceEdge(BaseModel):
 class CoinBalances(BaseModel):
     count: int
     edges: list[CoinBalanceEdge]
+      
 
 
 ExploreListType = Literal[

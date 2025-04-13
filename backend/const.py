@@ -21,6 +21,7 @@ This coin has:
 - name {name}
 - description {description}
 - the predicted ROI {predictedROI} is based on multiple factors including the ones above, market cap {marketCap}, market_cap_change_24h {market_cap_change_24h}, days_since_created {days_since_created}, unique_holders {unique_holders}, transfers {transfers}, and comments_sentimental_score {comments_sentimental_score}
+- From this image_url {image_url}, give a brief description or analyze to it
 - commentary:
 {comments}
 What makes it stand out and what inspiration can we draw from it?

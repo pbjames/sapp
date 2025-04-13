@@ -2,7 +2,7 @@ import Dashboard from '@/components/dashboard/dashboard';
 import { Button } from '@/components/ui/button';
 import { createFileRoute } from '@tanstack/react-router';
 import { Loader2, Rocket } from 'lucide-react';
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 export const Route = createFileRoute('/app/generate-ideas')({
     component: RouteComponent,
@@ -13,13 +13,19 @@ function RouteComponent() {
     const [idea, setIdea] = useState<{
         name: string;
         description: string;
-        image: string;
+        image: string | null;
     } | null>(null);
     const [loading, setLoading] = useState(false);
 
     const handleGenerate = async () => {
         setLoading(true);
-        // api shit
+        setIdea({
+            name: 'Fart Coin',
+            description:
+                'Lorem ipsum\nLorem ipsum dolor sit amet, consectetur adipiscing elit.',
+            image: null,
+        });
+        setLoading(false);
     };
 
     if (loading) {
@@ -29,6 +35,55 @@ function RouteComponent() {
                     <Loader2 className="h-8 w-8 animate-spin" />
                     <h1 className="text-3xl font-bold">Generating...</h1>
                     <p>We are generating your idea, please wait...</p>
+                </section>
+            </Dashboard>
+        );
+    }
+
+    if (idea) {
+        return (
+            <Dashboard>
+                <section className="flex flex-col items-center px-[15%] pt-10">
+                    <h1 className="mb-2 text-2xl font-bold">Generated Idea</h1>
+                    <p className="mb-6 text-center">
+                        Your idea has been generated! You can use the
+                        information below to create your coin.
+                    </p>
+                    <div className="flex w-full flex-col gap-2 rounded-md border bg-white p-4 shadow">
+                        <h2 className="text-xl font-semibold">{idea.name}</h2>
+                        <h2 className="text-lg font-semibold">Description</h2>
+                        <p className="text-gray-700">
+                            {idea.description.split('\n').map((line, i) => (
+                                <React.Fragment key={i}>
+                                    {line}
+                                    <br />
+                                </React.Fragment>
+                            ))}
+                        </p>
+                        <h2 className="text-lg font-semibold">Image</h2>
+                        {idea.image ? (
+                            <img
+                                src={idea.image}
+                                alt="Generated Coin"
+                                className="mt-2 w-full rounded-md"
+                            />
+                        ) : (
+                            <>
+                                <p className="text-gray-700">
+                                    No image generated yet.
+                                </p>
+                                <Button
+                                    className="mt-4 flex w-full max-w-xs cursor-pointer items-center gap-2"
+                                    onClick={() => {
+                                        // Handle image generation here
+                                    }}
+                                >
+                                    Generate Image
+                                    <Rocket className="h-4 w-4" />
+                                </Button>
+                            </>
+                        )}
+                    </div>
                 </section>
             </Dashboard>
         );

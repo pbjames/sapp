@@ -129,13 +129,6 @@ function CoinAnalysisResult({ tokenAddress, setTokenAddress }) {
                     </p>
                 </div>
             ))}
-            <section className="w-full rounded-lg bg-gradient-to-br from-purple-300 to-blue-500 p-1">
-                <Textarea
-                    className="h-24 w-full rounded-md p-2"
-                    placeholder="Write your thoughts or feedback..."
-                />
-            </section>
-
             <Button
                 variant="outline"
                 onClick={() => setTokenAddress(undefined)}

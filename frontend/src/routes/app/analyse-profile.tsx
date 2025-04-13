@@ -139,21 +139,21 @@ function TargetAnalysis(props: TargetState) {
             <section className="flex items-center pt-10">
                 <div className="flex h-auto max-w-[25%] items-center justify-items-start p-4">
                     <img
-                        src={profileQ.data?.avatar || null}
+                        src={profileQ.data.avatar || null}
                         className="rounded-full object-contain"
                     />
                 </div>
                 <div className="flex flex-col justify-items-center space-y-1">
                     <h1 className="text-2xl font-bold">
-                        {profileQ.data?.displayName}
+                        {profileQ.data.displayName}
                     </h1>
-                    <h1 className="text-xs text-gray-500">
-                        {profileQ.data?.handle}
+                    <h1 className="mb-2 text-xs text-gray-500">
+                        {profileQ.data.handle}
                         {' @ '}
-                        {profileQ.data?.wallet}
+                        {profileQ.data.wallet}
                     </h1>
                     <h1 className="text-[0.8rem] text-gray-500">
-                        {profileQ.data?.bio}
+                        {profileQ.data.bio}
                     </h1>
                 </div>
             </section>
@@ -163,23 +163,21 @@ function TargetAnalysis(props: TargetState) {
                         <h1 className="text-[1.10rem] font-semibold">
                             Bio Analysis
                         </h1>
-                        {analysisQ.data?.bio_analysis}
+                        {analysisQ.data.bio_analysis}
                     </div>
                     <div className="grow basis-0 p-2">
                         <h1 className="text-[1.10rem] font-semibold">
                             General Coin Performance
                         </h1>
                         <divContent>
-                            {analysisQ.data?.all_coin_summary}
+                            {analysisQ.data.all_coin_summary}
                         </divContent>
                     </div>
                     <div className="grow basis-0 p-2">
                         <h1 className="text-[1.10rem] font-semibold">
                             Summary
                         </h1>
-                        <divContent>
-                            {analysisQ.data?.prompt_summary}
-                        </divContent>
+                        <divContent>{analysisQ.data.prompt_summary}</divContent>
                     </div>
                 </section>
             </section>

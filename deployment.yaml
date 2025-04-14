@@ -22,17 +22,17 @@ spec:
             - containerPort: 8000
           env:
             - name: DATABASE_URL
-              value: "postgresql://testing_owner:npg_hrSRKItY39Vd@ep-nameless-wind-a560j4gl-pooler.us-east-2.aws.neon.tech/testing?sslmode=require"
+              value: 
             - name: LANGSMITH_PROJECT
-              value: "pr-candid-fly-64"
+              value:
             - name: LANGSMITH_ENDPOINT
-              value: "https://api.smith.langchain.com"
+              value: 
             - name: LANGSMITH_TRACING
               value: "true"
             - name: LANGSMITH_API_KEY
-              value: "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"
+              value: 
             - name: OPENAI_API_KEY
-              value: "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"
+              value: 
           resources:
             limits:
               memory: "512Mi"
